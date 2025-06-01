@@ -68,3 +68,35 @@ button:hover {
   background-color: var(--color-nebula);
   box-shadow: var(--hover-shadow);
 }
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: var(--spacing-md);
+}
+
+.tablink {
+  background-color: var(--color-midnight);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  border-radius: 4px;
+}
+
+.tablink:hover,
+.tablink.active {
+  background-color: var(--color-violet);
+}
+
+.tabcontent {
+  display: none;
+  padding: var(--spacing-sm);
+  border-top: 2px solid var(--color-violet);
+}
+
+.tabcontent.active {
+  display: block;
+}
+
