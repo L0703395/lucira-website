@@ -140,6 +140,23 @@
   <footer style="text-align: center; padding: var(--spacing-lg); color: var(--color-cloud); font-size: 0.85rem;">
     &copy; 2025 Lucira Systems. All rights reserved. Ethics before access.
   </footer>
+  <script>
+function openTab(evt, tabName) {
+  const tabs = document.getElementsByClassName("tabcontent");
+  const links = document.getElementsByClassName("tablink");
+  for (let i = 0; i < tabs.length; i++) tabs[i].classList.remove("active");
+  for (let i = 0; i < links.length; i++) links[i].classList.remove("active");
+
+  document.getElementById(tabName).classList.add("active");
+  evt.currentTarget.classList.add("active");
+}
+
+// Default tab
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelector(".tablink").click();
+});
+</script>
+
 
 </body>
 </html>
