@@ -101,6 +101,16 @@
   </form>
   <p id="dafeStatus" style="margin-top: 10px; font-weight: bold;"></p>
 </section>
+    <section class="card" id="taxe-form">
+  <h2>🧾 Submit Tax Form (TAXE)</h2>
+  <form id="taxeForm">
+    <label for="taxData">Tax Form Submission:</label><br />
+    <textarea id="taxData" rows="4" required></textarea><br />
+    <button type="submit">Submit Tax Info</button>
+  </form>
+  <p id="taxeStatus" style="margin-top: 10px; font-weight: bold;"></p>
+</section>
+
 
   </div>
 
@@ -271,6 +281,25 @@ document.getElementById('dafeForm').addEventListener('submit', async function(e)
     document.getElementById('dafeStatus').textContent = "❌ Failed to process transaction.";
   }
 });
+    document.getElementById('taxeForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+
+  const taxData = document.getElementById('taxData').value;
+
+  try {
+    const response = await fetch('https://lucira-api.onrender.com/api/taxe/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ taxData })
+    });
+
+    const data = await response.json();
+    document.getElementById('taxeStatus').textContent = data.status;
+  } catch (err) {
+    document.getElementById('taxeStatus').textContent = "❌ Failed to submit tax information.";
+  }
+});
+
 
 </script>
 
