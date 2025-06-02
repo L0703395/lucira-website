@@ -159,6 +159,16 @@
     <textarea id="medicalReport" rows="4" required></textarea><br />
     <button type="submit">Submit to MIE</button>
   </form>
+    <section class="card" id="ms-dao-form">
+  <h2>🗳️ Patient Voting — MS DAO</h2>
+  <form id="msDaoForm">
+    <label for="vote">Enter your vote or opinion:</label><br />
+    <textarea id="vote" rows="4" required></textarea><br />
+    <button type="submit">Submit Vote</button>
+  </form>
+  <p id="msDaoStatus" style="margin-top: 10px; font-weight: bold;"></p>
+</section>
+
 
   <p id="mieStatus" style="margin-top: 10px; font-weight: bold;"></p>
   </div>
@@ -299,6 +309,25 @@ document.getElementById('dafeForm').addEventListener('submit', async function(e)
     document.getElementById('taxeStatus').textContent = "❌ Failed to submit tax information.";
   }
 });
+    document.getElementById('msDaoForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+
+  const vote = document.getElementById('vote').value;
+
+  try {
+    const response = await fetch('https://lucira-api.onrender.com/api/ms/vote', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ vote })
+    });
+
+    const data = await response.json();
+    document.getElementById('msDaoStatus').textContent = data.status;
+  } catch (err) {
+    document.getElementById('msDaoStatus').textContent = "❌ Failed to submit your vote.";
+  }
+});
+
 
 
 </script>
