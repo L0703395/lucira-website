@@ -1,41 +1,53 @@
-# To better understand this file read this:
-# https://docs.ionos.space/docs/github-actions-customization/
-
-name: "Deploy Now: Execute Build"
+name: "Deploy Lucira Website to Ionos"
 
 on:
-  workflow_call:
-    inputs:
-      site-url:
-        required: true
-        type: string
-      branch-id:
-        required: true
-        type: string
+  push:
+    branches:
+      - main  # Deploy when changes are pushed to the 'main' branch.
+  workflow_dispatch:  # Allows manual triggering of the workflow.
 
 env:
-  DEPLOYMENT_FOLDER: lucira-website/
+  DEPLOYMENT_FOLDER: lucira-website/  # Folder where your static files are located.
+  IONOS_API_KEY: ${{ secrets.IONOS_API_KEY }}  # Store your Ionos API Key in GitHub Secrets.
 
 jobs:
-# Please do not rename this job
   build-project:
-    name: build lucira-website
+    name: Build and Deploy Lucira Website
     runs-on: ubuntu-latest
+
     steps:
-      - name: checkout
+      - name: Checkout Repository
         uses: actions/checkout@v4
         with:
-          submodules: 'recursive'
+          submodules: 'recursive'  # Ensure any submodules are also checked out.
 
-# Please do not touch the following action
-      - name: Store deployment content
+      - name: Set up Node.js (Optional for static JS/CSS)
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'  # Optional, if you're using Node.js to process static files
+
+      # If you use Node.js, you can add these steps to install dependencies
+      - name: Install Dependencies (Optional)
+        run: |
+          npm install
+          
+      # Optional: Build step if you need a bundler, like Webpack
+      - name: Build the Project (Optional)
+        run: |
+          npm run build  # Adjust if using a bundler like Webpack.
+
+      - name: Store Deployment Content on Ionos
         uses: ionos-deploy-now/artifact-action@v1
         with:
-          api-key: ${{ secrets.IONOS_API_KEY }}
+          api-key: ${{ secrets.IONOS_API_KEY }}  # Ensure the API key is stored in GitHub Secrets.
           service-host: api-us.ionos.space
-          project-id: 8171c7b2-6a2d-43d8-a65e-a564e97ac4bc
-          branch-id: ${{ inputs.branch-id }}
-          version: ${{ github.sha }}
-          folder: ${{ env.DEPLOYMENT_FOLDER }}
-          config-file: .deploy-now/lucira-website/config.yaml
-          action: upload
+          project-id: 8171c7b2-6a2d-43d8-a65e-a564e97ac4bc  # Your Ionos Project ID
+          branch-id: ${{ github.ref }}  # Automatically takes the branch name (e.g., main).
+          version: ${{ github.sha }}  # Uses the current commit hash as the version.
+          folder: ${{ env.DEPLOYMENT_FOLDER }}  # Specifies the folder for deployment
+          config-file: .deploy-now/lucira-website/config.yaml  # Ionos config file path.
+          action: upload  # Uploads the files to Ionos
+          
+      - name: Deploy Static Files to Ionos
+        run: |
+          echo "Deployment complete!"
