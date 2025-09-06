@@ -19,6 +19,7 @@ export default function App() {
           </nav>
         </div>
       </header>
+<<<<<<< HEAD
 
       <main className="container">
         <Routes>
@@ -44,3 +45,29 @@ export default function App() {
   );
 }
 
+=======
+
+      <main className="container">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/demo" element={<Demo />} />
+          <Route path="/privacy" element={<Privacy />} />
+          <Route path="/terms" element={<Terms />} />
+          <Route path="*" element={<Home />} />
+        </Routes>
+      </main>
+
+      <footer className="site-footer">
+        <div className="container">
+          <div>© {new Date().getFullYear()} Lucira Systems — Caeliaris</div>
+          <div className="foot-links">
+            <Link to="/privacy">Privacy</Link>
+            <Link to="/terms">Terms</Link>
+            <a href="mailto:lucirasystems@gmail.com">Contact</a>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}
+>>>>>>> 570cf4d (feat: update homepage/meta/assets)
