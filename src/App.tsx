@@ -89,10 +89,30 @@ export default function CaeliarisLanding(): JSX.Element {
         </nav>
       </header>
 
-      {page.type === 'home' && <HomeSections />}
-      {page.type === 'section' && <HomeSections initialAnchor={page.anchor} />}
-      {page.type === 'engine' && <EnginePage engineKey={page.engine} />}
-      {page.type === 'industry' && <IndustryPage industryKey={page.industry} />}
+    {page.type === 'home' && <HomeSections />}
+
+{page.type === 'section' && page.anchor === 'engines' && (
+  <HomeSections initialAnchor="engines" />
+)}
+{page.type === 'section' && page.anchor === 'sovereignty' && (
+  <HomeSections initialAnchor="sovereignty" />
+)}
+{page.type === 'section' && page.anchor === 'industries' && (
+  <HomeSections initialAnchor="industries" />
+)}
+{page.type === 'section' && page.anchor === 'contact' && (
+  <HomeSections initialAnchor="contact" />
+)}
+
+{/* Add these */}
+{page.type === 'section' && page.anchor === 'privacy' && <PrivacyPage />}
+{page.type === 'section' && page.anchor === 'terms' && <TermsPage />}
+
+{page.type === 'engine' && <EnginePage engineKey={page.engine} />}
+{page.type === 'industry' && <IndustryPage industryKey={page.industry} />}
+
+    
+      
 
       <footer className="border-t border-[var(--border)]/70">
         <div className="mx-auto max-w-7xl px-6 py-10 text-sm text-[var(--muted)] flex flex-col md:flex-row gap-3 items-center justify-between">
