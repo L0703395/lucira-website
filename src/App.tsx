@@ -186,16 +186,34 @@ function HomeSections({ initialAnchor }: { initialAnchor?: 'engines'|'sovereignt
             <div className="mt-6"><CTA href="#/industries" label="See Industry Surfaces" primary /></div>
           </div>
           <div className="md:col-span-6">
-            <motion.div initial={{opacity:0,y:12}} whileInView={{opacity:1,y:0}} viewport={{once:true}} transition={{duration:0.6}}
-              className="relative h-80 rounded-3xl border border-[var(--border)] bg-[var(--card)] overflow-hidden">
-              <div className="absolute inset-0 bg-[conic-gradient(from_180deg_at_50%_120%,#63E6FF11,transparent_60%)]" />
-              <div className="absolute inset-0 backdrop-blur-sm" />
-              <div className="relative h-full grid place-items-center">
-                <div className="text-center px-8">
-                  <p className="text-sm text-[var(--muted)] subtitle">“Progress collapses without principle. Sovereign logic prevents capture.”</p>
-                </div>
-              </div>
-            </motion.div>
+<motion.div
+  initial={{ opacity: 0, y: 12 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  viewport={{ once: true }}
+  transition={{ duration: 0.6 }}
+  className="relative h-80 rounded-3xl border border-[var(--border)] overflow-hidden"
+>
+  {/* Background video */}
+  <video
+    className="absolute inset-0 w-full h-full object-cover"
+    src="/Video_Ready_.mp4" // put your MP4 in /public
+    autoPlay
+    loop
+    muted
+    playsInline
+  />
+  {/* Optional dark overlay for text readability */}
+  <div className="absolute inset-0 bg-black/30" />
+
+  {/* Foreground text */}
+  <div className="relative h-full grid place-items-center">
+    <div className="text-center px-8">
+      <p className="text-sm text-[var(--muted)] subtitle">
+        “Progress collapses without principle. Sovereign logic prevents capture.”
+      </p>
+    </div>
+  </div>
+</motion.div>
           </div>
         </div>
       </section>
