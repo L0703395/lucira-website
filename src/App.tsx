@@ -111,14 +111,15 @@ export default function CaeliarisLanding(): JSX.Element {
 /** Router helpers **/
 function resolveRoute(hash: string):
   | { type: 'home' }
-  | { type: 'section'; anchor: 'engines'|'sovereignty'|'industries'|'contact' }
+  | { type: 'section'; anchor: 'engines'|'sovereignty'|'industries'|'contact'|'privacy'|'terms' }
   | { type: 'engine'; engine: EngineKey }
   | { type: 'industry'; industry: IndustryKey } {
   if (!hash || hash === '#' || hash === '#/') return { type: 'home' };
   const clean = hash.replace(/^#\/?/, '');
-  if (['engines','sovereignty','industries','contact'].includes(clean)) {
+  if (['engines','sovereignty','industries','contact','privacy','terms'].includes(clean)) {
     return { type: 'section', anchor: clean as any };
   }
+}
   let m = clean.match(/^engines\/(RIE|MIE|DAFE|EIIE|LIE|TAXE)$/i);
   if (m) return { type: 'engine', engine: m[1].toUpperCase() as EngineKey };
   m = clean.match(/^industries\/(education|finance|research|law|health|sustainability)$/i);
