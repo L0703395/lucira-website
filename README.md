@@ -1,4 +1,5 @@
 # React + Vite
+[![Deploy Vite to GitHub Pages](https://github.com/L0703395/lucira-website/actions/workflows/deploy.yml/badge.svg)](https://github.com/L0703395/lucira-website/actions/workflows/deploy.yml)
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
