@@ -235,13 +235,94 @@ function HomeSections({ initialAnchor }: { initialAnchor?: 'engines'|'sovereignt
         <div className="rounded-3xl border border-[var(--border)] bg-[var(--card)] p-8 md:p-12">
           <h3 className="text-2xl md:text-3xl font-semibold subhead">Get Involved</h3>
           <p className="mt-3 text-[var(--muted)] subtitle">Are you a researcher, policymaker, developer, or community leader? Reach out. All inquiries are vetted via ULI for ethical compliance.</p>
-          <form className="mt-6 grid md:grid-cols-3 gap-3" onSubmit={(e)=>e.preventDefault()}>
-            <input placeholder="Your name" className="col-span-1 rounded-xl bg-transparent border border-[var(--border)] px-4 py-3 outline-none focus:border-[var(--accent)]" />
-            <input placeholder="Email" className="col-span-1 rounded-xl bg-transparent border border-[var(--border)] px-4 py-3 outline-none focus:border-[var(--accent)]" />
-            <input placeholder="Organization" className="col-span-1 rounded-xl bg-transparent border border-[var(--border)] px-4 py-3 outline-none focus:border-[var(--accent)]" />
-            <textarea placeholder="How would you like to collaborate?" className="col-span-3 h-28 rounded-xl bg-transparent border border-[var(--border)] px-4 py-3 outline-none focus:border-[var(--accent)]" />
-            <div className="col-span-3"><CTA label="Submit" href="#" primary /></div>
-          </form>
+          function ContactForm() {
+  const [status, setStatus] = React.useState<'idle'|'sending'|'success'|'error'>('idle');
+  const [message, setMessage] = React.useState<string>('');
+
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setStatus('sending');
+    setMessage('');
+
+    const form = e.currentTarget;
+    const data = new FormData(form);
+
+    try {
+      const res = await fetch('https://formspree.io/f/xzzayaoe', {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: data
+      });
+
+      if (res.ok) {
+        setStatus('success');
+        setMessage('Thanks! We received your message and will reply soon.');
+        form.reset();
+      } else {
+        const j = await res.json().catch(() => null);
+        setStatus('error');
+        setMessage(j?.errors?.[0]?.message || 'Something went wrong. Please try again.');
+      }
+    } catch {
+      setStatus('error');
+      setMessage('Network error. Please try again.');
+    }
+  }
+
+  return (
+    <form onSubmit={onSubmit} className="mt-6 grid md:grid-cols-3 gap-3">
+      <input type="text" name="_gotcha" className="hidden" tabIndex={-1} autoComplete="off" />
+      <input type="hidden" name="_subject" value="New message from Caeliaris.site" />
+      <input type="hidden" name="_template" value="table" />
+
+      <input
+        name="name"
+        placeholder="Your name"
+        required
+        className="col-span-1 rounded-xl bg-transparent border border-[var(--border)] px-4 py-3 outline-none focus:border-[var(--accent)]"
+      />
+      <input
+        type="email"
+        name="email"
+        placeholder="Email"
+        required
+        className="col-span-1 rounded-xl bg-transparent border border-[var(--border)] px-4 py-3 outline-none focus:border-[var(--accent)]"
+      />
+      <input
+        name="organization"
+        placeholder="Organization"
+        className="col-span-1 rounded-xl bg-transparent border border-[var(--border)] px-4 py-3 outline-none focus:border-[var(--accent)]"
+      />
+      <textarea
+        name="message"
+        placeholder="How would you like to collaborate?"
+        required
+        className="col-span-3 h-28 rounded-xl bg-transparent border border-[var(--border)] px-4 py-3 outline-none focus:border-[var(--accent)]"
+      />
+
+      <div className="col-span-3 flex items-center gap-3">
+        <button
+          type="submit"
+          disabled={status === 'sending'}
+          className={[
+            'inline-flex items-center gap-2 rounded-full border px-5 py-2 text-sm',
+            'bg-[var(--accent)]/10 border-[var(--accent)] text-[var(--accent)]',
+            status === 'sending' ? 'opacity-60 cursor-not-allowed' : 'hover:bg-[var(--accent)]/20'
+          ].join(' ')}
+        >
+          {status === 'sending' ? 'Sending…' : 'Submit'} <span className="opacity-70">→</span>
+        </button>
+
+        {status !== 'idle' && (
+          <span className={status === 'success' ? 'text-emerald-400' : 'text-red-400'}>
+            {message}
+          </span>
+        )}
+      </div>
+    </form>
+  );
+}
+
         </div>
       </section>
     </>
