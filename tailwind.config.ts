@@ -6,6 +6,11 @@ export default {
     extend: {
       borderRadius: { '2xl': '1rem' },
       boxShadow: { 'elev': '0 10px 40px rgba(0,0,0,0.25)' },
+      fontFamily: {
+        heading: ['"Inter Tight"', 'sans-serif'],
+        body: ['"Plus Jakarta Sans"', 'sans-serif'],
+        principle: ['"Sora"', 'sans-serif'],
+      },
     },
   },
   plugins: [],
