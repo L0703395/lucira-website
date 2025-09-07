@@ -2,9 +2,7 @@ import React from 'react';
 import { useBackgroundAudio } from './useBackgroundAudio';
 
 export default function AudioToggle() {
-  // Use default "/sounds/bg.mp3". To point at a different file, pass a src and vol:
-  // const { enabled, toggle } = useBackgroundAudio('/sounds/your-file.mp3', 0.3);
-  const { enabled, toggle } = useBackgroundAudio();
+  const { enabled, toggle } = useBackgroundAudio(); // uses /sounds/bg.mp3 by default
 
   return (
     <button
