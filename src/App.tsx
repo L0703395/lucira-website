@@ -243,9 +243,343 @@ function EnginePage({ engineKey }: { engineKey: EngineKey }): JSX.Element {
         <Card title="What it does" body="Interoperable logic services with verifiable outputs and protective gates." />
         <Card title="How it connects" body="Routed through ULI, notarized via TESSERA, safeguarded by VIREL." />
       </div>
+<div className="mt-10">
+  <FlowExplorer engineKey={engineKey} />
+</div>
 
       {/* TODO slots: swap content per engineKey when you share specifics */}
     </section>
+  );
+}
+/** Flow Explorer (diagram + simulation) **/
+
+type FlowStep = { id: string; label: string; desc: string };
+type Flow = { title: string; steps: FlowStep[] };
+
+// flows: engine -> industry -> flow
+const flows: Record<EngineKey, Record<IndustryKey, Flow>> = {
+  RIE: {
+    education: { title: 'Evidence Map (Education)', steps: [
+      { id:'intake', label:'Intake', desc:'Curriculum question enters ULI with context.' },
+      { id:'research', label:'Research Graph', desc:'RIE queries sources and builds an evidence map.' },
+      { id:'review', label:'Ethics Review', desc:'Bias/ethics filters applied to citations.' },
+      { id:'receipt', label:'Receipt', desc:'TESSERA signs sources and outputs.' },
+    ]},
+    finance: { title:'Policy Scan (Finance)', steps:[
+      { id:'intake', label:'Intake', desc:'Regulatory query (jurisdiction, timeframe).' },
+      { id:'scan', label:'Scan & Rank', desc:'RIE ranks guidance across regions.' },
+      { id:'resolve', label:'Resolve', desc:'Conflicts highlighted for review.' },
+      { id:'receipt', label:'Receipt', desc:'TESSERA signs findings.' },
+    ]},
+    research: { title:'Meta-analysis (Research)', steps:[
+      { id:'scope', label:'Scope', desc:'Define PICO and scope.' },
+      { id:'collect', label:'Collect', desc:'Fetch studies & extract data.' },
+      { id:'synthesize', label:'Synthesize', desc:'Aggregate results with assumptions.' },
+      { id:'receipt', label:'Receipt', desc:'TESSERA notarizes outputs.' },
+    ]},
+    law: { title:'Precedent Review (Law)', steps:[
+      { id:'intake', label:'Intake', desc:'Matter & jurisdiction set.' },
+      { id:'search', label:'Search', desc:'RIE finds relevant cases.' },
+      { id:'map', label:'Map', desc:'Generate argument/evidence graph.' },
+      { id:'receipt', label:'Receipt', desc:'TESSERA notarizes memo.' },
+    ]},
+    health: { title:'Guideline Lookup (Health)', steps:[
+      { id:'intake', label:'Intake', desc:'Anonymized clinical question.' },
+      { id:'lookup', label:'Lookup', desc:'RIE fetches guidelines w/ citations.' },
+      { id:'triage', label:'Triage', desc:'Flag edge-cases & uncertainties.' },
+      { id:'receipt', label:'Receipt', desc:'Signed guidance for audit.' },
+    ]},
+    sustainability: { title:'Impact Scan (Sustainability)', steps:[
+      { id:'intake', label:'Intake', desc:'Scenario & region provided.' },
+      { id:'datasets', label:'Datasets', desc:'Aggregate environmental datasets.' },
+      { id:'model', label:'Model', desc:'Compare projected outcomes.' },
+      { id:'receipt', label:'Receipt', desc:'Notarized report.' },
+    ]},
+  },
+  MIE: {
+    education: { title:'Skills Screening', steps:[
+      { id:'intake', label:'Intake', desc:'Learning profile captured.' },
+      { id:'anonymize', label:'Anonymize', desc:'Data minimized & masked.' },
+      { id:'reason', label:'Reason', desc:'Clinical-style reasoning for supports.' },
+      { id:'receipt', label:'Receipt', desc:'Signed summary for educators.' },
+    ]},
+    finance: { title:'Claims Vetting', steps:[
+      { id:'intake', label:'Intake', desc:'Claim details captured.' },
+      { id:'anonymize', label:'Anonymize', desc:'PII masked, consent verified.' },
+      { id:'assess', label:'Assess', desc:'Risk & integrity checks.' },
+      { id:'receipt', label:'Receipt', desc:'Signed decision trail.' },
+    ]},
+    research: { title:'IRB Assistant', steps:[
+      { id:'intake', label:'Intake', desc:'Protocol pre-checks.' },
+      { id:'anonymize', label:'Anonymize', desc:'Strip identifiers.' },
+      { id:'review', label:'Review', desc:'Ethics & safety gates.' },
+      { id:'receipt', label:'Receipt', desc:'Signed IRB notes.' },
+    ]},
+    law: { title:'Evidence Handling', steps:[
+      { id:'intake', label:'Intake', desc:'Chain-of-custody established.' },
+      { id:'anonymize', label:'Anonymize', desc:'Sensitive data minimized.' },
+      { id:'reason', label:'Reason', desc:'Medical integrity inputs to LIE.' },
+      { id:'receipt', label:'Receipt', desc:'Signed log for court.' },
+    ]},
+    health: { title:'Clinical Reasoning', steps:[
+      { id:'intake', label:'Intake', desc:'Symptoms & context captured.' },
+      { id:'anonymize', label:'Anonymize', desc:'PHI minimized & masked.' },
+      { id:'reason', label:'Reason', desc:'Guideline-based reasoning.' },
+      { id:'receipt', label:'Receipt', desc:'Signed summary for chart.' },
+    ]},
+    sustainability: { title:'Case Review', steps:[
+      { id:'intake', label:'Intake', desc:'Case attributes captured.' },
+      { id:'anonymize', label:'Anonymize', desc:'Data minimized.' },
+      { id:'assess', label:'Assess', desc:'Integrity checks for data.' },
+      { id:'receipt', label:'Receipt', desc:'Signed evaluation.' },
+    ]},
+  },
+  DAFE: {
+    education: { title:'Grant Disbursement', steps:[
+      { id:'intake', label:'Intake', desc:'Applicant & program.' },
+      { id:'route', label:'Route', desc:'Compliance & currency rails.' },
+      { id:'settle', label:'Settle', desc:'Execute transfer with guards.' },
+      { id:'receipt', label:'Receipt', desc:'Public receipt emitted.' },
+    ]},
+    finance: { title:'Payment Rail', steps:[
+      { id:'intake', label:'Intake', desc:'Initiate multi-currency flow.' },
+      { id:'aml', label:'AML/KYC', desc:'Compliance gates perform checks.' },
+      { id:'settle', label:'Settle', desc:'Route & settle transaction.' },
+      { id:'receipt', label:'Receipt', desc:'Signed ledger record.' },
+    ]},
+    research: { title:'Grant Routing', steps:[
+      { id:'intake', label:'Intake', desc:'Proposal intake.' },
+      { id:'score', label:'Score', desc:'Score with published criteria.' },
+      { id:'disburse', label:'Disburse', desc:'Release funds via rails.' },
+      { id:'receipt', label:'Receipt', desc:'Public receipt for audit.' },
+    ]},
+    law: { title:'Escrow Flow', steps:[
+      { id:'intake', label:'Intake', desc:'Contract data captured.' },
+      { id:'checks', label:'Checks', desc:'Compliance/regulatory guards.' },
+      { id:'settle', label:'Settle', desc:'Escrow release.' },
+      { id:'receipt', label:'Receipt', desc:'Signed escrow receipt.' },
+    ]},
+    health: { title:'Claims Payout', steps:[
+      { id:'intake', label:'Intake', desc:'Provider submits claim.' },
+      { id:'checks', label:'Checks', desc:'Eligibility & fraud checks.' },
+      { id:'settle', label:'Settle', desc:'Route funds to provider.' },
+      { id:'receipt', label:'Receipt', desc:'Public receipt.' },
+    ]},
+    sustainability: { title:'Carbon Credit Flow', steps:[
+      { id:'intake', label:'Intake', desc:'Project & verifier enter.' },
+      { id:'checks', label:'Checks', desc:'Eligibility & double-count checks.' },
+      { id:'settle', label:'Settle', desc:'Move credits/funds.' },
+      { id:'receipt', label:'Receipt', desc:'Public receipt & audit trail.' },
+    ]},
+  },
+  EIIE: {
+    education: { title:'Student Coverage', steps:[
+      { id:'intake', label:'Intake', desc:'Policy parameters taken.' },
+      { id:'model', label:'Model', desc:'Risk model simulation.' },
+      { id:'price', label:'Price', desc:'Premium computed with fairness.' },
+      { id:'receipt', label:'Receipt', desc:'Policy signed.' },
+    ]},
+    finance: { title:'Portfolio Cover', steps:[
+      { id:'intake', label:'Intake', desc:'Portfolio attributes.' },
+      { id:'model', label:'Model', desc:'Scenario-based simulation.' },
+      { id:'price', label:'Price', desc:'Fair premium set.' },
+      { id:'receipt', label:'Receipt', desc:'Signed policy.' },
+    ]},
+    research: { title:'Study Insurance', steps:[
+      { id:'intake', label:'Intake', desc:'Study parameters.' },
+      { id:'model', label:'Model', desc:'Outcome scenarios.' },
+      { id:'cover', label:'Cover', desc:'Choose coverages.' },
+      { id:'receipt', label:'Receipt', desc:'Signed policy.' },
+    ]},
+    law: { title:'Case Coverage', steps:[
+      { id:'intake', label:'Intake', desc:'Case attributes.' },
+      { id:'model', label:'Model', desc:'Cost & risk curves.' },
+      { id:'cover', label:'Cover', desc:'Select limits/retentions.' },
+      { id:'receipt', label:'Receipt', desc:'Signed cover.' },
+    ]},
+    health: { title:'Care Coverage', steps:[
+      { id:'intake', label:'Intake', desc:'Patient & plan captured.' },
+      { id:'model', label:'Model', desc:'Utilization simulation.' },
+      { id:'cover', label:'Cover', desc:'Benefits designed.' },
+      { id:'receipt', label:'Receipt', desc:'Signed cover.' },
+    ]},
+    sustainability: { title:'Parametric Cover', steps:[
+      { id:'intake', label:'Intake', desc:'Perils & triggers set.' },
+      { id:'model', label:'Model', desc:'Hazard modeling.' },
+      { id:'price', label:'Price', desc:'Premium with fairness guards.' },
+      { id:'receipt', label:'Receipt', desc:'Signed cover.' },
+    ]},
+  },
+  LIE: {
+    education: { title:'EdTech Contract', steps:[
+      { id:'intake', label:'Intake', desc:'Parties & terms captured.' },
+      { id:'draft', label:'Draft', desc:'Generate draft with clauses.' },
+      { id:'review', label:'Review', desc:'Conflict & risk review.' },
+      { id:'receipt', label:'Receipt', desc:'TESSERA signs contract.' },
+    ]},
+    finance: { title:'KYC Policy', steps:[
+      { id:'intake', label:'Intake', desc:'Jurisdiction & scope.' },
+      { id:'draft', label:'Draft', desc:'Template composed.' },
+      { id:'review', label:'Review', desc:'Compliance check.' },
+      { id:'receipt', label:'Receipt', desc:'Signed policy.' },
+    ]},
+    research: { title:'Data Use Agreement', steps:[
+      { id:'intake', label:'Intake', desc:'Data & parties defined.' },
+      { id:'draft', label:'Draft', desc:'DUA generation.' },
+      { id:'review', label:'Review', desc:'Restriction checks.' },
+      { id:'receipt', label:'Receipt', desc:'Signed agreement.' },
+    ]},
+    law: { title:'Case Filing', steps:[
+      { id:'intake', label:'Intake', desc:'Facts & venue set.' },
+      { id:'draft', label:'Draft', desc:'Draft pleadings.' },
+      { id:'review', label:'Review', desc:'Cite-check & conflicts.' },
+      { id:'receipt', label:'Receipt', desc:'Filed & signed.' },
+    ]},
+    health: { title:'HIE Agreement', steps:[
+      { id:'intake', label:'Intake', desc:'Entities & scope.' },
+      { id:'draft', label:'Draft', desc:'Form agreement.' },
+      { id:'review', label:'Review', desc:'HIPAA/consent checks.' },
+      { id:'receipt', label:'Receipt', desc:'Signed exchange terms.' },
+    ]},
+    sustainability: { title:'Grant MOU', steps:[
+      { id:'intake', label:'Intake', desc:'Parties & objectives.' },
+      { id:'draft', label:'Draft', desc:'Compose MOU.' },
+      { id:'review', label:'Review', desc:'Policy/environment checks.' },
+      { id:'receipt', label:'Receipt', desc:'Signed memorandum.' },
+    ]},
+  },
+  TAXE: {
+    education: { title:'Edu Tax Filing', steps:[
+      { id:'intake', label:'Intake', desc:'School/entity details.' },
+      { id:'compute', label:'Compute', desc:'Jurisdictional rules applied.' },
+      { id:'file', label:'File', desc:'Submit to authorities.' },
+      { id:'receipt', label:'Receipt', desc:'Signed filing record.' },
+    ]},
+    finance: { title:'Corporate Filing', steps:[
+      { id:'intake', label:'Intake', desc:'Entity & locales.' },
+      { id:'compute', label:'Compute', desc:'Multi-region rules applied.' },
+      { id:'file', label:'File', desc:'File across regions.' },
+      { id:'receipt', label:'Receipt', desc:'Signed receipts.' },
+    ]},
+    research: { title:'Grant Tax', steps:[
+      { id:'intake', label:'Intake', desc:'Grant details.' },
+      { id:'compute', label:'Compute', desc:'Tax scenarios calculated.' },
+      { id:'file', label:'File', desc:'Submit filings.' },
+      { id:'receipt', label:'Receipt', desc:'Signed receipts.' },
+    ]},
+    law: { title:'Trust Filing', steps:[
+      { id:'intake', label:'Intake', desc:'Trust attributes.' },
+      { id:'compute', label:'Compute', desc:'Rules computed.' },
+      { id:'file', label:'File', desc:'File & acknowledge.' },
+      { id:'receipt', label:'Receipt', desc:'Signed record.' },
+    ]},
+    health: { title:'Provider Tax', steps:[
+      { id:'intake', label:'Intake', desc:'Provider attributes.' },
+      { id:'compute', label:'Compute', desc:'Compute obligations.' },
+      { id:'file', label:'File', desc:'Submit filings.' },
+      { id:'receipt', label:'Receipt', desc:'Signed receipts.' },
+    ]},
+    sustainability: { title:'Carbon Tax', steps:[
+      { id:'intake', label:'Intake', desc:'Project & region.' },
+      { id:'compute', label:'Compute', desc:'Rules & offsets applied.' },
+      { id:'file', label:'File', desc:'Submit to authority.' },
+      { id:'receipt', label:'Receipt', desc:'Signed receipt.' },
+    ]},
+  },
+};
+
+export function getFlow(engine: EngineKey, industry: IndustryKey): Flow {
+  return flows[engine][industry];
+}
+
+function FlowExplorer({ engineKey }: { engineKey: EngineKey }): JSX.Element {
+  const [industry, setIndustry] = React.useState<IndustryKey>('education');
+  const [active, setActive] = React.useState(0);
+  const flow = getFlow(engineKey, industry);
+
+  // simple simulation: step through with a timer
+  useEffect(() => { setActive(0); }, [engineKey, industry]);
+  function simulate() {
+    setActive(0);
+    const total = flow.steps.length;
+    let i = 0;
+    const tick = () => {
+      setActive(i);
+      i += 1;
+      if (i < total) setTimeout(tick, 800);
+    };
+    tick();
+  }
+
+  const industriesList: { key:IndustryKey; label:string }[] = [
+    { key:'education', label:'Education' },
+    { key:'finance', label:'Finance' },
+    { key:'research', label:'Research' },
+    { key:'law', label:'Law' },
+    { key:'health', label:'Health' },
+    { key:'sustainability', label:'Sustainability' },
+  ];
+
+  return (
+    <div className="rounded-3xl border border-[var(--border)] bg-[var(--card)] p-5">
+      <div className="flex flex-wrap items-center gap-2 justify-between">
+        <div className="flex flex-wrap gap-2">
+          {industriesList.map((it)=> (
+            <button key={it.key} onClick={()=>setIndustry(it.key)}
+              className={[
+                'px-3 py-1 rounded-full text-sm border',
+                industry===it.key
+                  ? 'border-[var(--accent)] text-[var(--accent)] bg-[var(--accent)]/10'
+                  : 'border-[var(--border)] text-[var(--muted)] hover:text-[var(--ink)] hover:border-[var(--accent)]/50'
+              ].join(' ')}>
+              {it.label}
+            </button>
+          ))}
+        </div>
+        <button onClick={simulate} className="px-3 py-1 rounded-full text-sm border border-[var(--accent)] text-[var(--accent)] hover:bg-[var(--accent)]/10">Simulate</button>
+      </div>
+
+      <h3 className="mt-4 text-lg font-medium subhead">{flow.title}</h3>
+
+      {/* Diagram */}
+      <div className="mt-4 overflow-x-auto">
+        <div className="min-w-[660px] grid grid-cols-4 gap-4">
+          {flow.steps.map((s, idx) => (
+            <div key={s.id} className={[
+              'relative rounded-2xl p-4 border bg-black/20',
+              'border-[var(--border)]',
+            ].join(' ')}>
+              <div className="flex items-center justify-between">
+                <div className="text-sm subhead text-[var(--ink)]">{s.label}</div>
+                <div className={[
+                  'h-2 w-2 rounded-full',
+                  idx<=active ? 'bg-[var(--accent)] shadow-[0_0_16px_rgba(99,230,255,0.6)]' : 'bg-[var(--muted)]/40'
+                ].join(' ')} />
+              </div>
+              <p className="mt-2 text-xs text-[var(--muted)] subtitle">{s.desc}</p>
+              {idx<flow.steps.length-1 && (
+                <div className="absolute -right-2 top-1/2 -translate-y-1/2 text-[var(--muted)]">→</div>
+              )}
+              {idx===active && (
+                <motion.div layoutId="glow"
+                  className="pointer-events-none absolute inset-0 rounded-2xl"
+                  style={{ boxShadow:'inset 0 0 0 1px var(--accent), 0 0 48px rgba(99,230,255,0.18)'}}
+                  transition={{ type:'spring', stiffness:200, damping:24 }} />
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* A11y step list */}
+      <ol className="mt-4 space-y-2 text-sm text-[var(--muted)] subtitle">
+        {flow.steps.map((s, idx)=>(
+          <li key={s.id} className={idx===active? 'text-[var(--accent)]' : ''}>
+            {idx+1}. {s.label} — {s.desc}
+          </li>
+        ))}
+      </ol>
+    </div>
   );
 }
 
@@ -455,4 +789,16 @@ if (__vitest__) {
       expect(r).toEqual({ type:'industry', industry:'education' });
     });
   });
+  describe('flows', () => {
+  it('LIE has a law flow with >= 4 steps', () => {
+    const f = getFlow('LIE','law');
+    expect(f.steps.length).toBeGreaterThanOrEqual(4);
+  });
+  it('DAFE finance flow starts with Intake and ends with Receipt', () => {
+    const f = getFlow('DAFE','finance');
+    expect(f.steps[0].id).toBe('intake');
+    expect(f.steps.at(-1)?.id).toBe('receipt');
+  });
+});
+
 }
