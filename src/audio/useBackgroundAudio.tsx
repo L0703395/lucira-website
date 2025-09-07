@@ -15,6 +15,17 @@ export function useBackgroundAudio(src: string = '/sounds/bg.mp3', targetVol = 0
     audioRef.current = a;
 
     a.play().catch(() => void 0);
+    // If autoplay rejected, we’ll try again on first interaction
+a.play().catch(() => {
+  const tryPlay = () => {
+    a.play().catch(() => void 0);
+    window.removeEventListener('pointerdown', tryPlay, true);
+    window.removeEventListener('keydown', tryPlay, true);
+  };
+  window.addEventListener('pointerdown', tryPlay, true);
+  window.addEventListener('keydown', tryPlay, true);
+});
+
 
     const unmuteAndFadeIn = () => {
       if (!audioRef.current || !enabled) return;
