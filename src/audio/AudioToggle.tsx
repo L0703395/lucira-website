@@ -2,7 +2,8 @@ import React from 'react';
 import { useBackgroundAudio } from './useBackgroundAudio';
 
 export default function AudioToggle() {
-  const { enabled, toggle } = useBackgroundAudio(); // uses /sounds/bg.mp3 by default
+  // Point to your actual file and raise the target volume a bit
+  const { enabled, toggle } = useBackgroundAudio('/sounds/Animated_Symbol_Video_Generation.mp3', 0.6);
 
   return (
     <button
