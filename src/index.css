@@ -24,3 +24,20 @@ body { @apply antialiased; }
 html, body{
   background: linear-gradient(to top, var(--bg-solid), var(--bg-via) 40%, var(--bg-top));
 }
+
+/* === Global typography === */
+@layer base {
+  html, body { @apply font-body antialiased; } /* Plus Jakarta Sans */
+  h1, h2, h3 { @apply font-heading font-semibold tracking-tight; } /* Inter Tight */
+  h4, h5, h6 { @apply font-heading font-medium tracking-tight; }
+}
+
+@layer components {
+  .subhead   { @apply font-heading; }    /* big section titles */
+  .subtitle  { @apply font-body; }       /* paragraph/subcopy */
+  .principle { @apply font-principle tracking-wide; } /* ULI/VIREL/TESSERA labels */
+}
+
+/* Optional readability boost */
+h1, h2, h3, .subhead { text-shadow: 0 2px 4px rgba(0,0,0,.30); }
+.subtitle { text-shadow: 0 1px 3px rgba(0,0,0,.25); }
