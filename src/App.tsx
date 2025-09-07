@@ -8,7 +8,7 @@
 //  - Top gradient stays light gray (#F7F8FA).
 //  - Subheads/Subtitles: Plus Jakarta Sans; body: Inter.
 //  - ULI card: animated orb/network field.
-
+import AudioToggle from './audio/AudioToggle';
 import React, { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 
@@ -103,6 +103,7 @@ export default function CaeliarisLanding(): JSX.Element {
           </div>
         </div>
       </footer>
+      <AudioToggle />
     </div>
   );
 }
