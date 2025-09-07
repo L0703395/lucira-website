@@ -1,3 +1,4 @@
+# .github/workflows/deploy.yml
 name: Deploy Vite to GitHub Pages
 
 on:
@@ -6,7 +7,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: write  # needed for pushing to gh-pages
 
 jobs:
   build:
@@ -22,10 +23,10 @@ jobs:
       - run: npm ci
       - run: npm run build
 
-      - name: Deploy to GitHub Pages
+      - name: Deploy to GitHub Pages (gh-pages branch)
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
-          cname: www.lucirasystems.com  # Writes CNAME in gh-pages branch
+          cname: www.lucirasystems.com
           force_orphan: true
