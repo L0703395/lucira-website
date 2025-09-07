@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://www.lucirasystems.com/</loc></url>
+  <url><loc>https://www.lucirasystems.com/#/engines</loc></url>
+  <url><loc>https://www.lucirasystems.com/#/sovereignty</loc></url>
+  <url><loc>https://www.lucirasystems.com/#/industries</loc></url>
+  <url><loc>https://www.lucirasystems.com/#/contact</loc></url>
+
+  <!-- Engine subpages -->
+  <url><loc>https://www.lucirasystems.com/#/engines/RIE</loc></url>
+  <url><loc>https://www.lucirasystems.com/#/engines/MIE</loc></url>
+  <url><loc>https://www.lucirasystems.com/#/engines/DAFE</loc></url>
+  <url><loc>https://www.lucirasystems.com/#/engines/EIIE</loc></url>
+  <url><loc>https://www.lucirasystems.com/#/engines/LIE</loc></url>
+  <url><loc>https://www.lucirasystems.com/#/engines/TAXE</loc></url>
+
+  <!-- Industry subpages -->
+  <url><loc>https://www.lucirasystems.com/#/industries/education</loc></url>
+  <url><loc>https://www.lucirasystems.com/#/industries/finance</loc></url>
+  <url><loc>https://www.lucirasystems.com/#/industries/research</loc></url>
+  <url><loc>https://www.lucirasystems.com/#/industries/law</loc></url>
+  <url><loc>https://www.lucirasystems.com/#/industries/health</loc></url>
+  <url><loc>https://www.lucirasystems.com/#/industries/sustainability</loc></url>
+</urlset>
