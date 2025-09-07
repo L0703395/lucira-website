@@ -875,6 +875,114 @@ function BackgroundFX({scrollY}:{scrollY:number;}): JSX.Element {
       <div className="pointer-events-none absolute -right-24 top-[480px] h-64 w-64 rounded-full blur-3xl opacity-30" style={{ background:'radial-gradient(140px 140px at 60% 60%, #9C7BFF33, transparent 70%)', transform:`translateY(${o2}px)` }} />
     </>
   );
+    function PrivacyPage(): JSX.Element {
+  return (
+    <section className="relative mx-auto max-w-3xl px-6 py-16 md:py-24">
+      <h1 className="text-3xl md:text-5xl font-semibold subhead text-[var(--ink)]">Privacy Policy</h1>
+      <p className="mt-4 text-[var(--muted)] subtitle">
+        Last updated: {new Date().toISOString().slice(0,10)}
+      </p>
+
+      <div className="mt-8 space-y-6 text-sm leading-6 text-[var(--muted)] subtitle">
+        <p>
+          Lucira Systems values privacy. We collect only what’s needed to respond to inquiries,
+          improve the site, and secure our systems.
+        </p>
+
+        <h2 className="subhead text-[var(--ink)] text-lg">What we collect</h2>
+        <ul className="list-disc pl-6 space-y-2">
+          <li><strong>Contact form:</strong> name, email, organization, and your message. Handled by Formspree.</li>
+          <li><strong>Server logs & basic analytics (optional):</strong> non-identifying technical data (e.g., pages viewed, device/browser, timestamps).</li>
+        </ul>
+
+        <h2 className="subhead text-[var(--ink)] text-lg">How we use data</h2>
+        <ul className="list-disc pl-6 space-y-2">
+          <li>Respond to inquiries and manage collaborations.</li>
+          <li>Protect our services and prevent abuse.</li>
+          <li>Improve design and performance.</li>
+        </ul>
+
+        <h2 className="subhead text-[var(--ink)] text-lg">Sharing</h2>
+        <p>
+          We don’t sell personal data. We use trusted vendors to operate this site. The contact form is
+          processed by <a className="underline hover:text-[var(--accent)]" href="https://formspree.io/legal/privacy" target="_blank" rel="noreferrer">Formspree</a>,
+          which handles message delivery and spam controls.
+        </p>
+
+        <h2 className="subhead text-[var(--ink)] text-lg">Retention</h2>
+        <p>
+          Contact submissions are retained as long as needed to manage correspondence, then archived or deleted.
+        </p>
+
+        <h2 className="subhead text-[var(--ink)] text-lg">Your choices</h2>
+        <ul className="list-disc pl-6 space-y-2">
+          <li>Don’t submit the form if you don’t want your data processed.</li>
+          <li>Request access or deletion by emailing <a className="underline" href="mailto:lucirasystems@gmail.com">lucirasystems@gmail.com</a>.</li>
+        </ul>
+
+        <h2 className="subhead text-[var(--ink)] text-lg">Contact</h2>
+        <p>
+          Email us at <a className="underline" href="mailto:lucirasystems@gmail.com">lucirasystems@gmail.com</a>.
+        </p>
+      </div>
+    </section>
+  );
+}
+
+function TermsPage(): JSX.Element {
+  return (
+    <section className="relative mx-auto max-w-3xl px-6 py-16 md:py-24">
+      <h1 className="text-3xl md:text-5xl font-semibold subhead text-[var(--ink)]">Terms of Use</h1>
+      <p className="mt-4 text-[var(--muted)] subtitle">
+        Last updated: {new Date().toISOString().slice(0,10)}
+      </p>
+
+      <div className="mt-8 space-y-6 text-sm leading-6 text-[var(--muted)] subtitle">
+        <p>
+          By accessing this site, you agree to these terms. If you do not agree, please do not use the site.
+        </p>
+
+        <h2 className="subhead text-[var(--ink)] text-lg">Use of the Site</h2>
+        <ul className="list-disc pl-6 space-y-2">
+          <li>The site is provided “as is,” for informational purposes only.</li>
+          <li>Do not misuse the site, attempt to break security, or infringe on rights.</li>
+        </ul>
+
+        <h2 className="subhead text-[var(--ink)] text-lg">No Professional Advice</h2>
+        <p>
+          Content is not legal, medical, or financial advice. You are responsible for your use of information provided.
+        </p>
+
+        <h2 className="subhead text-[var(--ink)] text-lg">Intellectual Property</h2>
+        <p>
+          © {new Date().getFullYear()} Lucira Systems. All rights reserved. Trademarks and names belong to their owners.
+        </p>
+
+        <h2 className="subhead text-[var(--ink)] text-lg">Third-Party Services</h2>
+        <p>
+          We may link to or integrate third-party services (e.g., Formspree). Their terms and privacy policies apply to their services.
+        </p>
+
+        <h2 className="subhead text-[var(--ink)] text-lg">Limitation of Liability</h2>
+        <p>
+          To the maximum extent permitted by law, Lucira Systems is not liable for indirect, incidental,
+          or consequential damages arising from use of the site.
+        </p>
+
+        <h2 className="subhead text-[var(--ink)] text-lg">Changes</h2>
+        <p>
+          We may update these terms. Continued use of the site constitutes acceptance of the revised terms.
+        </p>
+
+        <h2 className="subhead text-[var(--ink)] text-lg">Contact</h2>
+        <p>
+          Questions? <a className="underline" href="mailto:lucirasystems@gmail.com">lucirasystems@gmail.com</a>
+        </p>
+      </div>
+    </section>
+  );
+}
+
 }
 
 // =============================
