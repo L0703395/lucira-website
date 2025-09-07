@@ -10,11 +10,10 @@ export function useBackgroundAudio(src: string = '/sounds/bg.mp3', targetVol = 0
   useEffect(() => {
     const a = new Audio(src);
     a.loop = true;
-    a.muted = true; // autoplay allowed
-    a.volume = 0;   // we’ll fade in
+    a.muted = true; // allows autoplay
+    a.volume = 0;   // we’ll fade to target
     audioRef.current = a;
 
-    // try to start immediately (muted) — safe in all browsers
     a.play().catch(() => void 0);
 
     const unmuteAndFadeIn = () => {
@@ -34,8 +33,8 @@ export function useBackgroundAudio(src: string = '/sounds/bg.mp3', targetVol = 0
       window.removeEventListener('keydown',      unmuteAndFadeIn, true);
       window.removeEventListener('scroll',       unmuteAndFadeIn, true);
     };
-    addListeners();
 
+    addListeners();
     return () => {
       removeListeners();
       a.pause();
