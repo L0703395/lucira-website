@@ -1040,175 +1040,177 @@ function TermsPage(): JSX.Element {
   );
 }
 function RefractionPage(): JSX.Element {
-  // Layout
-  const size = 560;             // board size
-  const radius = 200;           // beam length from center
+  // Canvas layout
+  const size = 640;                     // board size
+  const radius = 230;                   // beam length from center
   const center = { x: size/2, y: size/2 };
 
-  // Beam definitions (angle in degrees, clockwise from right)
+  // Beams (angle degrees, clockwise from +X)
   const beams: { key: string; label: string; angle: number }[] = [
-    { key:'uli',       label:'ULI',       angle: 200 },
-    { key:'context',   label:'Context',   angle: 330 },
-    { key:'ethics',    label:'Ethics',    angle: 90  },
-    { key:'reasoning', label:'Reasoning', angle: 340 },
-    { key:'synthesis', label:'Synthesis', angle: 200 },
-    { key:'tessera',   label:'TESSERA',   angle: 230 },
-    { key:'deid',      label:'De-ID',     angle: 205 },
-    { key:'weights',   label:'Weights',   angle: 180 },
+    { key:'uli',       label:'ULI Intake',        angle: 200 },
+    { key:'deid',      label:'De-ID',             angle: 185 },
+    { key:'context',   label:'Context Parse',     angle: 330 },
+    { key:'ethics',    label:'Ethics Guards',     angle:  90 },
+    { key:'weights',   label:'Weights/Scales',    angle: 150 },
+    { key:'reasoning', label:'Reasoning',         angle: 340 },
+    { key:'synthesis', label:'Synthesis',         angle:  20 },
+    { key:'tessera',   label:'TESSERA Sign',      angle: 230 },
   ];
 
-  // Simulation steps — which beams activate at each phase
-  const steps: { title: string; beams: string[] }[] = [
-    { title:'ULI intake',                 beams:['uli','deid'] },
-    { title:'De-identification',          beams:['deid'] },
-    { title:'Context parse',              beams:['context'] },
-    { title:'Ethics guards',              beams:['ethics'] },
-    { title:'Reasoning',                  beams:['reasoning','weights'] },
-    { title:'Synthesis',                  beams:['synthesis'] },
-    { title:'Signature (TESSERA)',        beams:['tessera'] },
-    { title:'Emission',                   beams:['tessera'] }, // keep glow, imply outbound
+  // Scenario: “pregnancy dispute” phased path—minimal wording, high signal
+  const steps: { title: string; beams: string[]; notes: string }[] = [
+    { title:'ULI intake', beams:['uli','deid'], notes:'Memo received; PHI/PII masked via De-ID before any reasoning.' },
+    { title:'Context parse', beams:['context'], notes:'Extract roles, claims, jurisdiction, and timeline.' },
+    { title:'Ethics guards', beams:['ethics'], notes:'Apply safety/consent rules; block disallowed actions.' },
+    { title:'Weights & scales', beams:['weights'], notes:'Balance stakes: privacy, harm, rights, false-positive risk.' },
+    { title:'Reasoning', beams:['reasoning','context'], notes:'Structured analysis of options & constraints.' },
+    { title:'Synthesis', beams:['synthesis'], notes:'Compose accountable, non-diagnostic guidance.' },
+    { title:'Signature', beams:['tessera'], notes:'Notarize output and assumptions via TESSERA.' },
+    { title:'Emission', beams:['tessera'], notes:'Emit signed response with receipt.' },
   ];
 
   const [active, setActive] = React.useState(0);
-  const [running, setRunning] = React.useState(false);
+  const [running, setRunning] = React.useState(true);
 
-  // Auto-advance when running
+  // Auto-advance
   React.useEffect(() => {
     if (!running) return;
-    const id = setInterval(() => {
-      setActive(i => (i + 1) % steps.length);
-    }, 1200);
+    const id = setInterval(() => setActive(i => (i + 1) % steps.length), 1200);
     return () => clearInterval(id);
-  }, [running]);
-
-  function polar(angleDeg: number, r: number) {
-    const a = (angleDeg * Math.PI) / 180;
-    return { x: center.x + Math.cos(a)*r, y: center.y + Math.sin(a)*r };
-  }
+  }, [running, steps.length]);
 
   const activeKeys = new Set(steps[active].beams);
 
+  // helpers
+  const polar = (deg:number, r:number) => {
+    const a = (deg * Math.PI) / 180;
+    return { x: center.x + Math.cos(a)*r, y: center.y + Math.sin(a)*r };
+  };
+
   return (
     <section className="relative mx-auto max-w-6xl px-6 py-14">
-      <h1 className="text-3xl md:text-4xl font-semibold subhead text-[var(--ink)]">
-        Refraction System
-      </h1>
-      <p className="mt-2 text-[var(--muted)] subtitle">
-        Live path — beams activate only when used.
-      </p>
-
-      {/* Board */}
-      <div
-        className="relative mt-6 rounded-3xl border border-[var(--border)] bg-[var(--card)] overflow-hidden"
-        style={{ width: size, height: size, margin: '0 auto' }}
-      >
-        {/* subtle grid */}
-        <div className="absolute inset-0 pointer-events-none [background-image:linear-gradient(to_right,rgba(255,255,255,.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,.05)_1px,transparent_1px)] [background-size:40px_40px]" />
-
-        {/* Beams */}
-        <svg width={size} height={size} className="absolute inset-0">
-          {beams.map(b => {
-            const end = polar(b.angle, radius);
-            const on = activeKeys.has(b.key);
-
-            return (
-              <g key={b.key}>
-                {/* dashed energy path */}
-                <motion.line
-                  x1={center.x} y1={center.y} x2={end.x} y2={end.y}
-                  stroke={on ? 'var(--accent)' : 'rgba(186,195,207,.35)'}
-                  strokeWidth={on ? 3 : 2}
-                  strokeDasharray="10 12"
-                  initial={false}
-                  animate={on ? { opacity: 1 } : { opacity: 0.45 }}
-                  style={{
-                    filter: on ? 'drop-shadow(0 0 8px rgba(99,230,255,.6))' : 'none'
-                  }}
-                />
-                {/* flowing dash animation */}
-                <animate
-                  href={`#${b.key}`}
-                  attributeName="stroke-dashoffset"
-                  from="0" to="-44"
-                  dur="1.2s" repeatCount="indefinite"
-                />
-                {/* small label near end */}
-                <text
-                  x={end.x} y={end.y}
-                  dx={6} dy={-6}
-                  fontSize="11"
-                  fill={on ? 'var(--accent)' : 'rgba(186,195,207,.7)'}
-                >
-                  {b.label}
-                </text>
-              </g>
-            );
-          })}
-        </svg>
-
-        {/* Crystal at center */}
+      <div className="flex flex-col lg:grid lg:grid-cols-[auto_360px] gap-8">
+        {/* Board */}
         <div
-          className="absolute"
-          style={{
-            left: center.x - 64,
-            top: center.y - 96,
-            width: 128,
-            height: 192,
-            pointerEvents: 'none'
-          }}
+          className="relative rounded-3xl border border-[var(--border)] bg-[var(--card)] overflow-hidden"
+          style={{ width: size, height: size }}
         >
-          <motion.img
-            src="/crystal.png"
-            alt="Refraction crystal"
-            className="w-full h-full object-contain select-none"
-            initial={{ scale: 0.96, opacity: 0.85 }}
-            animate={{
-              scale: activeKeys.size ? 1.0 : 0.98,
-              opacity: 1,
-              filter: activeKeys.size
-                ? 'drop-shadow(0 0 24px rgba(99,230,255,.45))'
-                : 'drop-shadow(0 0 14px rgba(99,230,255,.25))'
+          {/* Subtle grid */}
+          <div className="absolute inset-0 pointer-events-none [background-image:linear-gradient(to_right,rgba(255,255,255,.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,.05)_1px,transparent_1px)] [background-size:40px_40px]" />
+
+          {/* Rays */}
+          <svg width={size} height={size} className="absolute inset-0">
+            {beams.map((b) => {
+              const end = polar(b.angle, radius);
+              const on = activeKeys.has(b.key);
+
+              return (
+                <g key={b.key}>
+                  {/* main beam */}
+                  <motion.line
+                    x1={center.x} y1={center.y} x2={end.x} y2={end.y}
+                    stroke={on ? 'var(--accent)' : 'rgba(186,195,207,.35)'}
+                    strokeWidth={on ? 3 : 2}
+                    strokeDasharray="12 14"
+                    initial={false}
+                    animate={on
+                      ? { opacity: 1, strokeDashoffset: -44 }
+                      : { opacity: 0.5, strokeDashoffset: 0 }
+                    }
+                    transition={on
+                      ? { repeat: Infinity, repeatType: 'loop', duration: 1.2, ease: 'linear' }
+                      : { duration: 0.3 }
+                    }
+                    style={{ filter: on ? 'drop-shadow(0 0 10px rgba(99,230,255,.55))' : 'none' }}
+                  />
+                  {/* minimal label at the end */}
+                  <text
+                    x={end.x} y={end.y}
+                    dx={6} dy={-6}
+                    fontSize="11"
+                    fill={on ? 'var(--accent)' : 'rgba(186,195,207,.7)'}
+                  >
+                    {b.label}
+                  </text>
+                </g>
+              );
+            })}
+          </svg>
+
+          {/* Crystal core */}
+          <div
+            className="absolute"
+            style={{
+              left: center.x - 72,
+              top: center.y - 108,
+              width: 144,
+              height: 216,
+              pointerEvents: 'none'
             }}
-            transition={{ type:'spring', stiffness:180, damping:16 }}
-          />
-        </div>
-      </div>
-
-      {/* Step rail */}
-      <div className="mx-auto mt-6 max-w-3xl grid grid-cols-2 md:grid-cols-4 gap-2">
-        {steps.map((s, i) => (
-          <button
-            key={s.title}
-            onClick={() => { setActive(i); setRunning(false); }}
-            className={[
-              'rounded-xl border px-3 py-2 text-xs subtitle text-left',
-              i===active
-                ? 'border-[var(--accent)] text-[var(--accent)] bg-[var(--accent)]/10'
-                : 'border-[var(--border)] text-[var(--muted)] hover:border-[var(--accent)]/60 hover:text-[var(--ink)]'
-            ].join(' ')}
-            title={s.title}
           >
-            {s.title}
-          </button>
-        ))}
-      </div>
+            <motion.img
+              src="/crystal.png"
+              alt="Refraction core"
+              className="w-full h-full object-contain select-none"
+              initial={{ scale: 0.96, opacity: 0.9 }}
+              animate={{
+                scale: activeKeys.size ? 1.0 : 0.985,
+                opacity: 1,
+                filter: activeKeys.size
+                  ? 'drop-shadow(0 0 26px rgba(99,230,255,.45))'
+                  : 'drop-shadow(0 0 16px rgba(99,230,255,.25))',
+              }}
+              transition={{ type: 'spring', stiffness: 180, damping: 16 }}
+            />
+          </div>
+        </div>
 
-      {/* Controls */}
-      <div className="mx-auto mt-4 max-w-3xl flex items-center gap-3">
-        <button
-          onClick={() => setRunning(v => !v)}
-          className={[
-            'rounded-full border px-4 py-2 text-sm',
-            running
-              ? 'border-red-400 text-red-300 hover:bg-red-400/10'
-              : 'border-[var(--accent)] text-[var(--accent)] hover:bg-[var(--accent)]/10'
-          ].join(' ')}
-        >
-          {running ? 'Pause' : 'Run Simulation'}
-        </button>
-        <span className="text-[var(--muted)] text-sm subtitle">
-          Minimal labels. Beams only glow when used.
-        </span>
+        {/* Right rail: compact, synced steps (no overwhelming text) */}
+        <aside className="lg:pt-2">
+          <h1 className="text-3xl md:text-4xl font-semibold subhead text-[var(--ink)]">
+            Refraction System
+          </h1>
+          <p className="mt-2 text-[var(--muted)] subtitle">
+            Beams glow only when used. Hover or click a step to jump.
+          </p>
+
+          <div className="mt-4 grid gap-2">
+            {steps.map((s, i) => {
+              const on = i === active;
+              return (
+                <button
+                  key={s.title}
+                  onMouseEnter={() => setActive(i)}
+                  onClick={() => { setActive(i); setRunning(false); }}
+                  className={[
+                    'rounded-xl border px-3 py-3 text-sm text-left subtitle transition',
+                    on
+                      ? 'border-[var(--accent)] text-[var(--accent)] bg-[var(--accent)]/10'
+                      : 'border-[var(--border)] text-[var(--muted)] hover:border-[var(--accent)]/60 hover:text-[var(--ink)]'
+                  ].join(' ')}
+                >
+                  <div className="font-medium subhead">{s.title}</div>
+                  <div className="text-xs opacity-80 mt-1">{s.notes}</div>
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="mt-4 flex items-center gap-3">
+            <button
+              onClick={() => setRunning(v => !v)}
+              className={[
+                'rounded-full border px-4 py-2 text-sm',
+                running
+                  ? 'border-red-400 text-red-300 hover:bg-red-400/10'
+                  : 'border-[var(--accent)] text-[var(--accent)] hover:bg-[var(--accent)]/10'
+              ].join(' ')}
+            >
+              {running ? 'Pause' : 'Run Simulation'}
+            </button>
+            <span className="text-[var(--muted)] text-sm subtitle">Smooth spacing, minimal labels.</span>
+          </div>
+        </aside>
       </div>
     </section>
   );
