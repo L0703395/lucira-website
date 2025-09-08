@@ -1264,7 +1264,7 @@ function RefractionPage(): JSX.Element {
   ];
 
   const [active, setActive] = React.useState(0);
-  const [running, setRunning] = React.useState(false);
+  const [running, setRunning] = React.useState(true);
 
   // Auto-advance
   React.useEffect(() => {
