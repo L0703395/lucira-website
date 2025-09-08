@@ -256,13 +256,7 @@ function HomeSections({ initialAnchor }: { initialAnchor?: 'engines'|'sovereignt
           ))}
         </div>
       </section>
-
-      {/* CONTACT */}
-      <section id="contact" className="relative mx-auto max-w-5xl px-6 py-12 md:py-20">
-        <div className="rounded-3xl border border-[var(--border)] bg-[var(--card)] p-8 md:p-12">
-          <h3 className="text-2xl md:text-3xl font-semibold subhead">Get Involved</h3>
-          <p className="mt-3 text-[var(--muted)] subtitle">Are you a researcher, policymaker, developer, or community leader? Reach out. All inquiries are vetted via ULI for ethical compliance.</p>
-          function ContactForm() {
+      function ContactForm() {
   const [status, setStatus] = React.useState<'idle'|'sending'|'success'|'error'>('idle');
   const [message, setMessage] = React.useState<string>('');
 
@@ -277,8 +271,8 @@ function HomeSections({ initialAnchor }: { initialAnchor?: 'engines'|'sovereignt
     try {
       const res = await fetch('https://formspree.io/f/xzzayaoe', {
         method: 'POST',
-        headers: { 'Accept': 'application/json' },
-        body: data
+        headers: { Accept: 'application/json' },
+        body: data,
       });
 
       if (res.ok) {
@@ -298,9 +292,7 @@ function HomeSections({ initialAnchor }: { initialAnchor?: 'engines'|'sovereignt
 
   return (
     <form onSubmit={onSubmit} className="mt-6 grid md:grid-cols-3 gap-3">
-      {/* spam honeypot */}
       <input type="text" name="_gotcha" className="hidden" tabIndex={-1} autoComplete="off" />
-      {/* formspree helpers */}
       <input type="hidden" name="_subject" value="New message from Caeliaris.site" />
       <input type="hidden" name="_template" value="table" />
 
@@ -336,7 +328,7 @@ function HomeSections({ initialAnchor }: { initialAnchor?: 'engines'|'sovereignt
           className={[
             'inline-flex items-center gap-2 rounded-full border px-5 py-2 text-sm',
             'bg-[var(--accent)]/10 border-[var(--accent)] text-[var(--accent)]',
-            status === 'sending' ? 'opacity-60 cursor-not-allowed' : 'hover:bg-[var(--accent)]/20'
+            status === 'sending' ? 'opacity-60 cursor-not-allowed' : 'hover:bg-[var(--accent)]/20',
           ].join(' ')}
         >
           {status === 'sending' ? 'Sending…' : 'Submit'} <span className="opacity-70">→</span>
@@ -350,12 +342,19 @@ function HomeSections({ initialAnchor }: { initialAnchor?: 'engines'|'sovereignt
       </div>
     </form>
   );
-    }
-    </div>
-      </section>
-    </>
-  );
 }
+
+
+      {/* CONTACT */}
+<section id="contact" className="relative mx-auto max-w-5xl px-6 py-12 md:py-20">
+  <div className="rounded-3xl border border-[var(--border)] bg-[var(--card)] p-8 md:p-12">
+    <h3 className="text-2xl md:text-3xl font-semibold subhead">Get Involved</h3>
+    <p className="mt-3 text-[var(--muted)] subtitle">
+      Are you a researcher, policymaker, developer, or community leader? Reach out. All inquiries are vetted via ULI for ethical compliance.
+    </p>
+    <ContactForm />
+  </div>
+</section>
 
 /** Engine subpage **/
 function EnginePage({ engineKey }: { engineKey: EngineKey }): JSX.Element {
