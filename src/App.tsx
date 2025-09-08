@@ -1039,34 +1039,82 @@ function TermsPage(): JSX.Element {
     </section>
   );
 }
+/** Diamond core (vector, no image file) */
+function DiamondCore({
+  cx, cy, w = 144, h = 216, active
+}: { cx: number; cy: number; w?: number; h?: number; active: boolean }) {
+  return (
+    <div
+      className="absolute select-none"
+      style={{ left: cx - w / 2, top: cy - h / 2, width: w, height: h, pointerEvents: 'none' }}
+    >
+      <svg width={w} height={h} viewBox="0 0 100 150" className="absolute inset-0">
+        <defs>
+          <linearGradient id="diaGrad" x1="50%" y1="0%" x2="50%" y2="100%">
+            <stop offset="0%"  stopColor="#A8EEFF" />
+            <stop offset="45%" stopColor="#63E6FF" />
+            <stop offset="100%" stopColor="#42CFEF" />
+          </linearGradient>
+          <filter id="diaGlow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="2.6" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+
+        {/* fill */}
+        <motion.polygon
+          points="50,3  90,58  50,147  10,58"
+          fill="url(#diaGrad)"
+          filter="url(#diaGlow)"
+          initial={{ scale: 0.97, opacity: 0.92 }}
+          animate={{ scale: active ? 1.0 : 0.985, opacity: 1 }}
+          transition={{ type: 'spring', stiffness: 180, damping: 16 }}
+        />
+        {/* stroke */}
+        <motion.polygon
+          points="50,3  90,58  50,147  10,58"
+          fill="none"
+          stroke="rgba(99,230,255,0.95)"
+          strokeWidth={1.6}
+          style={{
+            filter: active
+              ? 'drop-shadow(0 0 14px rgba(99,230,255,.55))'
+              : 'drop-shadow(0 0 6px rgba(99,230,255,.35))',
+          }}
+        />
+      </svg>
+    </div>
+  );
+}
+
 function RefractionPage(): JSX.Element {
   // Canvas layout
   const size = 640;                     // board size
   const radius = 230;                   // beam length from center
   const center = { x: size/2, y: size/2 };
 
-  // Beams (angle degrees, clockwise from +X)
-  const beams: { key: string; label: string; angle: number }[] = [
-    { key:'uli',       label:'ULI Intake',        angle: 200 },
-    { key:'deid',      label:'De-ID',             angle: 185 },
-    { key:'context',   label:'Context Parse',     angle: 330 },
-    { key:'ethics',    label:'Ethics Guards',     angle:  90 },
-    { key:'weights',   label:'Weights/Scales',    angle: 150 },
-    { key:'reasoning', label:'Reasoning',         angle: 340 },
-    { key:'synthesis', label:'Synthesis',         angle:  20 },
-    { key:'tessera',   label:'TESSERA Sign',      angle: 230 },
+  // Beams (evenly spaced; minimal label offsets so nothing crowds)
+  const beams: { key: string; label: string; angle: number; lo?: number }[] = [
+    { key:'uli',       label:'ULI Intake',     angle: 200, lo: -10 },
+    { key:'deid',      label:'De-ID',          angle: 182, lo: -8  },
+    { key:'context',   label:'Context Parse',  angle: 330, lo:  10 },
+    { key:'ethics',    label:'Ethics Guards',  angle:  84, lo: -10 },
+    { key:'weights',   label:'Weights/Scales', angle: 150, lo:  12 },
+    { key:'reasoning', label:'Reasoning',      angle:  22, lo:  10 },
+    { key:'synthesis', label:'Synthesis',      angle: 260, lo:  10 },
+    { key:'tessera',   label:'TESSERA Sign',   angle: 300, lo: -10 },
   ];
 
-  // Scenario: “pregnancy dispute” phased path—minimal wording, high signal
+  // Scenario path — concise notes
   const steps: { title: string; beams: string[]; notes: string }[] = [
-    { title:'ULI intake', beams:['uli','deid'], notes:'Memo received; PHI/PII masked via De-ID before any reasoning.' },
-    { title:'Context parse', beams:['context'], notes:'Extract roles, claims, jurisdiction, and timeline.' },
-    { title:'Ethics guards', beams:['ethics'], notes:'Apply safety/consent rules; block disallowed actions.' },
-    { title:'Weights & scales', beams:['weights'], notes:'Balance stakes: privacy, harm, rights, false-positive risk.' },
-    { title:'Reasoning', beams:['reasoning','context'], notes:'Structured analysis of options & constraints.' },
-    { title:'Synthesis', beams:['synthesis'], notes:'Compose accountable, non-diagnostic guidance.' },
-    { title:'Signature', beams:['tessera'], notes:'Notarize output and assumptions via TESSERA.' },
-    { title:'Emission', beams:['tessera'], notes:'Emit signed response with receipt.' },
+    { title:'ULI intake',          beams:['uli','deid'],            notes:'Memo received; PHI/PII masked before any reasoning.' },
+    { title:'Context parse',       beams:['context'],               notes:'Extract roles, claims, jurisdiction, timeline.' },
+    { title:'Ethics guards',       beams:['ethics'],                notes:'Safety / consent rules gate disallowed actions.' },
+    { title:'Weights & scales',    beams:['weights'],               notes:'Balance privacy, harm, rights, FP risk.' },
+    { title:'Reasoning',           beams:['reasoning','context'],   notes:'Structured options vs. constraints.' },
+    { title:'Synthesis',           beams:['synthesis'],             notes:'Compose accountable, non-diagnostic guidance.' },
+    { title:'Signature',           beams:['tessera'],               notes:'Notarize output & assumptions via TESSERA.' },
+    { title:'Emission',            beams:['tessera'],               notes:'Emit signed response with receipt.' },
   ];
 
   const [active, setActive] = React.useState(0);
@@ -1077,7 +1125,7 @@ function RefractionPage(): JSX.Element {
     if (!running) return;
     const id = setInterval(() => setActive(i => (i + 1) % steps.length), 1200);
     return () => clearInterval(id);
-  }, [running, steps.length]);
+  }, [running]);
 
   const activeKeys = new Set(steps[active].beams);
 
@@ -1102,11 +1150,11 @@ function RefractionPage(): JSX.Element {
           <svg width={size} height={size} className="absolute inset-0">
             {beams.map((b) => {
               const end = polar(b.angle, radius);
+              const tip = polar(b.angle, radius + 16);
               const on = activeKeys.has(b.key);
 
               return (
                 <g key={b.key}>
-                  {/* main beam */}
                   <motion.line
                     x1={center.x} y1={center.y} x2={end.x} y2={end.y}
                     stroke={on ? 'var(--accent)' : 'rgba(186,195,207,.35)'}
@@ -1114,20 +1162,19 @@ function RefractionPage(): JSX.Element {
                     strokeDasharray="12 14"
                     initial={false}
                     animate={on
-                      ? { opacity: 1, strokeDashoffset: -44 }
+                      ? { opacity: 1, strokeDashoffset: [0, -44] }
                       : { opacity: 0.5, strokeDashoffset: 0 }
                     }
                     transition={on
-                      ? { repeat: Infinity, repeatType: 'loop', duration: 1.2, ease: 'linear' }
-                      : { duration: 0.3 }
+                      ? { duration: 1.2, ease: 'linear', repeat: Infinity }
+                      : { duration: 0.25 }
                     }
                     style={{ filter: on ? 'drop-shadow(0 0 10px rgba(99,230,255,.55))' : 'none' }}
                   />
-                  {/* minimal label at the end */}
                   <text
-                    x={end.x} y={end.y}
-                    dx={6} dy={-6}
+                    x={tip.x} y={tip.y + (b.lo ?? 0)}
                     fontSize="11"
+                    textAnchor="middle"
                     fill={on ? 'var(--accent)' : 'rgba(186,195,207,.7)'}
                   >
                     {b.label}
@@ -1137,42 +1184,20 @@ function RefractionPage(): JSX.Element {
             })}
           </svg>
 
-          {/* Crystal core */}
-          <div
-            className="absolute"
-            style={{
-              left: center.x - 72,
-              top: center.y - 108,
-              width: 144,
-              height: 216,
-              pointerEvents: 'none'
-            }}
-          >
-            <motion.img
-              src="/crystal.png"
-              alt="Refraction core"
-              className="w-full h-full object-contain select-none"
-              initial={{ scale: 0.96, opacity: 0.9 }}
-              animate={{
-                scale: activeKeys.size ? 1.0 : 0.985,
-                opacity: 1,
-                filter: activeKeys.size
-                  ? 'drop-shadow(0 0 26px rgba(99,230,255,.45))'
-                  : 'drop-shadow(0 0 16px rgba(99,230,255,.25))',
-              }}
-              transition={{ type: 'spring', stiffness: 180, damping: 16 }}
-            />
-          </div>
+          {/* Diamond core (no /crystal.png needed) */}
+          <DiamondCore
+            cx={center.x}
+            cy={center.y}
+            w={144}
+            h={216}
+            active={activeKeys.size > 0}
+          />
         </div>
 
-        {/* Right rail: compact, synced steps (no overwhelming text) */}
+        {/* Right rail: compact, synced steps */}
         <aside className="lg:pt-2">
-          <h1 className="text-3xl md:text-4xl font-semibold subhead text-[var(--ink)]">
-            Refraction System
-          </h1>
-          <p className="mt-2 text-[var(--muted)] subtitle">
-            Beams glow only when used. Hover or click a step to jump.
-          </p>
+          <h1 className="text-3xl md:text-4xl font-semibold subhead text-[var(--ink)]">Refraction System</h1>
+          <p className="mt-2 text-[var(--muted)] subtitle">Beams glow only when used. Hover or click a step to jump.</p>
 
           <div className="mt-4 grid gap-2">
             {steps.map((s, i) => {
@@ -1215,6 +1240,7 @@ function RefractionPage(): JSX.Element {
     </section>
   );
 }
+
 
 
 // =============================
