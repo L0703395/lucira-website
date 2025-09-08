@@ -127,7 +127,6 @@ export default function CaeliarisLanding(): JSX.Element {
     </div>
   );
 }
-
 /** Router helpers **/
 function resolveRoute(hash: string):
   | { type: 'home' }
@@ -135,18 +134,25 @@ function resolveRoute(hash: string):
   | { type: 'engine'; engine: EngineKey }
   | { type: 'industry'; industry: IndustryKey } {
   if (!hash || hash === '#' || hash === '#/') return { type: 'home' };
+
   const clean = hash.replace(/^#\/?/, '');
+
+  // top-level sections
   if (['engines','sovereignty','industries','contact','privacy','terms'].includes(clean)) {
     return { type: 'section', anchor: clean as any };
   }
-}
+
+  // engine and industry subroutes
   let m = clean.match(/^engines\/(RIE|MIE|DAFE|EIIE|LIE|TAXE)$/i);
   if (m) return { type: 'engine', engine: m[1].toUpperCase() as EngineKey };
+
   m = clean.match(/^industries\/(education|finance|research|law|health|sustainability)$/i);
   if (m) return { type: 'industry', industry: m[1].toLowerCase() as IndustryKey };
+
   return { type: 'home' };
 }
 export { resolveRoute };
+
 
 /** Home sections (landing) **/
 function HomeSections({ initialAnchor }: { initialAnchor?: 'engines'|'sovereignty'|'industries'|'contact' }): JSX.Element {
