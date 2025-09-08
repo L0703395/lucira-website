@@ -356,17 +356,7 @@ function HomeSections({ initialAnchor }: { initialAnchor?: 'engines'|'sovereignt
           ))}
         </div>
       </section>
-      
-      {/* CONTACT */}
-<section id="contact" className="relative mx-auto max-w-5xl px-6 py-12 md:py-20">
-  <div className="rounded-3xl border border-[var(--border)] bg-[var(--card)] p-8 md:p-12">
-    <h3 className="text-2xl md:text-3xl font-semibold subhead">Get Involved</h3>
-    <p className="mt-3 text-[var(--muted)] subtitle">
-      Are you a researcher, policymaker, developer, or community leader? Reach out. All inquiries are vetted via ULI for ethical compliance.
-    </p>
-    <ContactForm />
-  </div>
-</section>
+     
     </>
   );
 }
