@@ -85,6 +85,7 @@ export default function CaeliarisLanding(): JSX.Element {
             <a className="hover:text-[var(--accent)] transition" href="#/industries">Industries</a>
             <a className="hover:text-[var(--accent)] transition" href="#/contact">Contact</a>
             <a className="rounded-full border border-[var(--border)] px-4 py-2 hover:border-[var(--accent)] hover:text-[var(--accent)] transition" href="#/engines/LIE">LIE</a>
+            <a className="hover:text-[var(--accent)] transition" href="#/refraction">Refraction</a>            
           </div>
         </nav>
       </header> 
@@ -1053,20 +1054,26 @@ function RefractionPage(): JSX.Element {
   const [running, setRunning] = React.useState(false);
   const [speed, setSpeed] = React.useState<'slow'|'normal'|'fast'>('normal');
   const [log, setLog] = React.useState<{id:string; label:string; t:number}[]>([]);
-  const [seed, setSeed] = React.useState(() => Math.random());
+  const [seed] = React.useState(() => Math.random());
+  const [memoText, setMemoText] = React.useState('Draft memo: equitable access policy');
+  const [packetT, setPacketT] = React.useState(0); // 0..1 along intake beam
+  const [showReceipt, setShowReceipt] = React.useState(false);
 
-  // speed map
   const ms = speed === 'slow' ? 1400 : speed === 'fast' ? 600 : 950;
 
+  // main stepper
   React.useEffect(() => {
     if (!running) return;
     if (active >= steps.length) return;
-
     const t = setTimeout(() => {
-      setLog((L) => [...L, { id: steps[active].id, label: steps[active].label, t: Date.now() }]);
-      setActive((a) => a + 1);
+      setLog(L => [...L, { id: steps[active].id, label: steps[active].label, t: Date.now() }]);
+      const next = active + 1;
+      setActive(next);
+      if (next >= steps.length) {
+        setRunning(false);
+        setShowReceipt(true);
+      }
     }, ms);
-
     return () => clearTimeout(t);
   }, [running, active, ms]);
 
@@ -1079,27 +1086,87 @@ function RefractionPage(): JSX.Element {
     setRunning(false);
     setActive(0);
     setLog([]);
-    setSeed(Math.random());
+    setPacketT(0);
+    setShowReceipt(false);
   }
 
-  // little helper for beam opacity based on active step
+  // drive the memo "packet" along the intake beam while we’re in step 1 (intake -> prism)
+  React.useEffect(() => {
+    if (!(running && active === 0)) return;
+    let raf = 0;
+    let last = performance.now();
+    const dur = 1300; // ms to travel full beam
+    let acc = 0;
+    const tick = (ts: number) => {
+      const dt = ts - last; last = ts;
+      acc += dt;
+      const t = Math.min(1, acc / dur);
+      setPacketT(t);
+      if (t < 1 && running && active === 0) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [running, active]);
+
+  // tiny hash util for the receipt
+  function fauxHash(s: string) {
+    // simple non-cryptographic hash
+    let h = 2166136261 ^ Math.floor(seed * 1e9);
+    for (let i=0;i<s.length;i++) {
+      h ^= s.charCodeAt(i);
+      h = Math.imul(h, 16777619);
+    }
+    const hex = (h>>>0).toString(16).padStart(8,'0');
+    return `0x${hex}${Math.floor(seed*1e8).toString(16).padStart(6,'0')}`;
+  }
+  const receipt = {
+    id: fauxHash(memoText),
+    at: new Date().toISOString(),
+  };
+
+  // helpers
   const beamOn = (idxNeeded: number) => active >= idxNeeded;
+
+  // packet position on intake line (x: 140->360, y: 260 constant)
+  const packetX = 140 + (360 - 140) * packetT;
+  const packetY = 260;
 
   return (
     <section className="relative mx-auto max-w-7xl px-6 py-16 md:py-24">
+      {/* local styles for shimmer */}
+      <style>{`
+        @keyframes beamShimmer {
+          from { stroke-dashoffset: 32; }
+          to   { stroke-dashoffset: 0; }
+        }
+        .beam-shimmer {
+          stroke-dasharray: 16 10;
+          animation: beamShimmer 1.2s linear infinite;
+        }
+      `}</style>
+
       <div className="grid md:grid-cols-12 gap-10">
-        {/* Left: Title + Log */}
+        {/* Left: Title + Controls + Log */}
         <div className="md:col-span-4">
-          <h1 className="text-3xl md:text-5xl font-semibold subhead text-[var(--ink)]">
-            Refraction System
-          </h1>
+          <h1 className="text-3xl md:text-5xl font-semibold subhead text-[var(--ink)]">Refraction System</h1>
           <p className="mt-3 text-[var(--muted)] subtitle">
             A memo flows from ULI into Caeliaris’s refraction layer, where multiple shard logics
             analyze, weight, and scale signals before notarization and emission.
           </p>
 
+          {/* Memo input */}
+          <div className="mt-5">
+            <label className="block text-xs text-[var(--muted)] mb-2">Memo (rides the beam)</label>
+            <input
+              value={memoText}
+              onChange={(e)=>setMemoText(e.target.value)}
+              className="w-full rounded-xl bg-transparent border border-[var(--border)] px-3 py-2 outline-none focus:border-[var(--accent)] text-sm"
+              placeholder="Type a short memo…"
+            />
+          </div>
+
           {/* Controls */}
-          <div className="mt-6 flex flex-wrap gap-2">
+          <div className="mt-5 flex flex-wrap gap-2">
             <button onClick={start}
               className="px-4 py-2 rounded-full border border-[var(--accent)] text-[var(--accent)] hover:bg-[var(--accent)]/10">
               {active === 0 ? 'Simulate' : active >= steps.length ? 'Replay' : 'Play'}
@@ -1143,22 +1210,13 @@ function RefractionPage(): JSX.Element {
             <div className="absolute inset-0 opacity-40 pointer-events-none"
                  style={{ background: 'repeating-linear-gradient(120deg, rgba(99,230,255,0.05), rgba(99,230,255,0.05) 1px, transparent 1px, transparent 20px)'}} />
 
-            {/* SVG canvas for beams and nodes */}
             <div className="relative h-[520px]">
               <svg viewBox="0 0 1200 520" className="absolute inset-0 h-full w-full">
-                {/* Intake capsule (left) */}
                 <defs>
                   <radialGradient id="capGlow" cx="50%" cy="50%" r="60%">
                     <stop offset="0%" stopColor="rgba(99,230,255,0.55)" />
                     <stop offset="100%" stopColor="transparent" />
                   </radialGradient>
-                </defs>
-
-                {/* Beams from intake -> prism */}
-                <line x1="140" y1="260" x2="360" y2="260"
-                      stroke="url(#beam1)" strokeWidth="3"
-                      opacity={beamOn(1) ? 0.9 : 0.2} />
-                <defs>
                   <linearGradient id="beam1" x1="0%" y1="0%" x2="100%" y2="0%">
                     <stop offset="0%" stopColor="#63E6FF"/>
                     <stop offset="100%" stopColor="#9C7BFF"/>
@@ -1169,6 +1227,12 @@ function RefractionPage(): JSX.Element {
                   </linearGradient>
                 </defs>
 
+                {/* Intake beam (shimmer when running) */}
+                <line x1="140" y1="260" x2="360" y2="260"
+                      stroke="url(#beam1)" strokeWidth="3"
+                      className={running ? 'beam-shimmer' : ''}
+                      opacity={beamOn(1) ? 0.95 : 0.25} />
+
                 {/* Intake Node */}
                 <g>
                   <circle cx="120" cy="260" r="46" fill="rgba(17,24,39,0.85)"
@@ -1178,26 +1242,24 @@ function RefractionPage(): JSX.Element {
                   <text x="120" y="276" fill="var(--muted)" textAnchor="middle" fontSize="10">Memo</text>
                 </g>
 
-                {/* Prism (refraction) */}
+                {/* Prism */}
                 <g transform="translate(360,180)">
-                  {/* triangle prism */}
                   <polygon points="0,160 120,0 240,160"
                     fill="rgba(156,123,255,0.08)"
                     stroke="var(--border)" strokeWidth="2" />
-                  {/* incoming arrow tip */}
                   <circle cx="0" cy="160" r="4" fill="#63E6FF" opacity={beamOn(1)?1:0.3}/>
-                  {/* outgoing beams to shards */}
                   {[0,1,2,3].map((i)=>(
                     <line key={i}
                       x1="240" y1="160"
                       x2={420} y2={80 + i*80}
                       stroke="url(#beam2)" strokeWidth="3"
-                      opacity={beamOn(2) ? 0.9 : 0.2}
+                      className={running && active>=1 ? 'beam-shimmer' : ''}
+                      opacity={beamOn(2) ? 0.95 : 0.25}
                     />
                   ))}
                 </g>
 
-                {/* Shards (right column of 4) */}
+                {/* Shards */}
                 {[0,1,2,3].map((i)=>(
                   <g key={i} transform={`translate(420, ${40 + i*80})`}>
                     <rect width="140" height="60" rx="12"
@@ -1216,11 +1278,9 @@ function RefractionPage(): JSX.Element {
                 <g transform="translate(640, 180)" opacity={beamOn(4)?1:0.6}>
                   <rect width="160" height="160" rx="16"
                         fill="rgba(17,24,39,0.85)" stroke="var(--border)" strokeWidth="2"/>
-                  {/* scale arm */}
-                  <line x1="20" y1="80" x2="140" y2="80" stroke="#63E6FF" strokeWidth="3" />
-                  {/* pivot */}
+                  <line x1="20" y1="80" x2="140" y2="80" stroke="#63E6FF" strokeWidth="3"
+                        className={running && active>=3 ? 'beam-shimmer' : ''}/>
                   <circle cx="80" cy="80" r="6" fill="#9C7BFF" />
-                  {/* plates */}
                   <circle cx="40" cy="110" r="16" fill="rgba(99,230,255,0.25)" />
                   <circle cx="120" cy="50"  r="16" fill="rgba(156,123,255,0.25)" />
                   <text x="80" y="152" fill="var(--muted)" textAnchor="middle" fontSize="10">
@@ -1230,16 +1290,15 @@ function RefractionPage(): JSX.Element {
 
                 {/* Resolution / Vault fork */}
                 <g transform="translate(840, 140)" opacity={beamOn(5)?1:0.6}>
-                  {/* split lines */}
-                  <line x1="0" y1="120" x2="100" y2="60" stroke="url(#beam2)" strokeWidth="3"/>
-                  <line x1="0" y1="120" x2="100" y2="180" stroke="url(#beam2)" strokeWidth="3"/>
-                  {/* resolution */}
+                  <line x1="0" y1="120" x2="100" y2="60" stroke="url(#beam2)" strokeWidth="3"
+                        className={running && active>=4 ? 'beam-shimmer' : ''}/>
+                  <line x1="0" y1="120" x2="100" y2="180" stroke="url(#beam2)" strokeWidth="3"
+                        className={running && active>=4 ? 'beam-shimmer' : ''}/>
                   <rect x="100" y="35" width="130" height="50" rx="10"
                         fill="rgba(17,24,39,0.85)" stroke="var(--border)" strokeWidth="2"/>
                   <text x="165" y="65" textAnchor="middle" fill="var(--ink)" fontSize="11" fontWeight="600">
                     Resolution
                   </text>
-                  {/* vault */}
                   <rect x="100" y="165" width="130" height="50" rx="10"
                         fill="rgba(17,24,39,0.85)" stroke="var(--border)" strokeWidth="2"/>
                   <text x="165" y="195" textAnchor="middle" fill="var(--ink)" fontSize="11" fontWeight="600">
@@ -1251,17 +1310,30 @@ function RefractionPage(): JSX.Element {
                 <g transform="translate(1020, 180)" opacity={beamOn(6)?1:0.6}>
                   <rect width="160" height="160" rx="16"
                         fill="rgba(17,24,39,0.85)" stroke="var(--border)" strokeWidth="2"/>
-                  {/* seal */}
                   <circle cx="80" cy="70" r="22" fill="rgba(99,230,255,0.18)" stroke="#63E6FF" strokeWidth="2" />
                   <text x="80" y="76" textAnchor="middle" fill="#63E6FF" fontSize="10" fontWeight="700">TESSERA</text>
-                  {/* output */}
                   <rect x="30" y="110" width="100" height="34" rx="8"
                         fill="rgba(156,123,255,0.18)" stroke="#9C7BFF" strokeWidth="1.5"/>
                   <text x="80" y="132" textAnchor="middle" fill="var(--ink)" fontSize="10">Receipt + Output</text>
                 </g>
               </svg>
 
-              {/* Floating captions synced to step */}
+              {/* Interactive MEMO "packet" riding the intake beam */}
+              <motion.div
+                initial={false}
+                animate={{ x: packetX, y: packetY }}
+                transition={{ type:'spring', stiffness:120, damping:20 }}
+                className="absolute"
+                style={{ transform: `translate(${packetX}px, ${packetY}px)` }}
+              >
+                <div className="translate-x-[-50%] translate-y-[-50%] select-none pointer-events-none">
+                  <div className="px-2 py-1 rounded-full text-[10px] border border-[var(--accent)] text-[var(--accent)] bg-[var(--accent)]/10 whitespace-nowrap">
+                    {memoText.slice(0,42)}{memoText.length>42?'…':''}
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* Floating caption */}
               <div className="absolute left-0 right-0 bottom-0 p-4">
                 <motion.div
                   key={active}
@@ -1299,6 +1371,35 @@ function RefractionPage(): JSX.Element {
           </ol>
         </div>
       </div>
+
+      {/* Receipt modal */}
+      {showReceipt && (
+        <div className="fixed inset-0 z-50 grid place-items-center bg-black/50">
+          <div className="w-[min(560px,92vw)] rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6 shadow-2xl">
+            <div className="flex items-center justify-between">
+              <div className="text-lg subhead text-[var(--ink)]">TESSERA Receipt</div>
+              <button onClick={()=>setShowReceipt(false)}
+                className="px-3 py-1 rounded-full border border-[var(--border)] text-[var(--muted)] hover:text-[var(--ink)] hover:border-[var(--accent)]/50">
+                Close
+              </button>
+            </div>
+            <div className="mt-4 text-sm subtitle text-[var(--muted)]">
+              <div className="flex items-center gap-2">
+                <span className="text-[var(--ink)] subhead">Hash:</span>
+                <code className="px-2 py-1 rounded bg-black/30 border border-[var(--border)]">{receipt.id}</code>
+                <button
+                  onClick={() => navigator.clipboard?.writeText(receipt.id)}
+                  className="px-2 py-1 rounded border border-[var(--border)] hover:border-[var(--accent)]/50"
+                >
+                  Copy
+                </button>
+              </div>
+              <div className="mt-2"><span className="text-[var(--ink)] subhead">Timestamp:</span> {receipt.at}</div>
+              <div className="mt-2"><span className="text-[var(--ink)] subhead">Memo:</span> {memoText}</div>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
