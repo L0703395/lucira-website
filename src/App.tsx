@@ -407,16 +407,17 @@ function HomeSections({ initialAnchor }: { initialAnchor?: 'engines'|'sovereignt
 
 
       {/* INDUSTRIES */}
-      <section id="industries" className="relative mx-auto max-w-7xl px-6 py-12 md:py-20">
-        <SectionTitle kicker="Surfaces" title="Industry Interfaces" subtitle="Public-facing surfaces route through ULI and enforce TESSERA signatures." />
-        <div className="mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {industries.map((i)=> (
-            <a key={i.key} href={`#/industries/${i.key}`} className="block">
-              <IndustryCard title={i.title} items={i.items} />
-            </a>
-          ))}
-        </div>
-      </section>
+{/* INDUSTRIES (minimal titles + preview) */}
+<section id="industries" className="relative mx-auto max-w-7xl px-6 py-12 md:py-20">
+  <SectionTitle
+    kicker="Surfaces"
+    title="Industry Interfaces"
+    subtitle="Public-facing surfaces route through ULI and enforce TESSERA signatures."
+  />
+
+  <IndustryTilesMinimal />
+</section>
+
      
     </>
   );
@@ -963,6 +964,71 @@ function BackgroundFX({ scrollY }: { scrollY: number }): JSX.Element {
     </>
   );
 }
+function IndustryTilesMinimal(): JSX.Element {
+  const [open, setOpen] = React.useState<IndustryKey | null>(null); // tap/click fallback (mobile)
+
+  return (
+    <div className="mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {industries.map((i) => {
+        const href = `#/industries/${i.key}`;
+        const isOpen = open === i.key;
+
+        return (
+          <div
+            key={i.key}
+            className="relative group rounded-2xl border border-[var(--border)] bg-[var(--card)]/40 p-5 overflow-hidden"
+            onMouseLeave={() => setOpen((k) => (k === i.key ? null : k))}
+          >
+            {/* Title only (clickable) */}
+            <a
+              href={href}
+              className="inline-block text-[var(--ink)] subhead text-xl md:text-2xl underline underline-offset-[6px]
+                         decoration-[var(--accent)]/60 decoration-2
+                         transition hover:text-[var(--accent)]
+                         [text-shadow:0_0_10px_rgba(99,230,255,0.35)]"
+            >
+              {i.title}
+            </a>
+
+            {/* Hover glow wash */}
+            <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition
+                            bg-[radial-gradient(320px_140px_at_85%_-10%,var(--glow),transparent_70%)]" />
+
+            {/* Preview: shows on hover (desktop) OR on tap (mobile) */}
+            <button
+              className="mt-3 text-xs text-[var(--muted)]/80 border border-[var(--border)] rounded-full px-3 py-1
+                         hover:border-[var(--accent)]/60 hover:text-[var(--ink)] md:hidden"
+              onClick={() => setOpen(isOpen ? null : i.key)}
+            >
+              {isOpen ? 'Hide preview' : 'Quick preview'}
+            </button>
+
+            <div
+              className={[
+                "absolute left-5 right-5 top-[58px] md:top-[56px] z-10",
+                "md:pointer-events-none md:opacity-0 md:translate-y-1",
+                "md:group-hover:opacity-100 md:group-hover:translate-y-0 md:transition",
+                isOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-1",
+              ].join(" ")}
+            >
+              <div className="rounded-xl border border-[var(--border)] bg-[color-mix(in_srgb,var(--card)_80%,transparent)] p-4 shadow-xl">
+                <ul className="space-y-1.5 text-sm text-[var(--muted)] subtitle">
+                  {i.items.map((item) => (
+                    <li key={item} className="flex gap-2">
+                      <span className="mt-1 h-1.5 w-1.5 rounded-full bg-[var(--accent)]/70 shrink-0" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 
 /** Standalone pages (must be top-level, not nested inside other components) **/
 function ContactPage(): JSX.Element {
