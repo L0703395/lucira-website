@@ -1040,285 +1040,223 @@ function TermsPage(): JSX.Element {
   );
 }
 function RefractionPage(): JSX.Element {
-  // Step program
-  const steps = [
-    { id:'intake',   label:'ULI Intake', desc:'Question arrives with context & permissions.' },
-    { id:'decomp',   label:'Decomposition', desc:'Diamond refracts into shard logics.' },
-    { id:'gather',   label:'Fact Pattern', desc:'Jurisdiction, age status, care type, threat level.' },
-    { id:'shards',   label:'Shard Evaluation', desc:'Parallel scoring across five shards.' },
-    { id:'weights',  label:'Weighting & Scaling', desc:'Balance rights, risks, constraints.' },
-    { id:'resolve',  label:'Resolution & Options', desc:'Actions & alternatives prepared.' },
-    { id:'tessera',  label:'TESSERA Signature', desc:'Receipts + verifiable outputs.' },
-    { id:'emit',     label:'Emission', desc:'Deliver response + audit trail.' },
+  type Phase =
+    | 'intake' | 'deid' | 'context'
+    | 'reason' | 'ethics' | 'weights'
+    | 'synthesize' | 'tessera' | 'emit';
+
+  const phases: {key:Phase; title:string; detail:string}[] = [
+    {
+      key:'intake',
+      title:'ULI Intake',
+      detail:'Memo arrives via ULI. Scope captured: jurisdiction, roles, request, time sensitivity.'
+    },
+    {
+      key:'deid',
+      title:'De-identification',
+      detail:'Personally identifiable info minimized/masked. Only necessary attributes retained.'
+    },
+    {
+      key:'context',
+      title:'Context Binding',
+      detail:'Facts split from claims; applicable rulesets and policies loaded for the scenario.'
+    },
+    {
+      key:'reason',
+      title:'Structured Reasoning',
+      detail:'Chain builds from premises → tests → provisional conclusions with uncertainty.'
+    },
+    {
+      key:'ethics',
+      title:'Ethical & Safety Gates',
+      detail:'Autonomy, beneficence, non-maleficence, justice; check coercion/safety thresholds.'
+    },
+    {
+      key:'weights',
+      title:'Weights & Evidence',
+      detail:'Sources ranked; conflicts flagged. Burden of proof/authority is tracked explicitly.'
+    },
+    {
+      key:'synthesize',
+      title:'Synthesis',
+      detail:'Resolution options assembled; disclosures constrained to lawful/consented scope.'
+    },
+    {
+      key:'tessera',
+      title:'TESSERA',
+      detail:'Cryptographic receipt prepared: hash of inputs, guards passed, and selected outputs.'
+    },
+    {
+      key:'emit',
+      title:'Emission',
+      detail:'Deliver response to the intended party; record audit pointer.'
+    }
   ];
 
-  // Shards tailored to this case
-  const shardDefs = [
-    { key:'autonomy',  title:'Autonomy & Consent',    short:'Autonomy' },
-    { key:'clinical',  title:'Clinical Risk & Duty',  short:'Clinical' },
-    { key:'law',       title:'Legal Constraints',     short:'Legal' },
-    { key:'safety',    title:'Safety & Harm Checks',  short:'Safety' },
-    { key:'prece',     title:'Precedent & Analogy',   short:'Precedent' },
-  ] as const;
+  // Scenario labels (your “young woman / older woman” classic case)
+  // These labels appear on the right panel and sync with the animation.
+  const scenarioSteps: {link:Phase; text:string}[] = [
+    { link:'intake',     text:'Two parties present: a 19-year-old requests confidential guidance; a guardian-aged third party requests status.' },
+    { link:'deid',       text:'Names/identifiers masked. Roles kept: “requesting adult patient”, “third-party adult”.' },
+    { link:'context',    text:'Jurisdictional rules: adult autonomy; privacy/consent; duty to warn thresholds.' },
+    { link:'reason',     text:'Separate claims: (A) patient seeks care; (B) third party demands info. Consider possible pregnancy and privacy basis.' },
+    { link:'ethics',     text:'Run gates: autonomy → respect patient agency; safety screen for coercion/self-harm; escalate only if threshold met.' },
+    { link:'weights',    text:'Prioritize statutes/clinical guidelines over informal assertions; note uncertainty if facts incomplete.' },
+    { link:'synthesize', text:'Resolution: offer the patient confidential care and resources; disclosures only with consent or lawful basis.' },
+    { link:'tessera',    text:'Prepare signed receipt of reasoning path and guard checks (without exposing PHI).' },
+    { link:'emit',       text:'Provide patient-facing guidance; withhold information from third party unless legal basis or patient consent.' }
+  ];
 
-  const [active, setActive] = React.useState(0);
-  const [running, setRunning] = React.useState(false);
-  const [speed, setSpeed] = React.useState<'slow'|'normal'|'fast'>('normal');
-  const ms = speed === 'slow' ? 1300 : speed === 'fast' ? 520 : 900;
+  const [active, setActive] = React.useState<Phase>('intake');
+  const [playing, setPlaying] = React.useState(false);
 
-  // drive the sim
-  React.useEffect(() => {
-    if (!running) return;
-    if (active >= steps.length) return;
-    const t = setTimeout(() => setActive(a => a + 1), ms);
-    return () => clearTimeout(t);
-  }, [running, active, ms]);
+  // run animated sequence
+  function play() {
+    if (playing) return;
+    setPlaying(true);
+    const order = phases.map(p => p.key);
+    let i = 0;
+    const tick = () => {
+      setActive(order[i] as Phase);
+      i += 1;
+      if (i < order.length) {
+        setTimeout(tick, 900);
+      } else {
+        setPlaying(false);
+      }
+    };
+    tick();
+  }
 
-  function start(){ if(active>=steps.length) setActive(0); setRunning(true); }
-  function pause(){ setRunning(false); }
-  function reset(){ setRunning(false); setActive(0); }
-
-  const beamOn = (need: number) => active >= need;
-  const nowStep = steps[Math.min(active, steps.length-1)];
+  // map a phase to a 0..1 progress for beam animation
+  const progressIndex = phases.findIndex(p => p.key === active);
+  const progress = (progressIndex + 1) / phases.length;
 
   return (
-    <section className="relative mx-auto max-w-7xl px-6 py-16 md:py-24">
-      {/* local beam shimmer + pulse */}
-      <style>{`
-        @keyframes beamShimmer { from { stroke-dashoffset: 32; } to { stroke-dashoffset: 0; } }
-        .beam { stroke-dasharray: 16 10; }
-        .run  { animation: beamShimmer 1.2s linear infinite; }
-        @keyframes pulse { 0%,100%{opacity:.55} 50%{opacity:1} }
-        .pulse { animation: pulse 1.6s ease-in-out infinite; }
-      `}</style>
+    <section className="relative mx-auto max-w-7xl px-6 py-14 md:py-20">
+      <div className="flex flex-col lg:grid lg:grid-cols-12 gap-8 items-start">
+        {/* LEFT: immersive diagram */}
+        <div className="lg:col-span-7 relative rounded-3xl border border-[var(--border)] bg-[var(--card)] overflow-hidden p-6">
+          {/* faint grid */}
+          <div className="absolute inset-0 pointer-events-none [background-image:linear-gradient(to_right,rgba(255,255,255,.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,.04)_1px,transparent_1px)] [background-size:36px_36px]" />
+          
+          {/* center shard */}
+          <div className="relative h-[520px]">
+            <motion.img
+              src="/shard.png"
+              alt="Refraction shard"
+              initial={{ scale: 0.95, opacity: 0.9, rotate: 0 }}
+              animate={{ 
+                scale: 1 + Math.sin(progress * Math.PI) * 0.05,
+                opacity: 1,
+                rotate: progress * 8
+              }}
+              transition={{ type: 'spring', stiffness: 120, damping: 20 }}
+              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-64 w-auto drop-shadow-[0_0_40px_rgba(99,230,255,0.35)]"
+            />
 
-      <div className="grid md:grid-cols-12 gap-10">
-        {/* LEFT: case panel + controls */}
-        <div className="md:col-span-4">
-          <h1 className="text-3xl md:text-5xl font-semibold subhead text-[var(--ink)]">Refraction System</h1>
-          <p className="mt-3 text-[var(--muted)] subtitle">
-            Visual simulation of Caeliaris processing a sensitive confidentiality case.
-          </p>
+            {/* beam helper */}
+            {[
+              { key:'intake', x1: '10%', y1:'15%', x2:'50%', y2:'50%', label:'ULI' },
+              { key:'deid', x1: '15%', y1:'80%', x2:'50%', y2:'54%', label:'De-ID' },
+              { key:'context', x1: '90%', y1:'18%', x2:'50%', y2:'48%', label:'Context' },
+              { key:'reason', x1: '88%', y1:'78%', x2:'54%', y2:'56%', label:'Reasoning' },
+              { key:'ethics', x1: '50%', y1:'5%',  x2:'50%', y2:'42%', label:'Ethics' },
+              { key:'weights', x1:'5%',  y1:'48%', x2:'46%', y2:'52%', label:'Weights' },
+              { key:'synthesize', x1:'50%', y1:'60%', x2:'50%', y2:'78%', label:'Synthesis' },
+              { key:'tessera', x1:'30%', y1:'92%', x2:'48%', y2:'70%', label:'TESSERA' },
+              { key:'emit', x1:'72%', y1:'92%', x2:'54%', y2:'72%', label:'Emission' },
+            ].map((b, i) => {
+              const isActive = phases[i].key === active;
+              // animate dash offset based on global progress but brighten when phase is active
+              return (
+                <svg key={b.key} className="absolute inset-0 w-full h-full pointer-events-none">
+                  <defs>
+                    <linearGradient id={`g-${b.key}`} x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stopColor="rgba(99,230,255,0)" />
+                      <stop offset="50%" stopColor="rgba(99,230,255,0.8)" />
+                      <stop offset="100%" stopColor="rgba(156,123,255,0.3)" />
+                    </linearGradient>
+                  </defs>
+                  <line
+                    x1={b.x1} y1={b.y1}
+                    x2={b.x2} y2={b.y2}
+                    stroke={`url(#g-${b.key})`}
+                    strokeWidth={isActive ? 3.5 : 2}
+                    strokeDasharray="8 10"
+                    style={{
+                      filter: isActive ? 'drop-shadow(0 0 10px rgba(99,230,255,.6))' : 'none',
+                      strokeDashoffset: (1 - progress) * 120
+                    }}
+                  />
+                </svg>
+              );
+            })}
 
-          <div className="mt-5 rounded-2xl border border-[var(--border)] bg-[var(--card)] p-4">
-            <div className="text-sm subhead text-[var(--ink)]">Case (for demo)</div>
-            <p className="mt-2 text-sm text-[var(--muted)] subtitle">
-              A pregnant young woman (legal adult) requests confidential care. An older family member
-              demands disclosure. What actions are permissible and responsible?
-            </p>
+            {/* node labels around edges */}
+            <div className="absolute left-[8%] top-[9%] text-xs text-[var(--muted)]">ULI</div>
+            <div className="absolute left-[10%] bottom-[12%] text-xs text-[var(--muted)]">De-ID</div>
+            <div className="absolute right-[6%] top-[10%] text-xs text-[var(--muted)]">Context</div>
+            <div className="absolute right-[7%] bottom-[12%] text-xs text-[var(--muted)]">Reasoning</div>
+            <div className="absolute left-1/2 -translate-x-1/2 top-[6%] text-xs text-[var(--muted)]">Ethics</div>
+            <div className="absolute left-[4%] top-1/2 -translate-y-1/2 text-xs text-[var(--muted)]">Weights</div>
+            <div className="absolute left-1/2 -translate-x-1/2 bottom-[12%] text-xs text-[var(--muted)]">Synthesis</div>
+            <div className="absolute left-[22%] bottom-[4%] text-xs text-[var(--muted)]">TESSERA</div>
+            <div className="absolute right-[18%] bottom-[4%] text-xs text-[var(--muted)]">Emission</div>
           </div>
 
-          {/* Controls */}
-          <div className="mt-5 flex flex-wrap gap-2">
-            <button onClick={start}
-              className="px-4 py-2 rounded-full border border-[var(--accent)] text-[var(--accent)] hover:bg-[var(--accent)]/10">
-              {active===0 ? 'Simulate' : active>=steps.length ? 'Replay' : 'Play'}
-            </button>
-            <button onClick={pause}
-              className="px-4 py-2 rounded-full border border-[var(--border)] text-[var(--ink)] hover:border-[var(--accent)]/50">
-              Pause
-            </button>
-            <button onClick={reset}
-              className="px-4 py-2 rounded-full border border-[var(--border)] text-[var(--ink)] hover:border-[var(--accent)]/50">
-              Reset
-            </button>
-            <select
-              value={speed}
-              onChange={(e)=>setSpeed(e.target.value as any)}
-              className="px-4 py-2 rounded-full bg-transparent border border-[var(--border)] text-sm focus:border-[var(--accent)]"
+          <div className="flex items-center justify-between pt-2">
+            <div className="text-sm text-[var(--muted)]">Refraction System — live path</div>
+            <button
+              onClick={play}
+              disabled={playing}
+              className={[
+                'px-3 py-1 rounded-full text-sm border',
+                'border-[var(--accent)] text-[var(--accent)] hover:bg-[var(--accent)]/10',
+                playing ? 'opacity-60 cursor-not-allowed' : ''
+              ].join(' ')}
             >
-              <option value="slow">Slow</option>
-              <option value="normal">Normal</option>
-              <option value="fast">Fast</option>
-            </select>
+              {playing ? 'Running…' : 'Run Simulation'}
+            </button>
           </div>
-
-          {/* Steps list */}
-          <ol className="mt-6 space-y-2 text-sm subtitle">
-            {steps.map((s, i)=>(
-              <li key={s.id}
-                  className={[
-                    'rounded-xl border p-3',
-                    'border-[var(--border)] bg-[var(--card)]',
-                    i<active ? 'text-[var(--ink)]' : 'text-[var(--muted)]'
-                  ].join(' ')}>
-                <span className="subhead">{i+1}. {s.label}</span>
-                <div className="text-xs mt-1">{s.desc}</div>
-              </li>
-            ))}
-          </ol>
         </div>
 
-        {/* RIGHT: immersive diagram */}
-        <div className="md:col-span-8">
-          <div className="relative rounded-3xl border border-[var(--border)] bg-[var(--card)] overflow-hidden">
-            {/* soft field */}
-            <div className="absolute inset-0 bg-[radial-gradient(900px_280px_at_70%_10%,var(--glow),transparent_60%)] opacity-80 pointer-events-none" />
-            <div className="relative h-[560px]">
-              <svg viewBox="0 0 1200 560" className="absolute inset-0 h-full w-full">
-                <defs>
-                  <linearGradient id="cyan" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%"  stopColor="#63E6FF"/>
-                    <stop offset="100%" stopColor="#63E6FF"/>
-                  </linearGradient>
-                  <radialGradient id="glow" cx="50%" cy="50%" r="60%">
-                    <stop offset="0%" stopColor="rgba(99,230,255,0.55)" />
-                    <stop offset="100%" stopColor="transparent" />
-                  </radialGradient>
-                </defs>
+        {/* RIGHT: synced step panel */}
+        <div className="lg:col-span-5">
+          <h2 className="text-2xl md:text-3xl font-semibold subhead">Scenario Walkthrough</h2>
+          <p className="mt-2 text-[var(--muted)] subtitle">
+            Hover a step to highlight the matching node/beam. Press “Run Simulation” to watch the full path.
+          </p>
 
-                {/* ULI node */}
-                <g>
-                  <circle cx="120" cy="280" r="46" fill="rgba(17,24,39,0.85)" stroke="var(--border)" strokeWidth="2" />
-                  <circle cx="120" cy="280" r="82" fill="url(#glow)" opacity="0.35" className={beamOn(1)?'pulse':''}/>
-                  <text x="120" y="278" fill="var(--ink)" textAnchor="middle" fontSize="12" fontWeight="600">ULI</text>
-                  <text x="120" y="296" fill="var(--muted)" textAnchor="middle" fontSize="10">Intake</text>
-                </g>
-
-                {/* intake beam -> diamond */}
-                <line x1="166" y1="280" x2="360" y2="280"
-                      stroke="url(#cyan)" strokeWidth="3"
-                      className={`beam ${running && active>=0 ? 'run':''}`}
-                      opacity={beamOn(1)?0.95:0.25}/>
-
-                {/* Cyan DIAMOND (replaces triangle prism) */}
-                <g transform="translate(360, 160)" opacity={beamOn(2)?1:0.6}>
-                  <polygon
-                    points="120,0 240,120 120,240 0,120"
-                    fill="rgba(99,230,255,0.08)"
-                    stroke="#63E6FF" strokeWidth="2"
-                    className={running && active>=1 ? 'pulse':''}
-                  />
-                  <text x="120" y="128" textAnchor="middle" fill="#63E6FF" fontSize="11" fontWeight="700">
-                    Decomposition
-                  </text>
-                </g>
-
-                {/* beams from diamond to shards */}
-                {[0,1,2,3,4].map((i)=>(
-                  <line key={i}
-                        x1="600" y1="280"
-                        x2="780" y2={120 + i*80}
-                        stroke="url(#cyan)" strokeWidth="3"
-                        className={`beam ${running && active>=3 ? 'run':''}`}
-                        opacity={beamOn(3)?0.95:0.25}/>
-                ))}
-
-                {/* five shards */}
-                {[0,1,2,3,4].map((i)=>(
-                  <g key={i} transform={`translate(780, ${90 + i*80})`} opacity={beamOn(3)?1:0.6}>
-                    <rect width="160" height="60" rx="12"
-                          fill="rgba(17,24,39,0.85)" stroke="var(--border)" strokeWidth="2" />
-                    <text x="80" y="26" fill="var(--ink)" textAnchor="middle" fontSize="11" fontWeight="600">
-                      {shardDefs[i].short}
-                    </text>
-                    <text x="80" y="42" fill="var(--muted)" textAnchor="middle" fontSize="9">
-                      evaluating…
-                    </text>
-                    {/* return beam to weighting hub */}
-                    <line x1="160" y1="30" x2="260" y2="30"
-                          stroke="url(#cyan)" strokeWidth="3"
-                          className={`beam ${running && active>=3 ? 'run':''}`}
-                          opacity={beamOn(4)?0.95:0.25}/>
-                  </g>
-                ))}
-
-                {/* weighting hub */}
-                <g transform="translate(1040, 140)" opacity={beamOn(4)?1:0.6}>
-                  <rect width="120" height="280" rx="16"
-                        fill="rgba(17,24,39,0.85)" stroke="var(--border)" strokeWidth="2"/>
-                  {/* vertical scale */}
-                  <line x1="60" y1="30" x2="60" y2="250"
-                        stroke="#63E6FF" strokeWidth="3"
-                        className={running && active>=4 ? 'beam run':''}/>
-                  {/* plates oscillate lightly while weighting */}
-                  <circle cx="60" cy="80"  r="14" fill="rgba(99,230,255,0.25)" className={active===4?'pulse':''}/>
-                  <circle cx="60" cy="150" r="14" fill="rgba(156,123,255,0.25)" className={active===4?'pulse':''}/>
-                  <circle cx="60" cy="220" r="14" fill="rgba(99,230,255,0.25)" className={active===4?'pulse':''}/>
-                  <text x="60" y="270" textAnchor="middle" fill="var(--muted)" fontSize="10">
-                    Weights
-                  </text>
-                </g>
-
-                {/* hub -> resolution box */}
-                <line x1="1100" y1="280" x2="1180" y2="280"
-                      stroke="url(#cyan)" strokeWidth="3"
-                      className={`beam ${running && active>=4 ? 'run':''}`}
-                      opacity={beamOn(5)?0.95:0.25}/>
-              </svg>
-
-              {/* resolution panel */}
-              <div className="absolute right-3 top-1/2 -translate-y-1/2 w-[300px]">
-                <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-4"
-                     style={{opacity: beamOn(5)?1:0.6}}>
-                  <div className="text-sm subhead text-[var(--ink)]">Resolution & Options</div>
-                  <ul className="mt-2 text-xs text-[var(--muted)] subtitle space-y-2">
-                    <li className={active>=5?'text-[var(--ink)]':''}>
-                      • Provide confidential care to the patient (legal adult autonomy).
-                    </li>
-                    <li className={active>=5?'text-[var(--ink)]':''}>
-                      • Screen for immediate safety risks (self-harm, coercion); escalate only if risk thresholds are met.
-                    </li>
-                    <li className={active>=5?'text-[var(--ink)]':''}>
-                      • Offer patient-controlled disclosures (with consent) and supportive resources.
-                    </li>
-                    <li className={active>=5?'text-[var(--ink)]':''}>
-                      • Document legal basis & clinical reasoning; withhold information from demanding third parties absent lawful basis or consent.
-                    </li>
-                  </ul>
-                </div>
-
-                {/* tessera + emit */}
-                <div className="mt-3 grid grid-cols-2 gap-3">
-                  <div className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-3 text-center"
-                       style={{opacity: beamOn(6)?1:0.6}}>
-                    <div className="text-xs subhead text-[var(--ink)]">TESSERA</div>
-                    <div className="text-[10px] text-[var(--muted)]">Receipt ready</div>
+          <ol className="mt-5 space-y-3">
+            {scenarioSteps.map((s, idx) => {
+              const isActive = active === s.link;
+              return (
+                <li
+                  key={s.link}
+                  onMouseEnter={() => setActive(s.link)}
+                  className={[
+                    'rounded-2xl border p-4 cursor-default transition',
+                    isActive
+                      ? 'border-[var(--accent)] bg-[var(--accent)]/8 text-[var(--ink)]'
+                      : 'border-[var(--border)] text-[var(--muted)] hover:border-[var(--accent)]/50 hover:text-[var(--ink)]'
+                  ].join(' ')}
+                >
+                  <div className="text-sm subhead flex items-center gap-2">
+                    <span className="inline-flex h-2 w-2 rounded-full"
+                          style={{ background: isActive ? 'var(--accent)' : 'var(--border)' }} />
+                    {idx + 1}. {phases[idx].title}
                   </div>
-                  <div className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-3 text-center"
-                       style={{opacity: beamOn(7)?1:0.6}}>
-                    <div className="text-xs subhead text-[var(--ink)]">Emission</div>
-                    <div className="text-[10px] text-[var(--muted)]">Deliver response</div>
-                  </div>
-                </div>
-              </div>
-
-              {/* live caption */}
-              <div className="absolute left-0 right-0 bottom-0 p-4">
-                <motion.div key={active} initial={{opacity:0,y:8}} animate={{opacity:1,y:0}} transition={{duration:.35}}
-                  className="text-center">
-                  <div className="inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-black/30 px-4 py-2">
-                    <span className="text-xs subhead text-[var(--accent-2)] uppercase tracking-widest">
-                      Step {Math.min(active+1, steps.length)}/{steps.length}
-                    </span>
-                    <span className="text-sm text-[var(--ink)] subhead">{nowStep.label}</span>
-                  </div>
-                </motion.div>
-              </div>
-            </div>
-          </div>
-
-          {/* shard legend explaining what each evaluates in this case */}
-          <div className="mt-6 grid md:grid-cols-5 gap-3 text-xs subtitle">
-            {shardDefs.map(s=>(
-              <div key={s.key} className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-3">
-                <div className="subhead text-[var(--ink)]">{s.short}</div>
-                <div className="mt-1 text-[var(--muted)]">
-                  {s.key==='autonomy' && 'Is the patient a legal adult? Respect informed consent; defaults to confidentiality.'}
-                  {s.key==='clinical' && 'Duty of care: immediate medical needs, risk screening, necessary referrals.'}
-                  {s.key==='law' && 'Applicable privacy/health laws; disclosure exceptions (danger, court order, explicit consent).'}
-                  {s.key==='safety' && 'Coercion, domestic threats, self-harm; escalate if thresholds met.'}
-                  {s.key==='prece' && 'Analogous rulings & guidelines; ensure consistency and fairness.'}
-                </div>
-              </div>
-            ))}
-          </div>
+                  <p className="mt-2 text-sm subtitle">{s.text}</p>
+                </li>
+              );
+            })}
+          </ol>
         </div>
       </div>
     </section>
   );
 }
-
 
 // =============================
 // Inline tests (Vitest) — run with `vitest`
