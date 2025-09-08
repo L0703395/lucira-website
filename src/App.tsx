@@ -262,7 +262,6 @@ function HomeSections({ initialAnchor }: { initialAnchor?: 'engines'|'sovereignt
         <div className="rounded-3xl border border-[var(--border)] bg-[var(--card)] p-8 md:p-12">
           <h3 className="text-2xl md:text-3xl font-semibold subhead">Get Involved</h3>
           <p className="mt-3 text-[var(--muted)] subtitle">Are you a researcher, policymaker, developer, or community leader? Reach out. All inquiries are vetted via ULI for ethical compliance.</p>
-          <ContactForm>
           function ContactForm() {
   const [status, setStatus] = React.useState<'idle'|'sending'|'success'|'error'>('idle');
   const [message, setMessage] = React.useState<string>('');
@@ -299,7 +298,9 @@ function HomeSections({ initialAnchor }: { initialAnchor?: 'engines'|'sovereignt
 
   return (
     <form onSubmit={onSubmit} className="mt-6 grid md:grid-cols-3 gap-3">
+      {/* spam honeypot */}
       <input type="text" name="_gotcha" className="hidden" tabIndex={-1} autoComplete="off" />
+      {/* formspree helpers */}
       <input type="hidden" name="_subject" value="New message from Caeliaris.site" />
       <input type="hidden" name="_template" value="table" />
 
@@ -347,11 +348,10 @@ function HomeSections({ initialAnchor }: { initialAnchor?: 'engines'|'sovereignt
           </span>
         )}
       </div>
-    </ContactForm>
+    </form>
   );
-}
-
-        </div>
+    }
+    </div>
       </section>
     </>
   );
