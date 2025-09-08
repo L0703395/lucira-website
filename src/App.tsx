@@ -59,9 +59,9 @@ export default function CaeliarisLanding(): JSX.Element {
         :root{
           --bg-solid:#0A0D12; /* bottom solid */
           --bg-via:#0F1420;   /* middle via */
-          --bg-top:#2554C7;   /*sapphire blue*/
+          --bg-top:#C6DEFF;   /*heavenly blue*/
           --ink:#E6EAEE;      /* primary text on dark */
-          --muted:#BAC3CF;    /* secondary text */
+          --muted:#838996;    /* secondary text */
           --accent:#63E6FF;   /* cyan accent */
           --accent-2:#9C7BFF; /* violet accent */
           --glow:#63E6FF33;   /* glow */
