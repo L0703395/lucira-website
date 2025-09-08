@@ -869,24 +869,44 @@ function IndustryCard({ title, items }:{ title:string; items:string[];}): JSX.El
   );
 }
 
-function BackgroundFX({scrollY}:{scrollY:number;}): JSX.Element {
+function BackgroundFX({ scrollY }: { scrollY: number }): JSX.Element {
   const o1 = 40 + scrollY * 0.04; // parallax offsets
   const o2 = 120 - scrollY * 0.02;
+
   return (
     <>
       {/* subtle grid overlay */}
       <div className="pointer-events-none absolute inset-0 [background-image:linear-gradient(to_right,rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.04)_1px,transparent_1px)] [background-size:40px_40px]" />
       {/* floating orbs */}
-      <div className="pointer-events-none absolute -left-24 top-28 h-64 w-64 rounded-full blur-3xl opacity-40" style={{ background:'radial-gradient(120px 120px at 30% 30%, var(--glow), transparent 70%)', transform:`translateY(${o1}px)` }} />
-      <div className="pointer-events-none absolute -right-24 top-[480px] h-64 w-64 rounded-full blur-3xl opacity-30" style={{ background:'radial-gradient(140px 140px at 60% 60%, #9C7BFF33, transparent 70%)', transform:`translateY(${o2}px)` }} />
+      <div
+        className="pointer-events-none absolute -left-24 top-28 h-64 w-64 rounded-full blur-3xl opacity-40"
+        style={{
+          background:
+            'radial-gradient(120px 120px at 30% 30%, var(--glow), transparent 70%)',
+          transform: `translateY(${o1}px)`,
+        }}
+      />
+      <div
+        className="pointer-events-none absolute -right-24 top-[480px] h-64 w-64 rounded-full blur-3xl opacity-30"
+        style={{
+          background:
+            'radial-gradient(140px 140px at 60% 60%, #9C7BFF33, transparent 70%)',
+          transform: `translateY(${o2}px)`,
+        }}
+      />
     </>
   );
-    function PrivacyPage(): JSX.Element {
+}
+
+/** Standalone pages (must be top-level, not nested inside other components) **/
+function PrivacyPage(): JSX.Element {
   return (
     <section className="relative mx-auto max-w-3xl px-6 py-16 md:py-24">
-      <h1 className="text-3xl md:text-5xl font-semibold subhead text-[var(--ink)]">Privacy Policy</h1>
+      <h1 className="text-3xl md:text-5xl font-semibold subhead text-[var(--ink)]">
+        Privacy Policy
+      </h1>
       <p className="mt-4 text-[var(--muted)] subtitle">
-        Last updated: {new Date().toISOString().slice(0,10)}
+        Last updated: {new Date().toISOString().slice(0, 10)}
       </p>
 
       <div className="mt-8 space-y-6 text-sm leading-6 text-[var(--muted)] subtitle">
@@ -897,8 +917,12 @@ function BackgroundFX({scrollY}:{scrollY:number;}): JSX.Element {
 
         <h2 className="subhead text-[var(--ink)] text-lg">What we collect</h2>
         <ul className="list-disc pl-6 space-y-2">
-          <li><strong>Contact form:</strong> name, email, organization, and your message. Handled by Formspree.</li>
-          <li><strong>Server logs & basic analytics (optional):</strong> non-identifying technical data (e.g., pages viewed, device/browser, timestamps).</li>
+          <li>
+            <strong>Contact form:</strong> name, email, organization, and your message. Handled by Formspree.
+          </li>
+          <li>
+            <strong>Server logs &amp; basic analytics (optional):</strong> non-identifying technical data (e.g., pages viewed, device/browser, timestamps).
+          </li>
         </ul>
 
         <h2 className="subhead text-[var(--ink)] text-lg">How we use data</h2>
@@ -911,8 +935,16 @@ function BackgroundFX({scrollY}:{scrollY:number;}): JSX.Element {
         <h2 className="subhead text-[var(--ink)] text-lg">Sharing</h2>
         <p>
           We don’t sell personal data. We use trusted vendors to operate this site. The contact form is
-          processed by <a className="underline hover:text-[var(--accent)]" href="https://formspree.io/legal/privacy" target="_blank" rel="noreferrer">Formspree</a>,
-          which handles message delivery and spam controls.
+          processed by{' '}
+          <a
+            className="underline hover:text-[var(--accent)]"
+            href="https://formspree.io/legal/privacy"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Formspree
+          </a>
+          , which handles message delivery and spam controls.
         </p>
 
         <h2 className="subhead text-[var(--ink)] text-lg">Retention</h2>
@@ -923,12 +955,22 @@ function BackgroundFX({scrollY}:{scrollY:number;}): JSX.Element {
         <h2 className="subhead text-[var(--ink)] text-lg">Your choices</h2>
         <ul className="list-disc pl-6 space-y-2">
           <li>Don’t submit the form if you don’t want your data processed.</li>
-          <li>Request access or deletion by emailing <a className="underline" href="mailto:lucirasystems@gmail.com">lucirasystems@gmail.com</a>.</li>
+          <li>
+            Request access or deletion by emailing{' '}
+            <a className="underline" href="mailto:lucirasystems@gmail.com">
+              lucirasystems@gmail.com
+            </a>
+            .
+          </li>
         </ul>
 
         <h2 className="subhead text-[var(--ink)] text-lg">Contact</h2>
         <p>
-          Email us at <a className="underline" href="mailto:lucirasystems@gmail.com">lucirasystems@gmail.com</a>.
+          Email us at{' '}
+          <a className="underline" href="mailto:lucirasystems@gmail.com">
+            lucirasystems@gmail.com
+          </a>
+          .
         </p>
       </div>
     </section>
@@ -938,9 +980,11 @@ function BackgroundFX({scrollY}:{scrollY:number;}): JSX.Element {
 function TermsPage(): JSX.Element {
   return (
     <section className="relative mx-auto max-w-3xl px-6 py-16 md:py-24">
-      <h1 className="text-3xl md:text-5xl font-semibold subhead text-[var(--ink)]">Terms of Use</h1>
+      <h1 className="text-3xl md:text-5xl font-semibold subhead text-[var(--ink)]">
+        Terms of Use
+      </h1>
       <p className="mt-4 text-[var(--muted)] subtitle">
-        Last updated: {new Date().toISOString().slice(0,10)}
+        Last updated: {new Date().toISOString().slice(0, 10)}
       </p>
 
       <div className="mt-8 space-y-6 text-sm leading-6 text-[var(--muted)] subtitle">
@@ -971,8 +1015,7 @@ function TermsPage(): JSX.Element {
 
         <h2 className="subhead text-[var(--ink)] text-lg">Limitation of Liability</h2>
         <p>
-          To the maximum extent permitted by law, Lucira Systems is not liable for indirect, incidental,
-          or consequential damages arising from use of the site.
+          To the maximum extent permitted by law, Lucira Systems is not liable for indirect, incidental, or consequential damages arising from use of the site.
         </p>
 
         <h2 className="subhead text-[var(--ink)] text-lg">Changes</h2>
@@ -982,14 +1025,16 @@ function TermsPage(): JSX.Element {
 
         <h2 className="subhead text-[var(--ink)] text-lg">Contact</h2>
         <p>
-          Questions? <a className="underline" href="mailto:lucirasystems@gmail.com">lucirasystems@gmail.com</a>
+          Questions?{' '}
+          <a className="underline" href="mailto:lucirasystems@gmail.com">
+            lucirasystems@gmail.com
+          </a>
         </p>
       </div>
     </section>
   );
 }
 
-}
 
 // =============================
 // Inline tests (Vitest) — run with `vitest`
