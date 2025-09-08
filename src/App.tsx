@@ -115,11 +115,8 @@ export default function CaeliarisLanding(): JSX.Element {
 {page.type === 'section' && page.anchor === 'industries' && (
   <HomeSections initialAnchor="industries" />
 )}
-{page.type === 'section' && page.anchor === 'contact' && (
-  <HomeSections initialAnchor="contact" />
-)}
-
-{/* Add these */}
+      
+{page.type === 'section' && page.anchor === 'contact' && <ContactPage />}
 {page.type === 'section' && page.anchor === 'privacy' && <PrivacyPage />}
 {page.type === 'section' && page.anchor === 'terms' && <TermsPage />}
 
@@ -917,6 +914,25 @@ function BackgroundFX({ scrollY }: { scrollY: number }): JSX.Element {
 }
 
 /** Standalone pages (must be top-level, not nested inside other components) **/
+function ContactPage(): JSX.Element {
+  return (
+    <section className="relative mx-auto max-w-5xl px-6 py-16 md:py-24">
+      <h1 className="text-3xl md:text-5xl font-semibold subhead text-[var(--ink)]">Contact</h1>
+      <p className="mt-3 text-[var(--muted)] subtitle">
+        Are you a researcher, policymaker, developer, or community leader? Reach out.
+        All inquiries are vetted via ULI for ethical compliance.
+      </p>
+
+      <div className="mt-8 rounded-3xl border border-[var(--border)] bg-[var(--card)] p-8 md:p-12">
+        <ContactForm />
+        <p className="mt-4 text-xs text-[var(--muted)]/80">
+          By submitting, you agree to our <a className="underline" href="#/privacy">Privacy Policy</a>.
+        </p>
+      </div>
+    </section>
+  );
+}
+
 function PrivacyPage(): JSX.Element {
   return (
     <section className="relative mx-auto max-w-3xl px-6 py-16 md:py-24">
