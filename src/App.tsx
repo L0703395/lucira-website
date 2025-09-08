@@ -1150,8 +1150,7 @@ function RefractionPage(): JSX.Element {
         <div className="md:col-span-4">
           <h1 className="text-3xl md:text-5xl font-semibold subhead text-[var(--ink)]">Refraction System</h1>
           <p className="mt-3 text-[var(--muted)] subtitle">
-            A memo flows from ULI into Caeliaris’s refraction layer, where multiple shard logics
-            analyze, weight, and scale signals before notarization and emission.
+           Hallucinations? Not a problem.
           </p>
 
           {/* Memo input */}
