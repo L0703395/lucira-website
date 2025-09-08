@@ -323,7 +323,7 @@ function HomeSections({ initialAnchor }: { initialAnchor?: 'engines'|'sovereignt
   <div className="relative h-full grid place-items-center">
     <div className="text-center px-8">
       <p className="text-sm text-[var(--muted)] subtitle">
-        “Integrity is the architecture of endurance.”
+        Integrity is the architecture of endurance.
       </p>
     </div>
   </div>
