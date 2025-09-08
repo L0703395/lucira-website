@@ -439,6 +439,7 @@ function HomeSections({ initialAnchor }: { initialAnchor?: 'engines'|'sovereignt
     <ContactForm />
   </div>
 </section>
+      }
 
 /** Engine subpage **/
 function EnginePage({ engineKey }: { engineKey: EngineKey }): JSX.Element {
