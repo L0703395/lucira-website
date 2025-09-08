@@ -111,6 +111,8 @@ export default function CaeliarisLanding(): JSX.Element {
 
 {page.type === 'engine' && <EnginePage engineKey={page.engine} />}
 {page.type === 'industry' && <IndustryPage industryKey={page.industry} />}
+{page.type === 'section' && page.anchor === 'refraction' && <RefractionPage />}
+
 
     
       
@@ -131,7 +133,7 @@ export default function CaeliarisLanding(): JSX.Element {
 /** Router helpers **/
 function resolveRoute(hash: string):
   | { type: 'home' }
-  | { type: 'section'; anchor: 'engines'|'sovereignty'|'industries'|'contact'|'privacy'|'terms' }
+  | { type: 'section'; anchor: 'engines'|'sovereignty'|'industries'|'contact'|'privacy'|'terms'|'refraction' }
   | { type: 'engine'; engine: EngineKey }
   | { type: 'industry'; industry: IndustryKey } {
   if (!hash || hash === '#' || hash === '#/') return { type: 'home' };
@@ -139,7 +141,7 @@ function resolveRoute(hash: string):
   const clean = hash.replace(/^#\/?/, '');
 
   // top-level sections
-  if (['engines','sovereignty','industries','contact','privacy','terms'].includes(clean)) {
+  if (['engines','sovereignty','industries','contact','privacy','terms','refraction'].includes(clean)) {
     return { type: 'section', anchor: clean as any };
   }
 
@@ -1032,6 +1034,270 @@ function TermsPage(): JSX.Element {
             lucirasystems@gmail.com
           </a>
         </p>
+      </div>
+    </section>
+  );
+}
+function RefractionPage(): JSX.Element {
+  const steps = [
+    { id:'intake',   label:'ULI Intake', desc:'Memo enters via ULI with context & permissions.' },
+    { id:'prism',    label:'Refraction Prism', desc:'The memo is refracted into logic shards (parallel analysis).' },
+    { id:'shards',   label:'Shard Analysis', desc:'Shards score evidence, provenance, and constraints.' },
+    { id:'weights',  label:'Weighting & Scaling', desc:'Scores are balanced; tradeoffs are surfaced.' },
+    { id:'resolve',  label:'Resolution / Preservation', desc:'Contradictions resolved or preserved to the Vault.' },
+    { id:'tessera',  label:'TESSERA Signature', desc:'Outputs are notarized and signed.' },
+    { id:'emit',     label:'Emission', desc:'Verified response emitted with receipt.' },
+  ];
+
+  const [active, setActive] = React.useState(0);
+  const [running, setRunning] = React.useState(false);
+  const [speed, setSpeed] = React.useState<'slow'|'normal'|'fast'>('normal');
+  const [log, setLog] = React.useState<{id:string; label:string; t:number}[]>([]);
+  const [seed, setSeed] = React.useState(() => Math.random());
+
+  // speed map
+  const ms = speed === 'slow' ? 1400 : speed === 'fast' ? 600 : 950;
+
+  React.useEffect(() => {
+    if (!running) return;
+    if (active >= steps.length) return;
+
+    const t = setTimeout(() => {
+      setLog((L) => [...L, { id: steps[active].id, label: steps[active].label, t: Date.now() }]);
+      setActive((a) => a + 1);
+    }, ms);
+
+    return () => clearTimeout(t);
+  }, [running, active, ms]);
+
+  function start() {
+    if (active >= steps.length) reset();
+    setRunning(true);
+  }
+  function pause() { setRunning(false); }
+  function reset() {
+    setRunning(false);
+    setActive(0);
+    setLog([]);
+    setSeed(Math.random());
+  }
+
+  // little helper for beam opacity based on active step
+  const beamOn = (idxNeeded: number) => active >= idxNeeded;
+
+  return (
+    <section className="relative mx-auto max-w-7xl px-6 py-16 md:py-24">
+      <div className="grid md:grid-cols-12 gap-10">
+        {/* Left: Title + Log */}
+        <div className="md:col-span-4">
+          <h1 className="text-3xl md:text-5xl font-semibold subhead text-[var(--ink)]">
+            Refraction System
+          </h1>
+          <p className="mt-3 text-[var(--muted)] subtitle">
+            A memo flows from ULI into Caeliaris’s refraction layer, where multiple shard logics
+            analyze, weight, and scale signals before notarization and emission.
+          </p>
+
+          {/* Controls */}
+          <div className="mt-6 flex flex-wrap gap-2">
+            <button onClick={start}
+              className="px-4 py-2 rounded-full border border-[var(--accent)] text-[var(--accent)] hover:bg-[var(--accent)]/10">
+              {active === 0 ? 'Simulate' : active >= steps.length ? 'Replay' : 'Play'}
+            </button>
+            <button onClick={pause}
+              className="px-4 py-2 rounded-full border border-[var(--border)] text-[var(--ink)] hover:border-[var(--accent)]/50">
+              Pause
+            </button>
+            <button onClick={reset}
+              className="px-4 py-2 rounded-full border border-[var(--border)] text-[var(--ink)] hover:border-[var(--accent)]/50">
+              Reset
+            </button>
+            <select
+              value={speed}
+              onChange={(e)=>setSpeed(e.target.value as any)}
+              className="px-4 py-2 rounded-full bg-transparent border border-[var(--border)] text-sm focus:border-[var(--accent)]"
+            >
+              <option value="slow">Slow</option>
+              <option value="normal">Normal</option>
+              <option value="fast">Fast</option>
+            </select>
+          </div>
+
+          {/* Step Log */}
+          <div className="mt-6 rounded-2xl border border-[var(--border)] bg-[var(--card)] p-4">
+            <div className="text-sm subhead text-[var(--ink)]">Output Log</div>
+            <ol className="mt-3 space-y-2 text-sm text-[var(--muted)] subtitle">
+              {log.map((e,i)=>(
+                <li key={`${e.id}-${i}`}>• {e.label}</li>
+              ))}
+              {log.length === 0 && <li className="opacity-60">No events yet. Press “Simulate”.</li>}
+            </ol>
+          </div>
+        </div>
+
+        {/* Right: Immersive Diagram */}
+        <div className="md:col-span-8">
+          <div className="relative rounded-3xl border border-[var(--border)] bg-[var(--card)] overflow-hidden p-0">
+            {/* soft background field */}
+            <div className="absolute inset-0 bg-[radial-gradient(800px_260px_at_70%_10%,var(--glow),transparent_60%)] pointer-events-none" />
+            <div className="absolute inset-0 opacity-40 pointer-events-none"
+                 style={{ background: 'repeating-linear-gradient(120deg, rgba(99,230,255,0.05), rgba(99,230,255,0.05) 1px, transparent 1px, transparent 20px)'}} />
+
+            {/* SVG canvas for beams and nodes */}
+            <div className="relative h-[520px]">
+              <svg viewBox="0 0 1200 520" className="absolute inset-0 h-full w-full">
+                {/* Intake capsule (left) */}
+                <defs>
+                  <radialGradient id="capGlow" cx="50%" cy="50%" r="60%">
+                    <stop offset="0%" stopColor="rgba(99,230,255,0.55)" />
+                    <stop offset="100%" stopColor="transparent" />
+                  </radialGradient>
+                </defs>
+
+                {/* Beams from intake -> prism */}
+                <line x1="140" y1="260" x2="360" y2="260"
+                      stroke="url(#beam1)" strokeWidth="3"
+                      opacity={beamOn(1) ? 0.9 : 0.2} />
+                <defs>
+                  <linearGradient id="beam1" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#63E6FF"/>
+                    <stop offset="100%" stopColor="#9C7BFF"/>
+                  </linearGradient>
+                  <linearGradient id="beam2" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#63E6FF"/>
+                    <stop offset="100%" stopColor="#63E6FF"/>
+                  </linearGradient>
+                </defs>
+
+                {/* Intake Node */}
+                <g>
+                  <circle cx="120" cy="260" r="46" fill="rgba(17,24,39,0.85)"
+                          stroke="var(--border)" strokeWidth="2" />
+                  <circle cx="120" cy="260" r="80" fill="url(#capGlow)" opacity={0.35}/>
+                  <text x="120" y="258" fill="var(--ink)" textAnchor="middle" fontSize="12" fontWeight="600">ULI</text>
+                  <text x="120" y="276" fill="var(--muted)" textAnchor="middle" fontSize="10">Memo</text>
+                </g>
+
+                {/* Prism (refraction) */}
+                <g transform="translate(360,180)">
+                  {/* triangle prism */}
+                  <polygon points="0,160 120,0 240,160"
+                    fill="rgba(156,123,255,0.08)"
+                    stroke="var(--border)" strokeWidth="2" />
+                  {/* incoming arrow tip */}
+                  <circle cx="0" cy="160" r="4" fill="#63E6FF" opacity={beamOn(1)?1:0.3}/>
+                  {/* outgoing beams to shards */}
+                  {[0,1,2,3].map((i)=>(
+                    <line key={i}
+                      x1="240" y1="160"
+                      x2={420} y2={80 + i*80}
+                      stroke="url(#beam2)" strokeWidth="3"
+                      opacity={beamOn(2) ? 0.9 : 0.2}
+                    />
+                  ))}
+                </g>
+
+                {/* Shards (right column of 4) */}
+                {[0,1,2,3].map((i)=>(
+                  <g key={i} transform={`translate(420, ${40 + i*80})`}>
+                    <rect width="140" height="60" rx="12"
+                      fill="rgba(17,24,39,0.85)" stroke="var(--border)" strokeWidth="2"
+                      opacity={beamOn(3)?1:0.6}/>
+                    <text x="70" y="28" fill="var(--ink)" textAnchor="middle" fontSize="11" fontWeight="600">
+                      Shard {i+1}
+                    </text>
+                    <text x="70" y="44" fill="var(--muted)" textAnchor="middle" fontSize="9">
+                      scoring…
+                    </text>
+                  </g>
+                ))}
+
+                {/* Weighting scale */}
+                <g transform="translate(640, 180)" opacity={beamOn(4)?1:0.6}>
+                  <rect width="160" height="160" rx="16"
+                        fill="rgba(17,24,39,0.85)" stroke="var(--border)" strokeWidth="2"/>
+                  {/* scale arm */}
+                  <line x1="20" y1="80" x2="140" y2="80" stroke="#63E6FF" strokeWidth="3" />
+                  {/* pivot */}
+                  <circle cx="80" cy="80" r="6" fill="#9C7BFF" />
+                  {/* plates */}
+                  <circle cx="40" cy="110" r="16" fill="rgba(99,230,255,0.25)" />
+                  <circle cx="120" cy="50"  r="16" fill="rgba(156,123,255,0.25)" />
+                  <text x="80" y="152" fill="var(--muted)" textAnchor="middle" fontSize="10">
+                    Weighting & Scaling
+                  </text>
+                </g>
+
+                {/* Resolution / Vault fork */}
+                <g transform="translate(840, 140)" opacity={beamOn(5)?1:0.6}>
+                  {/* split lines */}
+                  <line x1="0" y1="120" x2="100" y2="60" stroke="url(#beam2)" strokeWidth="3"/>
+                  <line x1="0" y1="120" x2="100" y2="180" stroke="url(#beam2)" strokeWidth="3"/>
+                  {/* resolution */}
+                  <rect x="100" y="35" width="130" height="50" rx="10"
+                        fill="rgba(17,24,39,0.85)" stroke="var(--border)" strokeWidth="2"/>
+                  <text x="165" y="65" textAnchor="middle" fill="var(--ink)" fontSize="11" fontWeight="600">
+                    Resolution
+                  </text>
+                  {/* vault */}
+                  <rect x="100" y="165" width="130" height="50" rx="10"
+                        fill="rgba(17,24,39,0.85)" stroke="var(--border)" strokeWidth="2"/>
+                  <text x="165" y="195" textAnchor="middle" fill="var(--ink)" fontSize="11" fontWeight="600">
+                    Vault
+                  </text>
+                </g>
+
+                {/* TESSERA + Emission */}
+                <g transform="translate(1020, 180)" opacity={beamOn(6)?1:0.6}>
+                  <rect width="160" height="160" rx="16"
+                        fill="rgba(17,24,39,0.85)" stroke="var(--border)" strokeWidth="2"/>
+                  {/* seal */}
+                  <circle cx="80" cy="70" r="22" fill="rgba(99,230,255,0.18)" stroke="#63E6FF" strokeWidth="2" />
+                  <text x="80" y="76" textAnchor="middle" fill="#63E6FF" fontSize="10" fontWeight="700">TESSERA</text>
+                  {/* output */}
+                  <rect x="30" y="110" width="100" height="34" rx="8"
+                        fill="rgba(156,123,255,0.18)" stroke="#9C7BFF" strokeWidth="1.5"/>
+                  <text x="80" y="132" textAnchor="middle" fill="var(--ink)" fontSize="10">Receipt + Output</text>
+                </g>
+              </svg>
+
+              {/* Floating captions synced to step */}
+              <div className="absolute left-0 right-0 bottom-0 p-4">
+                <motion.div
+                  key={active}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.35 }}
+                  className="text-center"
+                >
+                  <div className="inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-black/30 px-4 py-2">
+                    <span className="text-xs subhead text-[var(--accent-2)] uppercase tracking-widest">
+                      Step {Math.min(active, steps.length)}/{steps.length}
+                    </span>
+                    <span className="text-sm text-[var(--ink)] subhead">
+                      {steps[Math.min(active, steps.length-1)].label}
+                    </span>
+                  </div>
+                </motion.div>
+              </div>
+            </div>
+          </div>
+
+          {/* Accessibility list of steps */}
+          <ol className="mt-6 grid md:grid-cols-2 gap-3 text-sm subtitle">
+            {steps.map((s, idx)=>(
+              <li key={s.id}
+                  className={[
+                    'rounded-xl border p-3',
+                    'border-[var(--border)] bg-[var(--card)]',
+                    idx < active ? 'text-[var(--ink)]' : 'text-[var(--muted)]'
+                  ].join(' ')}>
+                <span className="subhead">{idx+1}. {s.label}</span>
+                <div className="text-xs mt-1">{s.desc}</div>
+              </li>
+            ))}
+          </ol>
+        </div>
       </div>
     </section>
   );
