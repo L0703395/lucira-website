@@ -1233,7 +1233,7 @@ function RefractionPage(): JSX.Element {
             >
               {running ? 'Pause' : 'Run Simulation'}
             </button>
-            <span className="text-[var(--muted)] text-sm subtitle">Smooth spacing, minimal labels.</span>
+
           </div>
         </aside>
       </div>
