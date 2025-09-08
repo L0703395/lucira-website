@@ -76,19 +76,32 @@ export default function CaeliarisLanding(): JSX.Element {
 
       <BackgroundFX scrollY={scrollY} />
 
-      <header className="sticky top-0 z-30 backdrop-blur supports-[backdrop-filter]:bg-[#0A0D12]/40 border-b border-[var(--border)]">
-        <nav className="mx-auto max-w-7xl px-6 py-4 flex items-center gap-6">
-          <Logo />
-          <div className="ml-auto hidden md:flex items-center gap-6 text-sm">
-            <a className="hover:text-[var(--accent)] transition" href="#/engines">Engines</a>
-            <a className="hover:text-[var(--accent)] transition" href="#/sovereignty">Sovereignty</a>
-            <a className="hover:text-[var(--accent)] transition" href="#/industries">Industries</a>
-            <a className="hover:text-[var(--accent)] transition" href="#/contact">Contact</a>
-            <a className="rounded-full border border-[var(--border)] px-4 py-2 hover:border-[var(--accent)] hover:text-[var(--accent)] transition" href="#/engines/LIE">LIE</a>
-            <a className="hover:text-[var(--accent)] transition" href="#/refraction">Refraction</a>            
-          </div>
-        </nav>
-      </header> 
+    <header className="sticky top-0 z-30 backdrop-blur supports-[backdrop-filter]:bg-[#0A0D12]/40 border-b border-[var(--border)]">
+  <nav className="mx-auto max-w-7xl px-6 py-4 flex items-center gap-6">
+    <Logo />
+    <div className="ml-auto hidden md:flex items-center gap-6 text-sm">
+      <a className="hover:text-[var(--accent)] transition" href="#/engines">Engines</a>
+      <a className="hover:text-[var(--accent)] transition" href="#/sovereignty">Sovereignty</a>
+      <a className="hover:text-[var(--accent)] transition" href="#/industries">Industries</a>
+      <a className="hover:text-[var(--accent)] transition" href="#/contact">Contact</a>
+
+      {/* Pills */}
+      <a
+        className="rounded-full border border-[var(--border)] px-4 py-2 hover:border-[var(--accent)] hover:text-[var(--accent)] transition"
+        href="#/engines/LIE"
+      >
+        LIE
+      </a>
+      <a
+        className="rounded-full border border-[var(--border)] px-4 py-2 hover:border-[var(--accent)] hover:text-[var(--accent)] transition"
+        href="#/refraction"
+      >
+        Refraction
+      </a>
+    </div>
+  </nav>
+</header>
+
     
 
     {page.type === 'home' && <HomeSections />}
