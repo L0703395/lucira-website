@@ -84,7 +84,12 @@ export default function CaeliarisLanding(): JSX.Element {
       <a className="hover:text-[var(--accent)] transition" href="#/sovereignty">Sovereignty</a>
       <a className="hover:text-[var(--accent)] transition" href="#/industries">Industries</a>
       <a className="rounded-full border border-[var(--border)] px-4 py-2 hover:border-[var(--accent)] hover:text-[var(--accent)] transition" href="#/engines/LIE">LIE</a>
-      <a className="hover:text-[var(--accent)] transition" href="#/refraction">Refraction</a>
+<a
+  className="rounded-full border border-[var(--border)] px-4 py-2 hover:border-[var(--accent)] hover:text-[var(--accent)] transition"
+  href="#/refraction"
+>
+  Refraction
+</a>
       <a
         className="rounded-full border border-[var(--accent)] bg-[var(--accent)]/10 text-[var(--accent)] px-4 py-2 hover:bg-[var(--accent)]/20 transition"
         href="#/contact"
