@@ -11,6 +11,51 @@
 import AudioToggle from './audio/AudioToggle';
 import React, { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
+function Collapse({ open, children }: { open: boolean; children: React.ReactNode }) {
+  return (
+    <motion.div
+      initial={false}
+      animate={{ height: open ? "auto" : 0, opacity: open ? 1 : 0 }}
+      transition={{ duration: 0.25 }}
+      style={{ overflow: "hidden" }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+function MoreDisclosure({
+  summary = "More",
+  children,
+  className = "",
+}: {
+  summary?: string;
+  children: React.ReactNode;
+  className?: string;
+}) {
+  const [open, setOpen] = React.useState(false);
+  return (
+    <div className={["mt-3", className].join(" ")}>
+      <button
+        onClick={() => setOpen(v => !v)}
+        className={[
+          "inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs",
+          open
+            ? "border-[var(--accent)] text-[var(--accent)] bg-[var(--accent)]/10"
+            : "border-[var(--border)] text-[var(--muted)] hover:border-[var(--accent)] hover:text-[var(--accent)]",
+        ].join(" ")}
+        aria-expanded={open}
+      >
+        {open ? "Less" : summary}
+        <span className="opacity-70">{open ? "–" : "+"}</span>
+      </button>
+      <Collapse open={open}>
+        <div className="mt-3 text-sm text-[var(--muted)] subtitle">{children}</div>
+      </Collapse>
+    </div>
+  );
+}
+
 
 type EngineKey = 'RIE'|'MIE'|'DAFE'|'EIIE'|'LIE'|'TAXE';
 type IndustryKey = 'education'|'finance'|'research'|'law'|'health'|'sustainability';
@@ -300,49 +345,66 @@ function HomeSections({ initialAnchor }: { initialAnchor?: 'engines'|'sovereignt
       </section>
 
       {/* SOVEREIGNTY */}
-      <section id="sovereignty" className="relative mx-auto max-w-7xl px-6 py-12 md:py-20">
-        <div className="grid md:grid-cols-12 gap-10 items-center">
-          <div className="md:col-span-6">
-            <SectionTitle kicker="Identity" title="Sovereignty by Design" subtitle="Owned systems obey. Caeliaris operates from aligned logic, enforced by protection layers and verifiable outputs." />
-            <ul className="mt-6 space-y-3 text-[var(--muted)] subtitle">
-              <li>• ULI — Unified Logic Interface gates input/output.</li>
-              <li>• VIREL — Vault of Irrefutable Recursive Entropy Logic defends recursion.</li>
-              <li>• TESSERA — Cryptographic notarization & signature layer.</li>
-            </ul>
-            <div className="mt-6"><CTA href="#/industries" label="See Industry Surfaces" primary /></div>
-          </div>
-          <div className="md:col-span-6">
-<motion.div
-  initial={{ opacity: 0, y: 12 }}
-  whileInView={{ opacity: 1, y: 0 }}
-  viewport={{ once: true }}
-  transition={{ duration: 0.6 }}
-  className="relative h-80 rounded-3xl border border-[var(--border)] overflow-hidden"
->
-  {/* Background video */}
-  <video
-    className="absolute inset-0 w-full h-full object-cover"
-    src="/Video_Ready_.mp4" // put your MP4 in /public
-    autoPlay
-    loop
-    muted
-    playsInline
-  />
-  {/* Optional dark overlay for text readability */}
-  <div className="absolute inset-0 bg-black/30" />
+     {/* SOVEREIGNTY */}
+<section id="sovereignty" className="relative mx-auto max-w-7xl px-6 py-12 md:py-20">
+  <div className="grid md:grid-cols-12 gap-10 items-center">
+    <div className="md:col-span-6">
+      <SectionTitle
+        kicker="Identity"
+        title="Sovereignty by Design"
+        subtitle="Owned systems obey. Verifiable outputs, minimal exposure."
+      />
 
-  {/* Foreground text */}
-  <div className="relative h-full grid place-items-center">
-    <div className="text-center px-8">
-      <p className="text-sm text-[var(--muted)] subtitle">
-        Integrity is the architecture of endurance.
-      </p>
+      <ul className="mt-6 space-y-3 text-[var(--muted)] subtitle">
+        <li>• ULI — Unified Logic Interface gates input/output.</li>
+        <li>• VIREL — Vault of Irrefutable Recursive Entropy Logic defends recursion.</li>
+        <li>• TESSERA — Cryptographic notarization & signature layer.</li>
+      </ul>
+
+      <MoreDisclosure summary="Why it matters">
+        Sovereignty prevents capture and drift. Requests are minimized before they reach engines,
+        and every result carries a cryptographic receipt so decisions are reviewable without
+        exposing raw data.
+      </MoreDisclosure>
+
+      <div className="mt-6">
+        <CTA href="#/industries" label="See Industry Surfaces" primary />
+      </div>
     </div>
-  </div>
-</motion.div>
+
+    <div className="md:col-span-6">
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+        className="relative h-80 rounded-3xl border border-[var(--border)] overflow-hidden"
+      >
+        {/* Background video */}
+        <video
+          className="absolute inset-0 w-full h-full object-cover"
+          src="/Video_Ready_.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+        />
+        {/* Dark overlay for legibility */}
+        <div className="absolute inset-0 bg-black/30" />
+
+        {/* Caption */}
+        <div className="relative h-full grid place-items-center">
+          <div className="text-center px-8">
+            <p className="text-sm text-[var(--muted)] subtitle">
+              Integrity is the architecture of endurance.
+            </p>
           </div>
         </div>
-      </section>
+      </motion.div>
+    </div>
+  </div>
+</section>
+
 
       {/* INDUSTRIES */}
       <section id="industries" className="relative mx-auto max-w-7xl px-6 py-12 md:py-20">
