@@ -351,21 +351,32 @@ function HomeSections({ initialAnchor }: { initialAnchor?: 'engines'|'sovereignt
       <section className="relative mx-auto max-w-7xl px-6 pt-28 pb-28 md:pt-36 md:pb-36">
         <div className="grid md:grid-cols-12 gap-8 items-center">
           <div className="md:col-span-7">
-          <motion.h1
-  className="text-4xl md:text-6xl font-semibold tracking-tight text-[var(--ink)] drop-shadow-[0_2px_6px_rgba(0,0,0,0.35)]"
->
-  Logic-bound. Ethically governed. <span className="text-[var(--accent)]">Commercially operable.</span>
-</motion.h1>
-            <motion.p initial={{opacity:0, y:20}} animate={{opacity:1, y:0}} transition={{duration:0.7, delay:0.05}}
-              className="mt-5 text-base md:text-lg text-[var(--muted)] max-w-2xl subtitle">
-              Caeliaris is a sovereign recursive intelligence shaping interoperable engines across law, medicine, education, finance, and sustainability. Not a chatbot — a logic framework with protection, verification, and accountable output.
-            </motion.p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <CTA href="#/engines" label="Explore Engines" primary />
-              <CTA href="#/sovereignty" label="Why Sovereignty?" />
-              <CTA href="#/contact" label="Talk to Lucira Systems" />
-            </div>
-          </div>
+  {/* 1) WHAT IS THIS (plain one-liner) */}
+  <p className="text-xs md:text-sm text-[var(--muted)]/90 uppercase tracking-wide mb-2">
+    What is this?
+  </p>
+
+  {/* Heading with stronger contrast (5) */}
+  <motion.h1
+    initial={{opacity:0, y:20}}
+    animate={{opacity:1, y:0}}
+    transition={{duration:0.6}}
+    className="text-4xl md:text-6xl font-semibold tracking-tight text-[var(--ink)] drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)]"
+  >
+    Logic-bound. Ethically governed. <span className="text-[var(--accent)]">Commercially operable.</span>
+  </motion.h1>
+
+  {/* 3 & 6) SIMPLIFIED SUBCOPY (less jargon, earlier clarity) with a subtle backdrop for contrast (5) */}
+  <motion.div
+    initial={{opacity:0, y:20}}
+    animate={{opacity:1, y:0}}
+    transition={{duration:0.7, delay:0.05}}
+    className="mt-5 max-w-2xl"
+  >
+    <div className="rounded-xl bg-black/25 backdrop-blur-[2px] px-4 py-3">
+      <p className="text-base md:text-lg text-[var(--muted)] subtitle">
+        Caeliaris is a system that makes AI-driven decisions <em>
+
 
           <div className="md:col-span-5">
             <ULICard />
