@@ -874,11 +874,18 @@ function ULICard(): JSX.Element {
     <p className="mt-2 text-sm text-[var(--muted)] subtitle">
       ULI filters input and routes actions. VIREL safeguards recursion. TESSERA notarizes and signs.
     </p>
-    <div className="mt-6 grid grid-cols-3 gap-3">
-      <Badge label="ULI" />
-      <Badge label="VIREL" />
-      <Badge label="TESSERA" />
-    </div>
+    {/* Bottom bubbles (anchored) */}
+<div className="absolute left-6 right-6 bottom-5 grid grid-cols-3 gap-4 z-10">
+  <div className="rounded-full border border-[var(--border)] bg-black/30 backdrop-blur-sm text-xs text-[var(--muted)] text-center py-2">
+    ULI
+  </div>
+  <div className="rounded-full border border-[var(--border)] bg-black/30 backdrop-blur-sm text-xs text-[var(--muted)] text-center py-2">
+    VIREL
+  </div>
+  <div className="rounded-full border border-[var(--border)] bg-black/30 backdrop-blur-sm text-xs text-[var(--muted)] text-center py-2">
+    TESSERA
+  </div>
+</div>
   </div>
 </div>
     </motion.div>
