@@ -45,19 +45,19 @@ function VideoBG({ src }: { src: string }) {
     window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 
   return (
-    <video
-      ref={ref}
-      className="absolute inset-0 w-full h-full object-cover opacity-50"
-      src={src}
-      autoPlay              {/* added */}
-      muted
-      loop
-      playsInline
-      preload="metadata"
-      aria-hidden
-      {...(prefersReduced ? { loop: false } : {})}
-    />
-  );
+  <video
+    ref={ref}
+    className="absolute inset-0 w-full h-full object-cover opacity-50"
+    src={src}
+    autoPlay
+    muted
+    loop
+    playsInline
+    preload="metadata"
+    aria-hidden="true"
+    {...(prefersReduced ? { loop: false } : {})}
+  />
+);
 }
 
 
