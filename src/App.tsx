@@ -23,28 +23,23 @@ function Collapse({ open, children }: { open: boolean; children: React.ReactNode
     </motion.div>
   );
 }
-// --- ULI video toggle & helper ---
-// Flip to `false` to go back to the animated orbs instantly.
 const USE_ULI_VIDEO = true;
 
 function VideoBG({ src }: { src: string }) {
   const ref = React.useRef<HTMLVideoElement | null>(null);
 
-  // polite playback: pause when tab hidden; play when visible
   React.useEffect(() => {
     const v = ref.current;
     if (!v) return;
-
     const handleVis = () => {
       const visible = document.visibilityState === 'visible';
-      try { visible ? v.play() : v.pause(); } catch { /* no-op */ }
+      try { visible ? v.play() : v.pause(); } catch {}
     };
     document.addEventListener('visibilitychange', handleVis);
     handleVis();
     return () => document.removeEventListener('visibilitychange', handleVis);
   }, []);
 
-  // respect reduced motion (don’t animate if user asked not to)
   const prefersReduced =
     typeof window !== 'undefined' &&
     window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
@@ -53,7 +48,8 @@ function VideoBG({ src }: { src: string }) {
     <video
       ref={ref}
       className="absolute inset-0 w-full h-full object-cover opacity-50"
-      src="/Animated_Symbol_Video_Generation.mp4"
+      src={src}
+      autoPlay              {/* added */}
       muted
       loop
       playsInline
@@ -63,6 +59,7 @@ function VideoBG({ src }: { src: string }) {
     />
   );
 }
+
 
 
 function MoreDisclosure({
