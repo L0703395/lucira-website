@@ -866,9 +866,11 @@ function ULICard(): JSX.Element {
       <div className="absolute inset-0 bg-[radial-gradient(300px_120px_at_15%_80%,#9C7BFF22,transparent_65%)]" />
 
       {/* existing content */}
-      <div className="relative h-full flex items-end justify-center pb-10">
+      <div className="relative h-full flex items-start justify-center pt-10">
   <div className="text-center px-6">
-    <h3 className="text-xl font-medium text-[var(--ink)]/90 subhead">Unified Logic Interface</h3>
+    <h3 className="text-xl font-medium text-[var(--ink)]/90 subhead">
+      Unified Logic Interface
+    </h3>
     <p className="mt-2 text-sm text-[var(--muted)] subtitle">
       ULI filters input and routes actions. VIREL safeguards recursion. TESSERA notarizes and signs.
     </p>
@@ -879,7 +881,6 @@ function ULICard(): JSX.Element {
     </div>
   </div>
 </div>
-
     </motion.div>
   );
 }
