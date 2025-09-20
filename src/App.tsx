@@ -871,9 +871,6 @@ function ULICard(): JSX.Element {
     <h3 className="text-xl font-medium text-[var(--ink)]/90 subhead">
       Unified Logic Interface
     </h3>
-    <p className="mt-2 text-sm text-[var(--muted)] subtitle">
-      ULI filters input and routes actions. VIREL safeguards recursion. TESSERA notarizes and signs.
-    </p>
     {/* Bottom bubbles (anchored) */}
 <div className="absolute left-6 right-6 bottom-5 grid grid-cols-3 gap-4 z-10">
   <div className="rounded-full border border-[var(--border)] bg-black/30 backdrop-blur-sm text-xs text-[var(--muted)] text-center py-2">
