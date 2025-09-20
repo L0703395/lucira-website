@@ -337,6 +337,7 @@ export { resolveRoute };
 }
 
 /** Home sections (landing) **/
+/** Home sections (landing) **/
 function HomeSections({ initialAnchor }: { initialAnchor?: 'engines'|'sovereignty'|'industries'|'contact' }): JSX.Element {
   useEffect(() => {
     if (initialAnchor) {
@@ -348,35 +349,46 @@ function HomeSections({ initialAnchor }: { initialAnchor?: 'engines'|'sovereignt
   return (
     <>
       {/* HERO */}
-      <section className="relative mx-auto max-w-7xl px-6 pt-28 pb-28 md:pt-36 md:pb-36">
+      <section className="relative mx-auto max-w-7xl px-6 pt-20 pb-16 md:pt-28 md:pb-24">
         <div className="grid md:grid-cols-12 gap-8 items-center">
           <div className="md:col-span-7">
-  {/* 1) WHAT IS THIS (plain one-liner) */}
-  <p className="text-xs md:text-sm text-[var(--muted)]/90 uppercase tracking-wide mb-2">
-    What is this?
-  </p>
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="text-4xl md:text-6xl font-semibold tracking-tight text-[var(--ink)] drop-shadow-[0_2px_6px_rgba(0,0,0,0.35)]"
+            >
+              {/* Keep accent word, simplify phrasing */}
+              Logic-bound. Ethically governed. <span className="text-[var(--accent)]">Ready for real-world use.</span>
+            </motion.h1>
 
-  {/* Heading with stronger contrast (5) */}
-  <motion.h1
-    initial={{opacity:0, y:20}}
-    animate={{opacity:1, y:0}}
-    transition={{duration:0.6}}
-    className="text-4xl md:text-6xl font-semibold tracking-tight text-[var(--ink)] drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)]"
-  >
-    Logic-bound. Ethically governed. <span className="text-[var(--accent)]">Commercially operable.</span>
-  </motion.h1>
+            {/* 1) Plain “what is this?” line (simple language) */}
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.65, delay: 0.04 }}
+              className="mt-4 text-base md:text-lg text-[var(--muted)] subtitle"
+            >
+              Caeliaris builds logic systems that keep AI safe, private, and trustworthy.
+            </motion.p>
 
-  {/* 3 & 6) SIMPLIFIED SUBCOPY (less jargon, earlier clarity) with a subtle backdrop for contrast (5) */}
-  <motion.div
-    initial={{opacity:0, y:20}}
-    animate={{opacity:1, y:0}}
-    transition={{duration:0.7, delay:0.05}}
-    className="mt-5 max-w-2xl"
-  >
-    <div className="rounded-xl bg-black/25 backdrop-blur-[2px] px-4 py-3">
-      <p className="text-base md:text-lg text-[var(--muted)] subtitle">
-        Caeliaris is a system that makes AI-driven decisions <em>
+            {/* 4) One short concrete example */}
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.07 }}
+              className="mt-3 text-sm md:text-base text-[var(--muted)]/90 subtitle"
+            >
+              Example: In healthcare, ULI lets only the right data in, VIREL keeps automated checks safe,
+              and TESSERA signs every result so decisions are auditable.
+            </motion.p>
 
+            <div className="mt-8 flex flex-wrap gap-3">
+              <CTA href="#/engines" label="Explore Engines" primary />
+              <CTA href="#/sovereignty" label="Why Sovereignty?" />
+              <CTA href="#/contact" label="Talk to Lucira Systems" />
+            </div>
+          </div>
 
           <div className="md:col-span-5">
             <ULICard />
@@ -386,7 +398,11 @@ function HomeSections({ initialAnchor }: { initialAnchor?: 'engines'|'sovereignt
 
       {/* ENGINES GRID */}
       <section id="engines" className="relative mx-auto max-w-7xl px-6 pb-20 md:pb-32">
-        <SectionTitle kicker="Modular" title="Interoperable Engines" subtitle="Specialized systems that interconnect while preserving sovereignty." />
+        <SectionTitle
+          kicker="Modular"
+          title="Interoperable Engines"
+          subtitle="Logic tools that work across systems while preserving sovereignty."
+        />
         <div className="mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {engines.map((e) => (
             <EngineCard key={e.key} ekey={e.key} title={e.title} desc={e.desc} cta={e.cta} />
@@ -395,78 +411,73 @@ function HomeSections({ initialAnchor }: { initialAnchor?: 'engines'|'sovereignt
       </section>
 
       {/* SOVEREIGNTY */}
-     {/* SOVEREIGNTY */}
-<section id="sovereignty" className="relative mx-auto max-w-7xl px-6 py-12 md:py-20">
-  <div className="grid md:grid-cols-12 gap-10 items-center">
-    <div className="md:col-span-6">
-      <SectionTitle
-        kicker="Identity"
-        title="Sovereignty by Design"
-        subtitle="Owned systems obey. Verifiable outputs, minimal exposure."
-      />
+      <section id="sovereignty" className="relative mx-auto max-w-7xl px-6 pt-20 md:pt-28 pb-12 md:pb-20">
+        <div className="grid md:grid-cols-12 gap-10 items-center">
+          <div className="md:col-span-6">
+            <SectionTitle
+              kicker="Identity"
+              title="Sovereignty by Design"
+              subtitle="Owned systems obey. Verifiable outputs, minimal exposure."
+            />
+            <ul className="mt-6 space-y-3 text-[var(--muted)] subtitle">
+              <li>• <strong>ULI</strong> — Unified Logic Interface gates input/output.</li>
+              <li>• <strong>VIREL</strong> — Protects feedback/loops so automation can’t run wild.</li>
+              <li>• <strong>TESSERA</strong> — Signs every result for proof and audit.</li>
+            </ul>
 
-      <ul className="mt-6 space-y-3 text-[var(--muted)] subtitle">
-        <li>• ULI — Unified Logic Interface gates input/output.</li>
-        <li>• VIREL — Vault of Irrefutable Recursive Entropy Logic defends recursion.</li>
-        <li>• TESSERA — Cryptographic notarization & signature layer.</li>
-      </ul>
+            <MoreDisclosure summary="Why it matters">
+              Sovereignty prevents capture and drift. Requests are minimized before they reach engines,
+              and every result carries a cryptographic receipt so decisions are reviewable without
+              exposing raw data.
+            </MoreDisclosure>
 
-      <MoreDisclosure summary="Why it matters">
-        Sovereignty prevents capture and drift. Requests are minimized before they reach engines,
-        and every result carries a cryptographic receipt so decisions are reviewable without
-        exposing raw data.
-      </MoreDisclosure>
+            <div className="mt-6">
+              <CTA href="#/industries" label="See Industry Surfaces" primary />
+            </div>
+          </div>
 
-      <div className="mt-6">
-        <CTA href="#/industries" label="See Industry Surfaces" primary />
-      </div>
-    </div>
-
-    <div className="md:col-span-6">
-      <motion.div
-        initial={{ opacity: 0, y: 12 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
-        className="relative h-80 rounded-3xl border border-[var(--border)] overflow-hidden"
-      >
-        {/* Background video */}
-        <video
-          className="absolute inset-0 w-full h-full object-cover"
-          src="/Video_Ready_.mp4"
-          autoPlay
-          loop
-          muted
-          playsInline
-        />
-        {/* Dark overlay for legibility */}
-        <div className="absolute inset-0 bg-black/30" />
-
-        {/* Caption */}
-        <div className="relative h-full grid place-items-center">
-          <div className="text-center px-8">
-            <p className="text-sm text-[var(--muted)] subtitle">
-              Integrity is the architecture of endurance.
-            </p>
+          <div className="md:col-span-6">
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="relative h-80 rounded-3xl border border-[var(--border)] overflow-hidden"
+            >
+              <video
+                className="absolute inset-0 w-full h-full object-cover"
+                src="/Video_Ready_.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
+              />
+              <div className="absolute inset-0 bg-black/30" />
+              <div className="relative h-full grid place-items-center">
+                <div className="text-center px-8">
+                  <p className="text-sm text-[var(--muted)] subtitle">
+                    Integrity is the architecture of endurance.
+                  </p>
+                </div>
+              </div>
+            </motion.div>
           </div>
         </div>
-      </motion.div>
-    </div>
-  </div>
-</section>
-
+      </section>
 
       {/* INDUSTRIES */}
-{/* INDUSTRIES (minimal titles + preview) */}
-<section id="industries" className="relative mx-auto max-w-7xl px-6 py-12 md:py-20">
-  <SectionTitle
-    kicker="Surfaces"
-    title="Industry Interfaces"
-    subtitle="Public-facing surfaces route through ULI and enforce TESSERA signatures."
-  />
+      <section id="industries" className="relative mx-auto max-w-7xl px-6 py-12 md:py-20">
+        <SectionTitle
+          kicker="Surfaces"
+          title="Industry Interfaces"
+          subtitle="Public-facing surfaces route through ULI and enforce TESSERA signatures."
+        />
+        <IndustryTilesMinimal />
+      </section>
+    </>
+  );
+}
 
-  <IndustryTilesMinimal />
-</section>
 
      
     </>
