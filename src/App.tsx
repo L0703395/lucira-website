@@ -23,6 +23,47 @@ function Collapse({ open, children }: { open: boolean; children: React.ReactNode
     </motion.div>
   );
 }
+// --- ULI video toggle & helper ---
+// Flip to `false` to go back to the animated orbs instantly.
+const USE_ULI_VIDEO = true;
+
+function VideoBG({ src }: { src: string }) {
+  const ref = React.useRef<HTMLVideoElement | null>(null);
+
+  // polite playback: pause when tab hidden; play when visible
+  React.useEffect(() => {
+    const v = ref.current;
+    if (!v) return;
+
+    const handleVis = () => {
+      const visible = document.visibilityState === 'visible';
+      try { visible ? v.play() : v.pause(); } catch { /* no-op */ }
+    };
+    document.addEventListener('visibilitychange', handleVis);
+    handleVis();
+    return () => document.removeEventListener('visibilitychange', handleVis);
+  }, []);
+
+  // respect reduced motion (don’t animate if user asked not to)
+  const prefersReduced =
+    typeof window !== 'undefined' &&
+    window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+
+  return (
+    <video
+      ref={ref}
+      className="absolute inset-0 w-full h-full object-cover opacity-50"
+      src="/Animated_Symbol_Video_Generation.mp4"
+      muted
+      loop
+      playsInline
+      preload="metadata"
+      aria-hidden
+      {...(prefersReduced ? { loop: false } : {})}
+    />
+  );
+}
+
 
 function MoreDisclosure({
   summary = "More",
@@ -808,23 +849,31 @@ function Card({ title, body }: { title:string; body:string }): JSX.Element {
   );
 }
 
-/** ULI Card with animated orb **/
 function ULICard(): JSX.Element {
   return (
-    <motion.div initial={{opacity:0, scale:0.95}} animate={{opacity:1, scale:1}} transition={{duration:0.7, delay:0.1}}
-      className="relative h-[420px] rounded-3xl border border-[var(--border)] bg-[var(--card)] shadow-2xl overflow-hidden">
-      {/* Animated orb field */}
-      <AnimatedOrbs />
+    <motion.div
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.7, delay: 0.1 }}
+      className="relative h-[420px] rounded-3xl border border-[var(--border)] bg-[var(--card)] shadow-2xl overflow-hidden"
+    >
+      {/* ⬇️ BACKGROUND LAYER (swap between video and previous orbs) */}
+      {USE_ULI_VIDEO ? (
+        <VideoBG src="/Animated_Symbol_Video_Generation.mp4" />
+      ) : (
+        <AnimatedOrbs />
+      )}
 
-      {/* Static accent washes */}
+      {/* keep your existing accent washes for depth/legibility */}
       <div className="absolute inset-0 bg-[radial-gradient(600px_200px_at_70%_10%,var(--glow),transparent_60%)]" />
       <div className="absolute inset-0 bg-[radial-gradient(300px_120px_at_15%_80%,#9C7BFF22,transparent_65%)]" />
 
+      {/* existing content */}
       <div className="relative h-full grid place-items-center">
         <div className="text-center px-6">
           <h3 className="text-xl font-medium text-[var(--ink)]/90 subhead">Unified Logic Interface</h3>
           <p className="mt-2 text-sm text-[var(--muted)] subtitle">
-            ULI filters input and routes actions to engines. VIREL safeguards recursion. TESSERA notarizes and signs. Transparency without exposure.
+            ULI filters input and routes actions. VIREL safeguards recursion. TESSERA notarizes and signs.
           </p>
           <div className="mt-6 grid grid-cols-3 gap-3">
             <Badge label="ULI" />
@@ -834,31 +883,6 @@ function ULICard(): JSX.Element {
         </div>
       </div>
     </motion.div>
-  );
-}
-
-function AnimatedOrbs(): JSX.Element {
-  // three slowly drifting orbs with varying sizes/opacities
-  const common = {
-    initial: { opacity: 0.35, scale: 0.9 },
-    animate: { opacity: 0.5, scale: 1.05 },
-    transition: { duration: 10, repeat: Infinity, repeatType: 'mirror' as const, ease: 'easeInOut' }
-  };
-  return (
-    <>
-      <motion.div {...common} className="absolute -top-16 -left-20 h-64 w-64 rounded-full blur-3xl"
-        style={{ background: 'radial-gradient(140px 140px at 40% 40%, var(--glow), transparent 70%)' }} />
-      <motion.div {...common} transition={{ ...common.transition, duration: 14 }}
-        className="absolute top-24 -right-24 h-72 w-72 rounded-full blur-3xl"
-        style={{ background: 'radial-gradient(160px 160px at 60% 60%, #9C7BFF33, transparent 70%)' }} />
-      <motion.div {...common} transition={{ ...common.transition, duration: 18 }}
-        className="absolute bottom-[-40px] left-1/3 h-64 w-64 rounded-full blur-3xl"
-        style={{ background: 'radial-gradient(130px 130px at 50% 50%, #63E6FF22, transparent 70%)' }} />
-      {/* gentle network lines */}
-      <motion.div initial={{opacity:0.08}} animate={{opacity:0.14}} transition={{duration:12, repeat:Infinity, repeatType:'mirror'}}
-        className="absolute inset-0"
-        style={{ background: 'repeating-linear-gradient(120deg, rgba(99,230,255,0.07), rgba(99,230,255,0.07) 1px, transparent 1px, transparent 18px)'}} />
-    </>
   );
 }
 
