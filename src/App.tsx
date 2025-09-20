@@ -373,7 +373,7 @@ function HomeSections({ initialAnchor }: { initialAnchor?: 'engines'|'sovereignt
       </section>
 
       {/* ENGINES GRID */}
-      <section id="engines" className="relative mx-auto max-w-7xl px-6 py-20 md:py-28">
+      <section id="engines" className="relative mx-auto max-w-7xl px-6 pb-20 md:pb-32">
         <SectionTitle kicker="Modular" title="Interoperable Engines" subtitle="Specialized systems that interconnect while preserving sovereignty." />
         <div className="mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {engines.map((e) => (
