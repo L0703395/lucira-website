@@ -160,7 +160,7 @@ export default function CaeliarisLanding(): JSX.Element {
       <BackgroundFX scrollY={scrollY} />
 
  <header className="sticky top-0 z-30 backdrop-blur supports-[backdrop-filter]:bg-[#0A0D12]/40 border-b border-[var(--border)]">
-  <nav className="mx-auto max-w-7xl px-6 py-4 flex items-center gap-6">
+<nav className="mx-auto max-w-7xl px-6 py-5 flex items-center gap-6">
     <Logo />
     <div className="ml-auto hidden md:flex items-center gap-6 text-sm">
       <a className="hover:text-[var(--accent)] transition" href="#/engines">Engines</a>
@@ -348,7 +348,7 @@ function HomeSections({ initialAnchor }: { initialAnchor?: 'engines'|'sovereignt
   return (
     <>
       {/* HERO */}
-      <section className="relative mx-auto max-w-7xl px-6 pt-20 pb-16 md:pt-28 md:pb-24">
+      <section className="relative mx-auto max-w-7xl px-6 pt-28 pb-28 md:pt-36 md:pb-36">
         <div className="grid md:grid-cols-12 gap-8 items-center">
           <div className="md:col-span-7">
             <motion.h1 initial={{opacity:0, y:20}} animate={{opacity:1, y:0}} transition={{duration:0.6}}
@@ -373,7 +373,7 @@ function HomeSections({ initialAnchor }: { initialAnchor?: 'engines'|'sovereignt
       </section>
 
       {/* ENGINES GRID */}
-      <section id="engines" className="relative mx-auto max-w-7xl px-6 pb-10 md:pb-20">
+      <section id="engines" className="relative mx-auto max-w-7xl px-6 py-20 md:py-28">
         <SectionTitle kicker="Modular" title="Interoperable Engines" subtitle="Specialized systems that interconnect while preserving sovereignty." />
         <div className="mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {engines.map((e) => (
@@ -754,7 +754,7 @@ function FlowExplorer({ engineKey }: { engineKey: EngineKey }): JSX.Element {
   ];
 
   return (
-    <div className="rounded-3xl border border-[var(--border)] bg-[var(--card)] p-5">
+<div className="rounded-3xl border border-[var(--border)] bg-[var(--card)] p-8 md:p-10">
       <div className="flex flex-wrap items-center gap-2 justify-between">
         <div className="flex flex-wrap gap-2">
           {industriesList.map((it)=> (
