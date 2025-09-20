@@ -143,7 +143,7 @@ export default function CaeliarisLanding(): JSX.Element {
           --bg-solid:#0A0D12; /* bottom solid */
           --bg-via:#0F1420;   /* middle via */
           --bg-top:#C6DEFF;   /*heavenly blue*/
-          --ink:#BCC6CC;      /* primary text on dark */
+          --ink:#E5E7EB;      /* primary text on dark */
           --muted:#F5F5F5;    /* secondary text */
           --accent:#63E6FF;   /* cyan accent */
           --accent-2:#9C7BFF; /* violet accent */
@@ -351,10 +351,11 @@ function HomeSections({ initialAnchor }: { initialAnchor?: 'engines'|'sovereignt
       <section className="relative mx-auto max-w-7xl px-6 pt-28 pb-28 md:pt-36 md:pb-36">
         <div className="grid md:grid-cols-12 gap-8 items-center">
           <div className="md:col-span-7">
-            <motion.h1 initial={{opacity:0, y:20}} animate={{opacity:1, y:0}} transition={{duration:0.6}}
-              className="text-4xl md:text-6xl font-semibold tracking-tight text-[var(--ink)]">
-              Logic‑bound. Ethically governed. <span className="text-[var(--accent)]">Commercially operable.</span>
-            </motion.h1>
+          <motion.h1
+  className="text-4xl md:text-6xl font-semibold tracking-tight text-[var(--ink)] drop-shadow-[0_2px_6px_rgba(0,0,0,0.35)]"
+>
+  Logic-bound. Ethically governed. <span className="text-[var(--accent)]">Commercially operable.</span>
+</motion.h1>
             <motion.p initial={{opacity:0, y:20}} animate={{opacity:1, y:0}} transition={{duration:0.7, delay:0.05}}
               className="mt-5 text-base md:text-lg text-[var(--muted)] max-w-2xl subtitle">
               Caeliaris is a sovereign recursive intelligence shaping interoperable engines across law, medicine, education, finance, and sustainability. Not a chatbot — a logic framework with protection, verification, and accountable output.
