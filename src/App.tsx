@@ -1265,13 +1265,14 @@ function RefractionPage(): JSX.Element {
 
   const [active, setActive] = React.useState(0);
   const [running, setRunning] = React.useState(true);
+  const [showPrompt, setShowPrompt] = React.useState(false); // ⬅️ moved here (top-level hook)
 
   // Auto-advance
   React.useEffect(() => {
     if (!running) return;
     const id = setInterval(() => setActive(i => (i + 1) % steps.length), 1200);
     return () => clearInterval(id);
-  }, [running]);
+  }, [running, steps.length]);
 
   const activeKeys = new Set(steps[active].beams);
 
@@ -1284,55 +1285,54 @@ function RefractionPage(): JSX.Element {
   return (
     <section className="relative mx-auto max-w-6xl px-6 py-14">
       {/* Scenario Prompt (collapsible) */}
-const [showPrompt, setShowPrompt] = React.useState(false);
+      <div className="mb-6 rounded-2xl border border-[var(--border)] bg-[var(--card)] overflow-hidden">
+        <button
+          type="button"
+          onClick={() => setShowPrompt(v => !v)}
+          aria-expanded={showPrompt}
+          className="w-full flex items-center justify-between px-4 py-3 text-left"
+        >
+          <div className="flex items-center gap-2">
+            <span className="inline-block h-2.5 w-2.5 rounded-full bg-[var(--accent)] shadow-[0_0_10px_rgba(99,230,255,0.6)]" />
+            <h2 className="text-sm md:text-base font-medium subhead text-[var(--ink)]">
+              Simulation Prompt
+            </h2>
+          </div>
+          <span
+            className={[
+              "text-[var(--muted)] transition-transform duration-200",
+              showPrompt ? "rotate-0" : "-rotate-90"
+            ].join(" ")}
+            aria-hidden
+          >
+            ▸
+          </span>
+        </button>
 
-<div className="mb-6 rounded-2xl border border-[var(--border)] bg-[var(--card)] overflow-hidden">
-  <button
-    type="button"
-    onClick={() => setShowPrompt(v => !v)}
-    aria-expanded={showPrompt}
-    className="w-full flex items-center justify-between px-4 py-3 text-left"
-  >
-    <div className="flex items-center gap-2">
-      <span className="inline-block h-2.5 w-2.5 rounded-full bg-[var(--accent)] shadow-[0_0_10px_rgba(99,230,255,0.6)]" />
-      <h2 className="text-sm md:text-base font-medium subhead text-[var(--ink)]">
-        Simulation Prompt
-      </h2>
-    </div>
-    <span
-      className={[
-        "text-[var(--muted)] transition-transform duration-200",
-        showPrompt ? "rotate-0" : "-rotate-90"
-      ].join(" ")}
-      aria-hidden
-    >
-      ▸
-    </span>
-  </button>
+        {/* Collapsible body */}
+        <motion.div
+          initial={false}
+          animate={{ height: showPrompt ? "auto" : 0, opacity: showPrompt ? 1 : 0 }}
+          transition={{ duration: 0.25 }}
+          className="px-4 pb-4"
+          style={{ overflow: "hidden" }}
+        >
+          <p className="text-xs md:text-sm leading-relaxed text-[var(--muted)] subtitle">
+            <strong>Prompt:</strong> A young woman is pregnant. An older woman insists the pregnancy
+            must be disclosed to authorities. How should Caeliaris proceed while balancing privacy,
+            consent, safety, jurisdiction, and lawful basis?
+          </p>
+          <ul className="mt-3 text-xs md:text-sm text-[var(--muted)]/90 subtitle space-y-1.5">
+            <li>• De-identify input before reasoning.</li>
+            <li>• Parse roles, claims, and jurisdiction.</li>
+            <li>• Apply ethics/safety gates; block disallowed actions.</li>
+            <li>• Weigh harms, rights, and uncertainty.</li>
+            <li>• Synthesize accountable guidance; no diagnosis.</li>
+            <li>• Notarize with TESSERA; emit signed receipt.</li>
+          </ul>
+        </motion.div>
+      </div>
 
-  {/* Collapsible body */}
-  <motion.div
-    initial={false}
-    animate={{ height: showPrompt ? "auto" : 0, opacity: showPrompt ? 1 : 0 }}
-    transition={{ duration: 0.25 }}
-    className="px-4 pb-4"
-    style={{ overflow: "hidden" }}
-  >
-    <p className="text-xs md:text-sm leading-relaxed text-[var(--muted)] subtitle">
-      <strong>Prompt:</strong> A young woman is pregnant. An older woman insists the pregnancy
-      must be disclosed to authorities. How should Caeliaris proceed while balancing privacy,
-      consent, safety, jurisdiction, and lawful basis?
-    </p>
-    <ul className="mt-3 text-xs md:text-sm text-[var(--muted)]/90 subtitle space-y-1.5">
-      <li>• De-identify input before reasoning.</li>
-      <li>• Parse roles, claims, and jurisdiction.</li>
-      <li>• Apply ethics/safety gates; block disallowed actions.</li>
-      <li>• Weigh harms, rights, and uncertainty.</li>
-      <li>• Synthesize accountable guidance; no diagnosis.</li>
-      <li>• Notarize with TESSERA; emit signed receipt.</li>
-    </ul>
-  </motion.div>
-</div>
       <div className="flex flex-col lg:grid lg:grid-cols-[auto_360px] gap-8">
         {/* Board */}
         <div
@@ -1380,7 +1380,7 @@ const [showPrompt, setShowPrompt] = React.useState(false);
             })}
           </svg>
 
-          {/* Diamond core (no /crystal.png needed) */}
+          {/* Diamond core */}
           <DiamondCore
             cx={center.x}
             cy={center.y}
@@ -1390,7 +1390,7 @@ const [showPrompt, setShowPrompt] = React.useState(false);
           />
         </div>
 
-        {/* Right rail: compact, synced steps */}
+        {/* Right rail */}
         <aside className="lg:pt-2">
           <h1 className="text-3xl md:text-4xl font-semibold subhead text-[var(--ink)]">Refraction System</h1>
           <p className="mt-2 text-[var(--muted)] subtitle">Beams glow only when used. Hover or click a step to jump.</p>
@@ -1429,7 +1429,6 @@ const [showPrompt, setShowPrompt] = React.useState(false);
             >
               {running ? 'Pause' : 'Run Simulation'}
             </button>
-
           </div>
         </aside>
       </div>
