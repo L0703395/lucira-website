@@ -417,7 +417,7 @@ function HomeSections({
             <SectionTitle
               kicker="Identity"
               title="Sovereignty by Design"
-              subtitle="Owned systems obey. Verifiable outputs, minimal exposure."
+              subtitle="Verifiable outputs, minimal exposure."
             />
             <ul className="mt-6 space-y-3 text-[var(--muted)] subtitle">
               <li>• <strong>ULI</strong> — Unified Logic Interface gates input/output.</li>
