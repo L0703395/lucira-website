@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Canonical homepage -->
+  <url><loc>https://www.lucirasystems.com/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+
+  <!-- Sections -->
+  <url><loc>https://www.lucirasystems.com/#/engines</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.lucirasystems.com/#/sovereignty</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.lucirasystems.com/#/industries</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.lucirasystems.com/#/contact</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+
+  <!-- Engines (deep links) -->
+  <url><loc>https://www.lucirasystems.com/#/engines/RIE</loc></url>
+  <url><loc>https://www.lucirasystems.com/#/engines/MIE</loc></url>
+  <url><loc>https://www.lucirasystems.com/#/engines/DAFE</loc></url>
+  <url><loc>https://www.lucirasystems.com/#/engines/EIIE</loc></url>
+  <url><loc>https://www.lucirasystems.com/#/engines/LIE</loc></url>
+  <url><loc>https://www.lucirasystems.com/#/engines/TAXE</loc></url>
+
+  <!-- Legal -->
+  <url><loc>https://www.lucirasystems.com/#/privacy</loc><changefreq>yearly</changefreq></url>
+  <url><loc>https://www.lucirasystems.com/#/terms</loc><changefreq>yearly</changefreq></url>
+</urlset>
