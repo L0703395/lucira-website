@@ -336,9 +336,11 @@ export { resolveRoute };
   );
 }
 
-/** Home sections (landing) **/
-/** Home sections (landing) **/
-function HomeSections({ initialAnchor }: { initialAnchor?: 'engines'|'sovereignty'|'industries'|'contact' }): JSX.Element {
+function HomeSections({
+  initialAnchor,
+}: {
+  initialAnchor?: 'engines' | 'sovereignty' | 'industries' | 'contact';
+}): JSX.Element {
   useEffect(() => {
     if (initialAnchor) {
       const el = document.getElementById(initialAnchor);
@@ -346,60 +348,53 @@ function HomeSections({ initialAnchor }: { initialAnchor?: 'engines'|'sovereignt
     }
   }, [initialAnchor]);
 
-return (
-  <React.Fragment>
-    {/* HERO */}
-    <section className="relative mx-auto max-w-7xl px-6 pt-20 pb-16 md:pt-28 md:pb-24">
-      <div className="grid md:grid-cols-12 gap-8 items-center">
-        <div className="md:col-span-7">
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-4xl md:text-6xl font-semibold tracking-tight text-[var(--ink)] drop-shadow-[0_2px_6px_rgba(0,0,0,0.35)]"
-          >
-            {/* Keep accent word, simplify phrasing */}
-            Logic-bound. Ethically governed.{" "}
-            <span className="text-[var(--accent)]">Ready for real-world use.</span>
-          </motion.h1>
+  return (
+    <React.Fragment>
+      {/* HERO */}
+      <section className="relative mx-auto max-w-7xl px-6 pt-20 pb-16 md:pt-28 md:pb-24">
+        <div className="grid md:grid-cols-12 gap-8 items-center">
+          <div className="md:col-span-7">
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="text-4xl md:text-6xl font-semibold tracking-tight text-[var(--ink)] drop-shadow-[0_2px_6px_rgba(0,0,0,0.35)]"
+            >
+              Logic-bound. Ethically governed.{' '}
+              <span className="text-[var(--accent)]">Ready for real-world use.</span>
+            </motion.h1>
 
-          {/* 1) Plain “what is this?” line (simple language) */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.65, delay: 0.04 }}
-            className="mt-4 text-base md:text-lg text-[var(--muted)] subtitle"
-          >
-            Caeliaris builds logic systems that keep AI safe, private, and trustworthy.
-          </motion.p>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.65, delay: 0.04 }}
+              className="mt-4 text-base md:text-lg text-[var(--muted)] subtitle"
+            >
+              Caeliaris builds logic systems that keep AI safe, private, and trustworthy.
+            </motion.p>
 
-          {/* 4) One short concrete example */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.07 }}
-            className="mt-3 text-sm md:text-base text-[var(--muted)]/90 subtitle"
-          >
-            Example: In healthcare, ULI lets only the right data in, VIREL keeps automated checks safe,
-            and TESSERA signs every result so decisions are auditable.
-          </motion.p>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.07 }}
+              className="mt-3 text-sm md:text-base text-[var(--muted)]/90 subtitle"
+            >
+              Example: In healthcare, ULI lets only the right data in, VIREL keeps automated checks
+              safe, and TESSERA signs every result so decisions are auditable.
+            </motion.p>
 
-          <div className="mt-8 flex flex-wrap gap-3">
-            <CTA href="#/engines" label="Explore Engines" primary />
-            <CTA href="#/sovereignty" label="Why Sovereignty?" />
-            <CTA href="#/contact" label="Talk to Lucira Systems" />
+            <div className="mt-8 flex flex-wrap gap-3">
+              <CTA href="#/engines" label="Explore Engines" primary />
+              <CTA href="#/sovereignty" label="Why Sovereignty?" />
+              <CTA href="#/contact" label="Talk to Lucira Systems" />
+            </div>
+          </div>
+
+          <div className="md:col-span-5">
+            <ULICard />
           </div>
         </div>
-
-        <div className="md:col-span-5">
-          <ULICard />
-        </div>
-      </div>
-    </section>
-    {/* …other sections… */}
-  </React.Fragment>
-);
-
+      </section>
 
       {/* ENGINES GRID */}
       <section id="engines" className="relative mx-auto max-w-7xl px-6 pb-20 md:pb-32">
@@ -432,8 +427,7 @@ return (
 
             <MoreDisclosure summary="Why it matters">
               Sovereignty prevents capture and drift. Requests are minimized before they reach engines,
-              and every result carries a cryptographic receipt so decisions are reviewable without
-              exposing raw data.
+              and every result carries a cryptographic receipt so decisions are reviewable without exposing raw data.
             </MoreDisclosure>
 
             <div className="mt-6">
@@ -460,9 +454,7 @@ return (
               <div className="absolute inset-0 bg-black/30" />
               <div className="relative h-full grid place-items-center">
                 <div className="text-center px-8">
-                  <p className="text-sm text-[var(--muted)] subtitle">
-                    Integrity is the architecture of endurance.
-                  </p>
+                  <p className="text-sm text-[var(--muted)] subtitle">Integrity is the architecture of endurance.</p>
                 </div>
               </div>
             </motion.div>
@@ -479,16 +471,9 @@ return (
         />
         <IndustryTilesMinimal />
       </section>
-    </>
+    </React.Fragment>
   );
 }
-
-
-     
-    </>
-  );
-}
-
 
 /** Engine subpage **/
 function EnginePage({ engineKey }: { engineKey: EngineKey }): JSX.Element {
