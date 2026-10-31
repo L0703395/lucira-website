@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 
 # Point crawlers to your sitemap:
-Sitemap: https://www.lucirasystems.com/sitemap.xml
+Sitemap: https://www.caeliaris.com/sitemap.xml
