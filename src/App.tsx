@@ -212,7 +212,7 @@ export default function CaeliarisLanding(): JSX.Element {
 
       <footer className="border-t border-[var(--border)]/70">
         <div className="mx-auto max-w-7xl px-6 py-10 text-sm text-[var(--muted)] flex flex-col md:flex-row gap-3 items-center justify-between">
-          <div>© {new Date().getFullYear()} Lucira Systems. Ethics before access.</div>
+          <div>© {new Date().getFullYear()} Caeliaris. Ethics before access.</div>
           <div className="flex gap-4">
             <a className="hover:text-[var(--accent)]" href="#/privacy">Privacy Policy</a>
             <a className="hover:text-[var(--accent)]" href="#/terms">Terms of Use</a>
@@ -386,7 +386,7 @@ function HomeSections({
             <div className="mt-8 flex flex-wrap gap-3">
               <CTA href="#/engines" label="Explore Engines" primary />
               <CTA href="#/sovereignty" label="Why Sovereignty?" />
-              <CTA href="#/contact" label="Talk to Lucira Systems" />
+              <CTA href="#/contact" label="Talk to Caeliaris" />
             </div>
           </div>
 
@@ -1102,7 +1102,7 @@ function PrivacyPage(): JSX.Element {
 
       <div className="mt-8 space-y-6 text-sm leading-6 text-[var(--muted)] subtitle">
         <p>
-          Lucira Systems values privacy. We collect only what’s needed to respond to inquiries,
+          Caeliaris values privacy. We collect only what’s needed to respond to inquiries,
           improve the site, and secure our systems.
         </p>
 
@@ -1196,7 +1196,7 @@ function TermsPage(): JSX.Element {
 
         <h2 className="subhead text-[var(--ink)] text-lg">Intellectual Property</h2>
         <p>
-          © {new Date().getFullYear()} Lucira Systems. All rights reserved. Trademarks and names belong to their owners.
+          © {new Date().getFullYear()} Caeliaris. All rights reserved. Trademarks and names belong to their owners.
         </p>
 
         <h2 className="subhead text-[var(--ink)] text-lg">Third-Party Services</h2>
@@ -1206,7 +1206,7 @@ function TermsPage(): JSX.Element {
 
         <h2 className="subhead text-[var(--ink)] text-lg">Limitation of Liability</h2>
         <p>
-          To the maximum extent permitted by law, Lucira Systems is not liable for indirect, incidental, or consequential damages arising from use of the site.
+          To the maximum extent permitted by law, Caeliaris is not liable for indirect, incidental, or consequential damages arising from use of the site.
         </p>
 
         <h2 className="subhead text-[var(--ink)] text-lg">Changes</h2>
