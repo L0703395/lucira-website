@@ -28,5 +28,5 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
-          cname: www.caeliaris.com
+          cname: caeliaris.com
           force_orphan: true
