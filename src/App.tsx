@@ -139,10 +139,10 @@ export const projects: {
     cta: 'Discuss the initiative',
   },
   {
-    key: 'cellular-precision',
-    title: 'Cellular Precision',
+    key: 'xpm',
+    title: 'XPM',
     category: 'PRECISION MEDICINE RESEARCH',
-    description: 'An emerging research initiative exploring cellular profiles and immune signaling to help evaluate targeted therapeutic hypotheses, including questions around xenon.',
+    description: 'Xenon Precision Medicine is an emerging research initiative exploring cellular profiles and immune signaling to help evaluate targeted therapeutic hypotheses, including questions around xenon.',
     image: '/images/cellular-precision.svg',
     imageAlt: 'A conceptual view of a cell, molecular signals, and immune pathway connections',
     href: '#/contact',
@@ -490,7 +490,7 @@ function HomeSections({
             </article>
           ))}
         </div>
-        <p className="mt-5 text-xs leading-relaxed text-[var(--muted)]/65">Project artwork is illustrative. MS DAO and Cellular Precision are presented as research initiatives; descriptions do not imply completed deployment, validated performance, or established medical treatment.</p>
+        <p className="mt-5 text-xs leading-relaxed text-[var(--muted)]/65">Project artwork is illustrative. MS DAO and XPM are presented as research initiatives; descriptions do not imply completed deployment, validated performance, or established medical treatment.</p>
       </section>
 
       
