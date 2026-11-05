@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { engines, industries, resolveRoute } from './App';
+import { engines, industries, projects, resolveRoute } from './App';
 
 describe('Caeliaris site navigation', () => {
   it('resolves the home route', () => {
@@ -36,5 +36,18 @@ describe('Caeliaris platform content', () => {
 
   it('contains six application areas', () => {
     expect(industries).toHaveLength(6);
+  });
+
+  it('features the selected three projects in the requested order', () => {
+    expect(projects.map((project) => project.title)).toEqual([
+      'Project Refract',
+      'MS DAO',
+      'Cellular Precision',
+    ]);
+    expect(projects.map((project) => project.image)).toEqual([
+      '/images/project-refract.svg',
+      '/images/ms-dao.svg',
+      '/images/cellular-precision.svg',
+    ]);
   });
 });
