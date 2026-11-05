@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 440" role="img" aria-labelledby="title desc">
+<title id="title">Jason Transpiler concept</title><desc id="desc">A central processing unit connects structured code blocks to modular output paths on a circuit board.</desc>
+<defs>
+ <linearGradient id="bg" x2="1" y2="1"><stop stop-color="#14283e"/><stop offset="1" stop-color="#080e18"/></linearGradient>
+ <linearGradient id="chip" x2="1" y2="1"><stop stop-color="#203d58"/><stop offset=".5" stop-color="#0d1b2b"/><stop offset="1" stop-color="#294a67"/></linearGradient>
+ <filter id="shine"><feGaussianBlur stdDeviation="10"/></filter>
+</defs>
+<rect width="720" height="440" rx="28" fill="url(#bg)"/>
+<g stroke="#8ebfdf" stroke-opacity=".16" fill="none">
+ <path d="M0 80H720M0 160H720M0 240H720M0 320H720M80 0V440M160 0V440M240 0V440M320 0V440M400 0V440M480 0V440M560 0V440M640 0V440"/>
+</g>
+<circle cx="360" cy="220" r="154" fill="#58bfe9" opacity=".12" filter="url(#shine)"/>
+<g fill="none" stroke="#6fc9ef" stroke-width="2">
+ <path d="M78 112H214V180H272M78 220H246M78 328H214V260H272"/>
+ <path d="M448 180H506V112H642M474 220H642M448 260H506V328H642"/>
+ <path d="M214 180L246 220L214 260M506 180L474 220L506 260" stroke-opacity=".6"/>
+</g>
+<g fill="#a9e8ff"><circle cx="78" cy="112" r="5"/><circle cx="78" cy="220" r="5"/><circle cx="78" cy="328" r="5"/><circle cx="642" cy="112" r="5"/><circle cx="642" cy="220" r="5"/><circle cx="642" cy="328" r="5"/></g>
+<rect x="272" y="132" width="176" height="176" rx="18" fill="url(#chip)" stroke="#9be5ff" stroke-width="2.5"/>
+<rect x="292" y="152" width="136" height="136" rx="10" fill="#0a1523" stroke="#6ec9eb" stroke-opacity=".75"/>
+<g stroke="#85d9f5" stroke-width="5" stroke-linecap="round">
+ <path d="M248 154H272M248 180H272M248 206H272M248 232H272M248 258H272M248 284H272M448 154H472M448 180H472M448 206H472M448 232H472M448 258H472M448 284H472"/>
+ <path d="M296 108V132M322 108V132M348 108V132M374 108V132M400 108V132M296 308V332M322 308V332M348 308V332M374 308V332M400 308V332"/>
+</g>
+<g fill="#c8f2ff" font-family="monospace" text-anchor="middle"><text x="360" y="211" font-size="32">&lt;/&gt;</text><text x="360" y="240" font-size="10" letter-spacing="2">TRANSLATE</text></g>
+<g fill="none" stroke="#9ce7ff" stroke-opacity=".5" stroke-width="1.5">
+ <rect x="42" y="92" width="104" height="40" rx="8"/><rect x="42" y="200" width="104" height="40" rx="8"/><rect x="42" y="308" width="104" height="40" rx="8"/>
+ <rect x="574" y="92" width="104" height="40" rx="8"/><rect x="574" y="200" width="104" height="40" rx="8"/><rect x="574" y="308" width="104" height="40" rx="8"/>
+</g>
+<g fill="#d9f7ff" font-family="Arial,sans-serif" font-size="9" letter-spacing="1.4" text-anchor="middle"><text x="94" y="116">STRUCTURE</text><text x="94" y="224">SYNTAX</text><text x="94" y="332">MODULES</text><text x="626" y="116">OUTPUT</text><text x="626" y="224">TARGET</text><text x="626" y="332">BUILD</text></g>
+<g fill="#dff8ff" font-family="Arial,sans-serif" font-size="10" letter-spacing="3" opacity=".75"><text x="38" y="42">STRUCTURED TRANSLATION</text><text x="38" y="408">MODULAR · EXTENSIBLE · REVIEWABLE</text></g>
+</svg>
