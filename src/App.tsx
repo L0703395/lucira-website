@@ -432,6 +432,8 @@ function HomeSections({
           </div>
           <div className="md:col-span-6">
             <div className="ca-diagram-wrap">
+              <video className="ca-diagram-video" src="/Video_Ready_.mp4" autoPlay loop muted playsInline preload="metadata" aria-hidden="true" />
+              <div className="ca-diagram-shade" />
               <img src="/caeliaris.png" alt="Caeliaris identity mark" className="ca-symbol" loading="lazy" />
               <div className="ca-diagram-orbit ca-orbit-one" /><div className="ca-diagram-orbit ca-orbit-two" />
               <div className="ca-diagram-label ca-label-top">INPUT</div><div className="ca-diagram-label ca-label-right">PROCESS</div>
