@@ -10,6 +10,10 @@ describe('Caeliaris site navigation', () => {
     expect(resolveRoute('#/projects')).toEqual({ type: 'section', anchor: 'projects' });
   });
 
+  it('resolves the ULI explainer page', () => {
+    expect(resolveRoute('#/uli')).toEqual({ type: 'section', anchor: 'uli' });
+  });
+
   it('keeps engine routes case-insensitive', () => {
     expect(resolveRoute('#/engines/rie')).toEqual({ type: 'engine', engine: 'RIE' });
   });

@@ -164,6 +164,7 @@ export default function CaeliarisLanding(): JSX.Element {
     <Logo />
     <div className="ml-auto hidden md:flex items-center gap-6 text-sm">
       <a className="hover:text-[var(--accent)] transition" href="#/projects">Projects</a>
+      <a className="hover:text-[var(--accent)] transition" href="#/uli">ULI</a>
       <a className="hover:text-[var(--accent)] transition" href="#/engines">Technology</a>
       <a className="hover:text-[var(--accent)] transition" href="#/sovereignty">Approach</a>
       <a className="hover:text-[var(--accent)] transition" href="#/industries">Applications</a>
@@ -175,6 +176,7 @@ export default function CaeliarisLanding(): JSX.Element {
       <div className="ca-mobile-menu-panel">
         <a href="#/">Home</a>
         <a href="#/projects">Projects</a>
+        <a href="#/uli">ULI</a>
         <a href="#/engines">Technology</a>
         <a href="#/sovereignty">Approach</a>
         <a href="#/industries">Applications</a>
@@ -203,6 +205,7 @@ export default function CaeliarisLanding(): JSX.Element {
   <HomeSections initialAnchor="industries" />
 )}
       
+{page.type === 'section' && page.anchor === 'uli' && <ULIPage />}
 {page.type === 'section' && page.anchor === 'contact' && <ContactPage />}
 {page.type === 'section' && page.anchor === 'privacy' && <PrivacyPage />}
 {page.type === 'section' && page.anchor === 'terms' && <TermsPage />}
@@ -231,7 +234,7 @@ export default function CaeliarisLanding(): JSX.Element {
 /** Router helpers **/
 function resolveRoute(hash: string):
   | { type: 'home' }
-  | { type: 'section'; anchor: 'projects'|'engines'|'sovereignty'|'industries'|'contact'|'privacy'|'terms'|'refraction' }
+  | { type: 'section'; anchor: 'uli'|'projects'|'engines'|'sovereignty'|'industries'|'contact'|'privacy'|'terms'|'refraction' }
   | { type: 'engine'; engine: EngineKey }
   | { type: 'industry'; industry: IndustryKey } {
   if (!hash || hash === '#' || hash === '#/') return { type: 'home' };
@@ -239,7 +242,7 @@ function resolveRoute(hash: string):
   const clean = hash.replace(/^#\/?/, '');
 
   // top-level sections
-  if (['projects','engines','sovereignty','industries','contact','privacy','terms','refraction'].includes(clean)) {
+  if (['uli','projects','engines','sovereignty','industries','contact','privacy','terms','refraction'].includes(clean)) {
     return { type: 'section', anchor: clean as any };
   }
 
@@ -475,7 +478,7 @@ function HomeSections({
               <div className="ca-feature-row"><span>02</span><div><h3>Traceable outputs</h3><p>Keep records that make important processing steps easier to inspect.</p></div></div>
               <div className="ca-feature-row"><span>03</span><div><h3>Human oversight</h3><p>Keep consequential decisions reviewable rather than hiding them inside automation.</p></div></div>
             </div>
-            <div className="mt-8"><CTA href="#/refraction" label="View the Refraction demonstration" primary /></div>
+            <div className="mt-8 flex flex-wrap gap-3"><CTA href="#/uli" label="How ULI works" primary /><CTA href="#/refraction" label="View the Refraction demonstration" /></div>
           </div>
           <div className="md:col-span-6">
             <div className="ca-diagram-wrap">
@@ -1096,6 +1099,164 @@ function IndustryTilesMinimal(): JSX.Element {
 
 
 /** Standalone pages (must be top-level, not nested inside other components) **/
+/** Plain-language overview of the Unified Logic Interface. */
+function ULIPage(): JSX.Element {
+  return (
+    <main className="ca-uli-page relative mx-auto max-w-7xl px-6 py-14 md:py-20">
+      <section className="ca-uli-hero">
+        <div className="max-w-3xl">
+          <p className="ca-eyebrow">CAELIARIS ARCHITECTURE / INTERFACE LAYER</p>
+          <h1 className="mt-4 text-4xl sm:text-5xl md:text-6xl font-semibold subhead text-[var(--ink)]">Unified Logic Interface</h1>
+          <p className="mt-5 text-xl md:text-2xl leading-relaxed text-[var(--muted)] subtitle">A controlled point of entry and exit for information moving through Caeliaris workflows.</p>
+          <p className="mt-5 max-w-2xl leading-relaxed text-[var(--muted)] subtitle">
+            ULI defines how a request enters a workflow, how it is handed to the appropriate system, and how a result is returned. It is the interface boundary around the work, rather than the specialist engine doing every task.
+          </p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <CTA href="#/engines" label="Explore the engines" primary />
+            <CTA href="#/sovereignty" label="See the design principles" />
+          </div>
+        </div>
+        <div className="ca-uli-hero-mark" aria-hidden="true">
+          <div className="ca-uli-orbit ca-uli-orbit-a" />
+          <div className="ca-uli-orbit ca-uli-orbit-b" />
+          <div className="ca-uli-core"><span>ULI</span><small>INTERFACE</small></div>
+          <span className="ca-uli-orbit-dot ca-uli-dot-a" />
+          <span className="ca-uli-orbit-dot ca-uli-dot-b" />
+          <span className="ca-uli-orbit-dot ca-uli-dot-c" />
+        </div>
+      </section>
+
+      <section className="mt-16 md:mt-20">
+        <p className="ca-eyebrow">THE CORE IDEA</p>
+        <h2 className="mt-3 text-3xl md:text-4xl font-semibold subhead text-[var(--ink)]">Think of ULI as the front door and return gate.</h2>
+        <p className="mt-4 max-w-3xl leading-relaxed text-[var(--muted)] subtitle">
+          A request should not have to know the internal details of every engine. ULI provides a consistent interface around the workflow: it receives the request, carries the relevant context into the process, and governs the boundary through which the result comes back.
+        </p>
+        <div className="ca-uli-flow mt-9" aria-label="Illustrative ULI request and response flow">
+          <article className="ca-uli-flow-card">
+            <span className="ca-uli-step">01</span>
+            <strong>Request</strong>
+            <p>A person or application submits a task and its relevant context.</p>
+          </article>
+          <div className="ca-uli-flow-arrow" aria-hidden="true">→</div>
+          <article className="ca-uli-flow-card ca-uli-flow-highlight">
+            <span className="ca-uli-step">02</span>
+            <strong>ULI · Input boundary</strong>
+            <p>The request enters through the defined interface and workflow boundaries.</p>
+          </article>
+          <div className="ca-uli-flow-arrow" aria-hidden="true">→</div>
+          <article className="ca-uli-flow-card">
+            <span className="ca-uli-step">03</span>
+            <strong>Specialist engine</strong>
+            <p>The appropriate Caeliaris engine performs its assigned work.</p>
+          </article>
+          <div className="ca-uli-flow-arrow" aria-hidden="true">→</div>
+          <article className="ca-uli-flow-card ca-uli-flow-highlight">
+            <span className="ca-uli-step">04</span>
+            <strong>ULI · Output boundary</strong>
+            <p>The result passes back through the interface before it is returned.</p>
+          </article>
+          <div className="ca-uli-flow-arrow" aria-hidden="true">→</div>
+          <article className="ca-uli-flow-card">
+            <span className="ca-uli-step">05</span>
+            <strong>Response</strong>
+            <p>The result is returned to the person or application that requested it.</p>
+          </article>
+        </div>
+        <p className="mt-4 text-xs text-[var(--muted)]/70">Conceptual overview of the interface boundary. Individual workflows may contain additional review, safety, and recordkeeping stages.</p>
+      </section>
+
+      <section className="mt-16 grid gap-8 lg:grid-cols-12 lg:items-start md:mt-24">
+        <div className="lg:col-span-4">
+          <p className="ca-eyebrow">WHAT IT IS RESPONSIBLE FOR</p>
+          <h2 className="mt-3 text-3xl font-semibold subhead text-[var(--ink)]">A consistent boundary around different kinds of work.</h2>
+        </div>
+        <div className="ca-uli-responsibility-grid lg:col-span-8">
+          <article className="ca-uli-info-card">
+            <span>01 / INTAKE</span>
+            <h3>Receive requests with context</h3>
+            <p>ULI is the defined point where a request enters a Caeliaris workflow. The request can carry the context needed for the next stage.</p>
+          </article>
+          <article className="ca-uli-info-card">
+            <span>02 / HAND-OFF</span>
+            <h3>Connect to specialist engines</h3>
+            <p>ULI provides a consistent interface for passing work into the appropriate engine instead of making every engine handle every kind of request.</p>
+          </article>
+          <article className="ca-uli-info-card">
+            <span>03 / OUTPUT</span>
+            <h3>Govern the return path</h3>
+            <p>The result returns through an output boundary. This keeps the way results leave a workflow part of the architecture, not an afterthought.</p>
+          </article>
+          <article className="ca-uli-info-card">
+            <span>04 / CONSISTENCY</span>
+            <h3>Keep the interaction understandable</h3>
+            <p>A shared interface makes it easier to describe how requests enter, where work is sent, and how results are returned across different use cases.</p>
+          </article>
+        </div>
+      </section>
+
+      <section className="mt-16 md:mt-24">
+        <p className="ca-eyebrow">HOW THE COMPONENTS RELATE</p>
+        <h2 className="mt-3 text-3xl md:text-4xl font-semibold subhead text-[var(--ink)]">ULI works alongside other parts of Caeliaris.</h2>
+        <p className="mt-4 max-w-3xl leading-relaxed text-[var(--muted)] subtitle">
+          These components have different roles. ULI defines the interface boundary; the engines perform specialized tasks; VIREL and TESSERA provide complementary safeguards and records in the wider architecture.
+        </p>
+        <div className="mt-8 grid gap-4 md:grid-cols-3">
+          <article className="ca-uli-comp-card ca-uli-comp-primary">
+            <span className="ca-uli-comp-label">INTERFACE</span>
+            <h3>ULI</h3>
+            <p>Unified Logic Interface</p>
+            <strong>Gates input and output.</strong>
+            <span className="ca-uli-comp-foot">Defines the workflow boundary</span>
+          </article>
+          <article className="ca-uli-comp-card">
+            <span className="ca-uli-comp-label">LOOP SAFEGUARDS</span>
+            <h3>VIREL</h3>
+            <p>Feedback and automation safeguards</p>
+            <strong>Protects feedback loops.</strong>
+            <span className="ca-uli-comp-foot">Helps keep automation bounded</span>
+          </article>
+          <article className="ca-uli-comp-card">
+            <span className="ca-uli-comp-label">PROVENANCE</span>
+            <h3>TESSERA</h3>
+            <p>Signing and receipts</p>
+            <strong>Signs results for review.</strong>
+            <span className="ca-uli-comp-foot">Provides a record of outputs</span>
+          </article>
+        </div>
+      </section>
+
+      <section className="ca-uli-example mt-16 md:mt-24">
+        <div>
+          <p className="ca-eyebrow">ILLUSTRATIVE WORKFLOW</p>
+          <h2 className="mt-3 text-3xl md:text-4xl font-semibold subhead text-[var(--ink)]">What might this look like?</h2>
+          <p className="mt-4 leading-relaxed text-[var(--muted)] subtitle">
+            Consider a research question in an education setting. The request enters through ULI with its context. The Research Interoperability Engine (RIE) can then build an evidence map, an ethics review can be applied, and TESSERA can sign the sources and output.
+          </p>
+          <p className="mt-3 text-sm leading-relaxed text-[var(--muted)] subtitle">
+            The point is separation of roles: ULI provides the way into and out of the workflow, RIE performs the research task, and the related controls support review and traceability.
+          </p>
+          <div className="mt-7"><CTA href="#/engines/RIE" label="Explore the RIE engine" primary /></div>
+        </div>
+        <div className="ca-uli-example-list">
+          <div><span>01</span><p><strong>Request</strong> — a research question and context arrive.</p></div>
+          <div><span>02</span><p><strong>ULI intake</strong> — the request enters the workflow.</p></div>
+          <div><span>03</span><p><strong>RIE</strong> — sources are queried and an evidence map is assembled.</p></div>
+          <div><span>04</span><p><strong>Review</strong> — an ethics review is applied.</p></div>
+          <div><span>05</span><p><strong>TESSERA</strong> — sources and outputs are signed.</p></div>
+          <div><span>06</span><p><strong>ULI output</strong> — the result returns through the interface.</p></div>
+        </div>
+      </section>
+
+      <section className="mt-16 border-t border-[var(--border)] pt-8 md:mt-20">
+        <p className="text-sm leading-relaxed text-[var(--muted)] subtitle">
+          <strong className="text-[var(--ink)]">A note on scope:</strong> This page describes ULI's role in the Caeliaris architecture as represented in the current public project materials. The diagrams are explanatory, and should not be read as proof that every proposed control is deployed or independently validated in a production system.
+        </p>
+      </section>
+    </main>
+  );
+}
+
 function ContactPage(): JSX.Element {
   return (
     <section className="relative mx-auto max-w-5xl px-6 py-16 md:py-24">
