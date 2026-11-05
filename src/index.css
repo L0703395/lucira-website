@@ -41,3 +41,53 @@ html, body{
 /* Optional readability boost */
 h1, h2, h3, .subhead { text-shadow: 0 2px 4px rgba(0,0,0,.30); }
 .subtitle { text-shadow: 0 1px 3px rgba(0,0,0,.25); }
+
+
+/* Caeliaris homepage refresh — restrained scientific visual system */
+:root {
+  --bg-solid: #080d16;
+  --bg-via: #101c2c;
+  --bg-top: #17283b;
+  --ink: #f3f7fc;
+  --muted: #c1ccd9;
+  --accent: #79d9ef;
+  --accent-2: #a7a4ee;
+  --card: rgba(17, 29, 45, .88);
+  --border: rgba(150, 183, 211, .2);
+}
+html, body { min-height: 100%; background: #080d16; }
+body { color: var(--ink); }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.ca-hero-title { line-height: 1.08; max-width: 13ch; }
+.ca-eyebrow { color: var(--accent); font-size: .7rem; font-weight: 700; letter-spacing: .22em; }
+.ca-hero-visual { min-height: 320px; background: #101c2c; box-shadow: 0 26px 80px rgba(0,0,0,.28); }
+.ca-principle-card { border: 1px solid var(--border); background: linear-gradient(145deg, rgba(24,42,62,.9), rgba(11,20,33,.88)); border-radius: 1.2rem; padding: 1.5rem; min-height: 190px; }
+.ca-number { color: var(--accent); font-size: .72rem; letter-spacing: .16em; }
+.ca-principle-card h3 { margin-top: 1.6rem; color: var(--ink); font-size: 1.15rem; font-weight: 600; }
+.ca-principle-card p { margin-top: .55rem; color: var(--muted); font-size: .92rem; line-height: 1.65; }
+.ca-feature-row { display: flex; gap: 1rem; align-items: flex-start; }
+.ca-feature-row > span { color: var(--accent); font-size: .75rem; letter-spacing: .12em; padding-top: .2rem; }
+.ca-feature-row h3 { color: var(--ink); font-size: 1rem; font-weight: 600; }
+.ca-feature-row p { color: var(--muted); font-size: .9rem; line-height: 1.6; margin-top: .25rem; }
+.ca-diagram-wrap { position: relative; display: grid; place-items: center; min-height: 390px; overflow: hidden; border: 1px solid var(--border); border-radius: 1.8rem; background: radial-gradient(circle at center, rgba(77,164,203,.17), transparent 52%), linear-gradient(145deg,#13283a,#0a1321); }
+.ca-symbol { z-index: 2; width: 118px; height: 118px; object-fit: contain; border-radius: 50%; filter: drop-shadow(0 0 28px rgba(121,217,239,.24)); }
+.ca-diagram-orbit { position: absolute; border: 1px solid rgba(121,217,239,.25); border-radius: 50%; }
+.ca-orbit-one { width: 240px; height: 240px; }
+.ca-orbit-two { width: 330px; height: 330px; border-style: dashed; }
+.ca-diagram-label { position: absolute; z-index: 3; border: 1px solid rgba(121,217,239,.3); border-radius: 999px; background: rgba(8,16,27,.82); padding: .45rem .8rem; color: #d8f6ff; font-size: .65rem; letter-spacing: .15em; }
+.ca-label-top { top: 12%; }
+.ca-label-right { right: 8%; }
+.ca-label-bottom { bottom: 15%; }
+.ca-label-left { left: 8%; }
+.ca-diagram-caption { position: absolute; bottom: 1.2rem; color: var(--muted); font-size: .75rem; }
+@media (max-width: 640px) {
+  .ca-hero-title { max-width: 100%; }
+  .ca-diagram-wrap { min-height: 320px; }
+  .ca-orbit-two { width: 280px; height: 280px; }
+  .ca-label-left { left: 3%; }
+  .ca-label-right { right: 3%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
