@@ -107,3 +107,6 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outlin
 }
 .ca-mobile-menu-panel a { padding: .65rem .75rem; border-radius: .65rem; color: var(--muted); font-size: .9rem; }
 .ca-mobile-menu-panel a:hover { background: rgba(121,217,239,.1); color: var(--accent); }
+
+.ca-diagram-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .32; }
+.ca-diagram-shade { position: absolute; inset: 0; background: linear-gradient(145deg, rgba(8,19,32,.42), rgba(8,19,32,.78)); }
