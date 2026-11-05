@@ -1454,7 +1454,7 @@ function DiamondCore({ active }: { active: boolean }) {
       className="absolute select-none"
       style={{ left: '50%', top: '50%', width: '22.5%', height: '33.75%', transform: 'translate(-50%, -50%)', pointerEvents: 'none' }}
     >
-      <svg width={w} height={h} viewBox="0 0 100 150" className="absolute inset-0">
+      <svg width="100%" height="100%" viewBox="0 0 100 150" className="absolute inset-0">
         <defs>
           <linearGradient id="diaGrad" x1="50%" y1="0%" x2="50%" y2="100%">
             <stop offset="0%"  stopColor="#A8EEFF" />
