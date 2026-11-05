@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 440" role="img" aria-labelledby="title desc">
+<title id="title">ASON architecture concept</title><desc id="desc">A layered network of points and paths representing connected information and memory structures.</desc>
+<defs>
+ <linearGradient id="bg" x2="1" y2="1"><stop stop-color="#142b40"/><stop offset="1" stop-color="#080f1a"/></linearGradient>
+ <linearGradient id="line" x2="1"><stop stop-color="#4b95c6" stop-opacity=".12"/><stop offset=".5" stop-color="#a6eaff" stop-opacity=".9"/><stop offset="1" stop-color="#7f90f2" stop-opacity=".12"/></linearGradient>
+ <radialGradient id="glow"><stop stop-color="#9ceaff" stop-opacity=".65"/><stop offset="1" stop-color="#9ceaff" stop-opacity="0"/></radialGradient>
+ <filter id="blur"><feGaussianBlur stdDeviation="18"/></filter>
+</defs>
+<rect width="720" height="440" rx="28" fill="url(#bg)"/>
+<path d="M0 88H720M0 176H720M0 264H720M0 352H720M90 0V440M180 0V440M270 0V440M360 0V440M450 0V440M540 0V440M630 0V440" stroke="#9dcce8" stroke-opacity=".055"/>
+<ellipse cx="360" cy="232" rx="280" ry="118" fill="url(#glow)" filter="url(#blur)"/>
+<g fill="none" stroke="url(#line)" stroke-width="1.3">
+ <path d="M54 288L122 214 198 257 263 147 338 208 412 122 488 193 560 104 664 166"/>
+ <path d="M54 288L144 342 226 293 306 350 390 292 470 337 550 269 664 300"/>
+ <path d="M122 214L144 342M198 257L226 293M263 147L306 350M338 208L390 292M412 122L470 337M488 193L550 269M560 104L664 300"/>
+ <path d="M54 288Q200 80 338 208T664 166M54 288Q210 420 390 292T664 300"/>
+</g>
+<g fill="#bcefff">
+ <circle cx="54" cy="288" r="5"/><circle cx="122" cy="214" r="6"/><circle cx="198" cy="257" r="4"/>
+ <circle cx="263" cy="147" r="6"/><circle cx="338" cy="208" r="8"/><circle cx="412" cy="122" r="5"/>
+ <circle cx="488" cy="193" r="7"/><circle cx="560" cy="104" r="5"/><circle cx="664" cy="166" r="6"/>
+ <circle cx="144" cy="342" r="4"/><circle cx="226" cy="293" r="5"/><circle cx="306" cy="350" r="4"/>
+ <circle cx="390" cy="292" r="6"/><circle cx="470" cy="337" r="4"/><circle cx="550" cy="269" r="5"/><circle cx="664" cy="300" r="4"/>
+</g>
+<g fill="none" stroke="#7bdaf3" stroke-opacity=".4"><circle cx="338" cy="208" r="32"/><circle cx="338" cy="208" r="57" stroke-dasharray="3 8"/><circle cx="488" cy="193" r="28"/></g>
+<g fill="#dff8ff" font-family="Arial,sans-serif" font-size="10" letter-spacing="3" opacity=".75"><text x="38" y="42">CONNECTED INFORMATION STRUCTURE</text><text x="38" y="408">CONCEPTUAL ARCHITECTURE</text></g>
+</svg>

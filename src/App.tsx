@@ -140,16 +140,16 @@ export default function CaeliarisLanding(): JSX.Element {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;700&display=swap');
         :root{
-          --bg-solid:#0A0D12; /* bottom solid */
-          --bg-via:#0F1420;   /* middle via */
-          --bg-top:#C6DEFF;   /*heavenly blue*/
-          --ink:#E5E7EB;      /* primary text on dark */
-          --muted:#F5F5F5;    /* secondary text */
-          --accent:#63E6FF;   /* cyan accent */
-          --accent-2:#9C7BFF; /* violet accent */
+          --bg-solid:#080d16; /* bottom solid */
+          --bg-via:#101c2c;   /* middle via */
+          --bg-top:#17283b;   /*heavenly blue*/
+          --ink:#f3f7fc;      /* primary text on dark */
+          --muted:#c1ccd9;    /* secondary text */
+          --accent:#79d9ef;   /* cyan accent */
+          --accent-2:#a7a4ee; /* violet accent */
           --glow:#63E6FF33;   /* glow */
-          --card:#111827CC;   /* translucent card */
-          --border:#233044;   /* subtle border */
+          --card:rgba(17, 29, 45, .88);   /* translucent card */
+          --border:rgba(150, 183, 211, .2);   /* subtle border */
         }
         html, body{background: linear-gradient(to top, var(--bg-solid), var(--bg-via) 40%, var(--bg-top));}
         body { font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, 'Apple Color Emoji', 'Segoe UI Emoji'; }
@@ -163,23 +163,25 @@ export default function CaeliarisLanding(): JSX.Element {
 <nav className="mx-auto max-w-7xl px-6 py-5 flex items-center gap-6">
     <Logo />
     <div className="ml-auto hidden md:flex items-center gap-6 text-sm">
-      <a className="hover:text-[var(--accent)] transition" href="#/engines">Engines</a>
-      <a className="hover:text-[var(--accent)] transition" href="#/sovereignty">Sovereignty</a>
-      <a className="hover:text-[var(--accent)] transition" href="#/industries">Industries</a>
-      <a className="rounded-full border border-[var(--border)] px-4 py-2 hover:border-[var(--accent)] hover:text-[var(--accent)] transition" href="#/engines/LIE">LIE</a>
-<a
-  className="rounded-full border border-[var(--border)] px-4 py-2 hover:border-[var(--accent)] hover:text-[var(--accent)] transition"
-  href="#/refraction"
->
-  Refraction
-</a>
-      <a
-        className="rounded-full border border-[var(--accent)] bg-[var(--accent)]/10 text-[var(--accent)] px-4 py-2 hover:bg-[var(--accent)]/20 transition"
-        href="#/contact"
-      >
-        Contact
-      </a>
+      <a className="hover:text-[var(--accent)] transition" href="#/projects">Projects</a>
+      <a className="hover:text-[var(--accent)] transition" href="#/engines">Technology</a>
+      <a className="hover:text-[var(--accent)] transition" href="#/sovereignty">Approach</a>
+      <a className="hover:text-[var(--accent)] transition" href="#/industries">Applications</a>
+      <a className="rounded-full border border-[var(--border)] px-4 py-2 hover:border-[var(--accent)] hover:text-[var(--accent)] transition" href="#/refraction">Refraction</a>
+      <a className="rounded-full border border-[var(--accent)] bg-[var(--accent)]/10 text-[var(--accent)] px-4 py-2 hover:bg-[var(--accent)]/20 transition" href="#/contact">Contact</a>
     </div>
+    <details className="ca-mobile-menu relative ml-auto md:hidden">
+      <summary aria-label="Open navigation menu">Menu <span aria-hidden="true">⌄</span></summary>
+      <div className="ca-mobile-menu-panel">
+        <a href="#/">Home</a>
+        <a href="#/projects">Projects</a>
+        <a href="#/engines">Technology</a>
+        <a href="#/sovereignty">Approach</a>
+        <a href="#/industries">Applications</a>
+        <a href="#/refraction">Refraction</a>
+        <a href="#/contact">Contact</a>
+      </div>
+    </details>
   </nav>
 </header>
 
@@ -188,6 +190,9 @@ export default function CaeliarisLanding(): JSX.Element {
 
     {page.type === 'home' && <HomeSections />}
 
+{page.type === 'section' && page.anchor === 'projects' && (
+  <HomeSections initialAnchor="projects" />
+)}
 {page.type === 'section' && page.anchor === 'engines' && (
   <HomeSections initialAnchor="engines" />
 )}
@@ -226,7 +231,7 @@ export default function CaeliarisLanding(): JSX.Element {
 /** Router helpers **/
 function resolveRoute(hash: string):
   | { type: 'home' }
-  | { type: 'section'; anchor: 'engines'|'sovereignty'|'industries'|'contact'|'privacy'|'terms'|'refraction' }
+  | { type: 'section'; anchor: 'projects'|'engines'|'sovereignty'|'industries'|'contact'|'privacy'|'terms'|'refraction' }
   | { type: 'engine'; engine: EngineKey }
   | { type: 'industry'; industry: IndustryKey } {
   if (!hash || hash === '#' || hash === '#/') return { type: 'home' };
@@ -234,7 +239,7 @@ function resolveRoute(hash: string):
   const clean = hash.replace(/^#\/?/, '');
 
   // top-level sections
-  if (['engines','sovereignty','industries','contact','privacy','terms','refraction'].includes(clean)) {
+  if (['projects','engines','sovereignty','industries','contact','privacy','terms','refraction'].includes(clean)) {
     return { type: 'section', anchor: clean as any };
   }
 
@@ -339,7 +344,7 @@ export { resolveRoute };
 function HomeSections({
   initialAnchor,
 }: {
-  initialAnchor?: 'engines' | 'sovereignty' | 'industries' | 'contact';
+  initialAnchor?: 'projects' | 'engines' | 'sovereignty' | 'industries' | 'contact';
 }): JSX.Element {
   useEffect(() => {
     if (initialAnchor) {
@@ -351,124 +356,144 @@ function HomeSections({
   return (
     <React.Fragment>
       {/* HERO */}
-      <section className="relative mx-auto max-w-7xl px-6 pt-20 pb-16 md:pt-28 md:pb-24">
-        <div className="grid md:grid-cols-12 gap-8 items-center">
-          <div className="md:col-span-7">
+      <section className="ca-hero relative mx-auto max-w-7xl px-6 pt-16 pb-16 md:pt-24 md:pb-24">
+        <div className="grid lg:grid-cols-12 gap-10 items-center">
+          <div className="lg:col-span-6 relative z-10">
+            <p className="ca-eyebrow">INDEPENDENT RESEARCH & TECHNOLOGY</p>
             <motion.h1
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="text-4xl md:text-6xl font-semibold tracking-tight text-[var(--ink)] drop-shadow-[0_2px_6px_rgba(0,0,0,0.35)]"
+              transition={{ duration: 0.55 }}
+              className="ca-hero-title mt-5 text-4xl sm:text-5xl md:text-6xl font-semibold tracking-tight text-[var(--ink)]"
             >
-              Logic-bound. Ethically governed.{' '}
-              <span className="text-[var(--accent)]">Ready for real-world use.</span>
+              Designing more thoughtful intelligent systems.
             </motion.h1>
-
             <motion.p
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.65, delay: 0.04 }}
-              className="mt-4 text-base md:text-lg text-[var(--muted)] subtitle"
+              transition={{ duration: 0.6, delay: 0.08 }}
+              className="mt-6 max-w-xl text-base md:text-lg leading-relaxed text-[var(--muted)] subtitle"
             >
-              Caeliaris builds logic systems that keep AI safe, private, and trustworthy.
+              Caeliaris explores how intelligent technology can process information, organize memory, and work across systems with greater transparency and control.
             </motion.p>
-
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.07 }}
-              className="mt-3 text-sm md:text-base text-[var(--muted)]/90 subtitle"
-            >
-              Example: In healthcare, ULI lets only the right data in, VIREL keeps automated checks
-              safe, and TESSERA signs every result so decisions are auditable.
-            </motion.p>
-
             <div className="mt-8 flex flex-wrap gap-3">
-              <CTA href="#/engines" label="Explore Engines" primary />
-              <CTA href="#/sovereignty" label="Why Sovereignty?" />
-              <CTA href="#/contact" label="Talk to Caeliaris" />
+              <CTA href="#/engines" label="Explore the technology" primary />
+              <CTA href="#/sovereignty" label="Our approach" />
+            </div>
+            <p className="mt-7 text-xs uppercase tracking-[0.18em] text-[var(--muted)]/70">Research-led · Systems-focused · Human-centered</p>
+          </div>
+          <div className="lg:col-span-6">
+            <div className="ca-hero-visual relative overflow-hidden rounded-[2rem] border border-[var(--border)]">
+              <img src="/shard.png" alt="Caeliaris abstract shard artwork representing interconnected computational systems" className="h-full min-h-[320px] w-full object-cover" loading="eager" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#08111f]/75 via-transparent to-[#08111f]/10" />
+              <div className="absolute bottom-5 left-5 right-5">
+                <span className="text-xs uppercase tracking-[0.22em] text-cyan-100/80">Caeliaris / Systems in relation</span>
+                <p className="mt-2 max-w-sm text-lg font-medium text-white md:text-xl">A connected view of intelligence, memory, and computation.</p>
+              </div>
             </div>
           </div>
-
-          <div className="md:col-span-5">
-            <ULICard />
-          </div>
         </div>
+      </section>
+
+      {/* PLAIN-LANGUAGE INTRODUCTION */}
+      <section className="mx-auto max-w-7xl px-6 py-12 md:py-16">
+        <div className="grid gap-8 md:grid-cols-12 md:items-end">
+          <div className="md:col-span-5">
+            <p className="ca-eyebrow">THE IDEA</p>
+            <h2 className="mt-3 text-3xl md:text-4xl font-semibold subhead text-[var(--ink)]">Technology should be understandable.</h2>
+          </div>
+          <p className="md:col-span-7 max-w-3xl text-base leading-relaxed text-[var(--muted)] subtitle">
+            Complex systems are easier to evaluate when their purpose, boundaries, and decisions are visible. Caeliaris brings these ideas together through research into modular software, intelligent workflows, and verifiable system behavior.
+          </p>
+        </div>
+        <div className="ca-principle-grid mt-10 grid gap-4 md:grid-cols-3">
+          <article className="ca-principle-card"><div className="ca-number">01</div><h3>Understand</h3><p>Make the purpose of a system and the information it uses easier to follow.</p></article>
+          <article className="ca-principle-card"><div className="ca-number">02</div><h3>Coordinate</h3><p>Explore how specialized tools can work together without losing their roles.</p></article>
+          <article className="ca-principle-card"><div className="ca-number">03</div><h3>Verify</h3><p>Design for traceability so actions and outputs can be reviewed.</p></article>
+        </div>
+      </section>
+
+      {/* FEATURED PROJECTS */}
+      <section id="projects" className="relative mx-auto max-w-7xl px-6 py-16 md:py-24">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="ca-eyebrow">SELECTED WORK</p>
+            <h2 className="mt-3 text-3xl md:text-4xl font-semibold subhead text-[var(--ink)]">Projects and initiatives</h2>
+            <p className="mt-3 max-w-2xl text-[var(--muted)] subtitle">A closer look at the systems and ideas being explored within Caeliaris.</p>
+          </div>
+          <span className="text-xs uppercase tracking-[0.16em] text-[var(--muted)]/65">Research · Architecture · Development</span>
+        </div>
+        <div className="mt-9 grid gap-5 lg:grid-cols-3">
+          <article className="ca-project-card">
+            <img src="/images/ason-architecture.svg" alt="Illustrative network architecture for ASON" loading="lazy" />
+            <div className="ca-project-content">
+              <p className="ca-project-kicker">MODULAR INTELLIGENCE</p>
+              <h3>ASON</h3>
+              <p>A modular intelligence framework exploring how information, memory, and system components can be organized and coordinated.</p>
+              <a href="https://github.com/L0703395/CAELIARIS-V.0.1" target="_blank" rel="noreferrer" className="ca-project-link">Explore the repository <span aria-hidden="true">↗</span></a>
+            </div>
+          </article>
+          <article className="ca-project-card">
+            <img src="/images/project-refract.svg" alt="Illustrative prism refracting a beam into multiple paths for Project Refract" loading="lazy" />
+            <div className="ca-project-content">
+              <p className="ca-project-kicker">RECURSIVE EXPLORATION</p>
+              <h3>Project Refract</h3>
+              <p>A research concept and interactive demonstration exploring recursive processes, multiple paths, and reviewable steps.</p>
+              <a href="#/refraction" className="ca-project-link">View the demonstration <span aria-hidden="true">→</span></a>
+            </div>
+          </article>
+          <article className="ca-project-card">
+            <img src="/images/jason-transpiler.svg" alt="Illustrative modular processing circuit for Jason Transpiler" loading="lazy" />
+            <div className="ca-project-content">
+              <p className="ca-project-kicker">LANGUAGE & TOOLING</p>
+              <h3>Jason Transpiler</h3>
+              <p>A development initiative exploring structured translation and modular program generation.</p>
+              <a href="#/contact" className="ca-project-link">Ask about this project <span aria-hidden="true">→</span></a>
+            </div>
+          </article>
+        </div>
+        <p className="mt-5 text-xs leading-relaxed text-[var(--muted)]/65">Project artwork is illustrative. Descriptions summarize project direction and should not be read as claims of validated performance or completed deployment.</p>
       </section>
 
       {/* ENGINES GRID */}
-      <section id="engines" className="relative mx-auto max-w-7xl px-6 pb-20 md:pb-32">
-        <SectionTitle
-          kicker="Modular"
-          title="Interoperable Engines"
-          subtitle="Logic tools that work across systems while preserving sovereignty."
-        />
-        <div className="mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {engines.map((e) => (
-            <EngineCard key={e.key} ekey={e.key} title={e.title} desc={e.desc} cta={e.cta} />
-          ))}
+      <section id="engines" className="relative mx-auto max-w-7xl px-6 py-16 md:py-24">
+        <SectionTitle kicker="PLATFORM" title="Explore the technology" subtitle="A set of specialized engines for different types of work. Select an area to see how it is intended to function." />
+        <div className="mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {engines.map((e) => <EngineCard key={e.key} ekey={e.key} title={e.title} desc={e.desc} cta="Learn more" />)}
         </div>
       </section>
 
-      {/* SOVEREIGNTY */}
-      <section id="sovereignty" className="relative mx-auto max-w-7xl px-6 pt-20 md:pt-28 pb-12 md:pb-20">
+      {/* DESIGN PRINCIPLES */}
+      <section id="sovereignty" className="relative mx-auto max-w-7xl px-6 py-16 md:py-24">
         <div className="grid md:grid-cols-12 gap-10 items-center">
           <div className="md:col-span-6">
-            <SectionTitle
-              kicker="Identity"
-              title="Sovereignty by Design"
-              subtitle="Verifiable outputs, minimal exposure."
-            />
-            <ul className="mt-6 space-y-3 text-[var(--muted)] subtitle">
-              <li>• <strong>ULI</strong> — Unified Logic Interface gates input/output.</li>
-              <li>• <strong>VIREL</strong> — Protects feedback/loops so automation can’t run wild.</li>
-              <li>• <strong>TESSERA</strong> — Signs every result for proof and audit.</li>
-            </ul>
-
-            <MoreDisclosure summary="Why it matters">
-              Sovereignty prevents capture and drift. Requests are minimized before they reach engines,
-              and every result carries a cryptographic receipt so decisions are reviewable without exposing raw data.
-            </MoreDisclosure>
-
-            <div className="mt-6">
-              <CTA href="#/industries" label="See Industry Surfaces" primary />
+            <p className="ca-eyebrow">DESIGN PRINCIPLES</p>
+            <h2 className="mt-3 text-3xl md:text-4xl font-semibold subhead text-[var(--ink)]">Built around clarity and control.</h2>
+            <p className="mt-4 text-[var(--muted)] leading-relaxed subtitle">Caeliaris explores ways to keep intelligent workflows understandable, limited to their intended purpose, and open to review.</p>
+            <div className="mt-7 space-y-5">
+              <div className="ca-feature-row"><span>01</span><div><h3>Clear boundaries</h3><p>Define what information and actions a system is allowed to handle.</p></div></div>
+              <div className="ca-feature-row"><span>02</span><div><h3>Traceable outputs</h3><p>Keep records that make important processing steps easier to inspect.</p></div></div>
+              <div className="ca-feature-row"><span>03</span><div><h3>Human oversight</h3><p>Keep consequential decisions reviewable rather than hiding them inside automation.</p></div></div>
             </div>
+            <div className="mt-8"><CTA href="#/refraction" label="View the Refraction demonstration" primary /></div>
           </div>
-
           <div className="md:col-span-6">
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="relative h-80 rounded-3xl border border-[var(--border)] overflow-hidden"
-            >
-              <video
-                className="absolute inset-0 w-full h-full object-cover"
-                src="/Video_Ready_.mp4"
-                autoPlay
-                loop
-                muted
-                playsInline
-              />
-              <div className="absolute inset-0 bg-black/30" />
-              <div className="relative h-full grid place-items-center">
-                <div className="text-center px-8">
-                  <p className="text-sm text-[var(--muted)] subtitle">Integrity is the architecture of endurance.</p>
-                </div>
-              </div>
-            </motion.div>
+            <div className="ca-diagram-wrap">
+              <video className="ca-diagram-video" src="/Video_Ready_.mp4" autoPlay loop muted playsInline preload="metadata" aria-hidden="true" />
+              <div className="ca-diagram-shade" />
+              <img src="/caeliaris.png" alt="Caeliaris identity mark" className="ca-symbol" loading="lazy" />
+              <div className="ca-diagram-orbit ca-orbit-one" /><div className="ca-diagram-orbit ca-orbit-two" />
+              <div className="ca-diagram-label ca-label-top">INPUT</div><div className="ca-diagram-label ca-label-right">PROCESS</div>
+              <div className="ca-diagram-label ca-label-bottom">REVIEW</div><div className="ca-diagram-label ca-label-left">OUTPUT</div>
+              <p className="ca-diagram-caption">A conceptual model of a reviewable workflow</p>
+            </div>
           </div>
         </div>
       </section>
 
       {/* INDUSTRIES */}
-      <section id="industries" className="relative mx-auto max-w-7xl px-6 py-12 md:py-20">
-        <SectionTitle
-          kicker="Surfaces"
-          title="Industry Interfaces"
-          subtitle="Public-facing surfaces route through ULI and enforce TESSERA signatures."
-        />
+      <section id="industries" className="relative mx-auto max-w-7xl px-6 py-16 md:py-24">
+        <SectionTitle kicker="APPLICATION AREAS" title="Where these ideas may apply" subtitle="Illustrative areas of exploration. Each field has its own requirements, risks, and standards." />
         <IndustryTilesMinimal />
       </section>
     </React.Fragment>
