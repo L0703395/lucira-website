@@ -1448,13 +1448,11 @@ function TermsPage(): JSX.Element {
   );
 }
 /** Diamond core (vector, no image file) */
-function DiamondCore({
-  cx, cy, w = 144, h = 216, active
-}: { cx: number; cy: number; w?: number; h?: number; active: boolean }) {
+function DiamondCore({ active }: { active: boolean }) {
   return (
     <div
       className="absolute select-none"
-      style={{ left: cx - w / 2, top: cy - h / 2, width: w, height: h, pointerEvents: 'none' }}
+      style={{ left: '50%', top: '50%', width: '22.5%', height: '33.75%', transform: 'translate(-50%, -50%)', pointerEvents: 'none' }}
     >
       <svg width={w} height={h} viewBox="0 0 100 150" className="absolute inset-0">
         <defs>
@@ -1595,17 +1593,18 @@ function RefractionPage(): JSX.Element {
         </motion.div>
       </div>
 
-      <div className="flex flex-col lg:grid lg:grid-cols-[auto_360px] gap-8">
+      <div className="ca-refraction-layout grid min-w-0 grid-cols-1 gap-6 lg:grid-cols-[minmax(0,640px)_minmax(0,1fr)] lg:gap-8">
         {/* Board */}
         <div
-          className="relative rounded-3xl border border-[var(--border)] bg-[var(--card)] overflow-hidden"
-          style={{ width: size, height: size }}
+          className="ca-refraction-board relative mx-auto aspect-square w-full min-w-0 max-w-[640px] overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--card)]"
+          role="img"
+          aria-label="Refraction simulation showing eight processing paths around a central system"
         >
           {/* Subtle grid */}
           <div className="absolute inset-0 pointer-events-none [background-image:linear-gradient(to_right,rgba(255,255,255,.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,.05)_1px,transparent_1px)] [background-size:40px_40px]" />
 
           {/* Rays */}
-          <svg width={size} height={size} className="absolute inset-0">
+          <svg viewBox={`0 0 ${size} ${size}`} width="100%" height="100%" preserveAspectRatio="xMidYMid meet" className="absolute inset-0">
             {beams.map((b) => {
               const end = polar(b.angle, radius);
               const tip = polar(b.angle, radius + 16);
@@ -1643,21 +1642,15 @@ function RefractionPage(): JSX.Element {
           </svg>
 
           {/* Diamond core */}
-          <DiamondCore
-            cx={center.x}
-            cy={center.y}
-            w={144}
-            h={216}
-            active={activeKeys.size > 0}
-          />
+          <DiamondCore active={activeKeys.size > 0} />
         </div>
 
         {/* Right rail */}
-        <aside className="lg:pt-2">
+        <aside className="min-w-0 lg:pt-2">
           <h1 className="text-3xl md:text-4xl font-semibold subhead text-[var(--ink)]">Refraction System</h1>
-          <p className="mt-2 text-[var(--muted)] subtitle">Beams glow only when used. Hover or click a step to jump.</p>
+          <p className="mt-2 text-[var(--muted)] subtitle">Beams glow only when used. Tap or select a step to jump.</p>
 
-          <div className="mt-4 grid gap-2">
+          <div className="mt-4 grid min-w-0 grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-1">
             {steps.map((s, i) => {
               const on = i === active;
               return (
