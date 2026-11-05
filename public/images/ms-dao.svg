@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 440" role="img" aria-labelledby="title desc">
+<title id="title">MS DAO concept</title>
+<desc id="desc">An illustrative network connects patients, clinicians, and researchers to a shared governance center, with pathways for research funding, community decisions, and protected data.</desc>
+<defs>
+  <linearGradient id="bg" x2="1" y2="1"><stop stop-color="#17243d"/><stop offset="1" stop-color="#07111e"/></linearGradient>
+  <linearGradient id="hub" x2="1" y2="1"><stop stop-color="#244d68"/><stop offset="1" stop-color="#111c37"/></linearGradient>
+  <linearGradient id="link" x2="1"><stop stop-color="#7bdff4" stop-opacity=".12"/><stop offset=".5" stop-color="#83dff6" stop-opacity=".85"/><stop offset="1" stop-color="#a9a0f4" stop-opacity=".2"/></linearGradient>
+  <radialGradient id="halo"><stop stop-color="#65d8f7" stop-opacity=".23"/><stop offset="1" stop-color="#65d8f7" stop-opacity="0"/></radialGradient>
+  <filter id="glow"><feGaussianBlur stdDeviation="10"/></filter>
+</defs>
+<rect width="720" height="440" rx="28" fill="url(#bg)"/>
+<g opacity=".15" stroke="#8fc9e9" stroke-width="1">
+  <path d="M0 88H720M0 176H720M0 264H720M0 352H720M90 0V440M180 0V440M270 0V440M360 0V440M450 0V440M540 0V440M630 0V440"/>
+</g>
+<circle cx="360" cy="220" r="174" fill="url(#halo)" filter="url(#glow)"/>
+<g fill="none" stroke="url(#link)" stroke-width="2">
+  <path d="M142 106C220 106 256 150 302 190"/>
+  <path d="M125 330C212 330 254 284 302 250"/>
+  <path d="M250 60C280 112 300 145 328 166"/>
+  <path d="M418 172C468 134 500 114 568 104"/>
+  <path d="M418 220H578"/>
+  <path d="M418 268C472 302 514 326 570 336"/>
+  <path d="M148 106L125 330L250 60" stroke-dasharray="3 8" opacity=".45"/>
+  <path d="M568 104L578 220L570 336" stroke-dasharray="3 8" opacity=".45"/>
+</g>
+<g fill="#b9f4ff">
+  <circle cx="142" cy="106" r="5"/><circle cx="125" cy="330" r="5"/><circle cx="250" cy="60" r="5"/>
+  <circle cx="568" cy="104" r="5"/><circle cx="578" cy="220" r="5"/><circle cx="570" cy="336" r="5"/>
+</g>
+<g>
+  <circle cx="360" cy="220" r="102" fill="#63dfff" opacity=".07"/>
+  <circle cx="360" cy="220" r="82" fill="none" stroke="#8fe8ff" stroke-opacity=".45" stroke-width="1.5"/>
+  <circle cx="360" cy="220" r="66" fill="url(#hub)" stroke="#8fe8ff" stroke-opacity=".8" stroke-width="2"/>
+  <path d="M328 218c0-12 10-22 22-22s22 10 22 22M350 196a13 13 0 1 0 0-26 13 13 0 0 0 0 26" fill="none" stroke="#d9faff" stroke-width="3" stroke-linecap="round"/>
+  <path d="M376 190l11 11m-11 0 11-11" stroke="#a8a3f4" stroke-width="2" stroke-linecap="round"/>
+  <text x="360" y="248" text-anchor="middle" fill="#f2fbff" font-family="Inter,Arial,sans-serif" font-size="17" font-weight="700" letter-spacing="2">MS DAO</text>
+  <text x="360" y="266" text-anchor="middle" fill="#8edff3" font-family="Inter,Arial,sans-serif" font-size="8" letter-spacing="2.2">SHARED GOVERNANCE</text>
+</g>
+<g font-family="Inter,Arial,sans-serif" text-anchor="middle">
+  <g fill="#d7f7ff" font-size="10" letter-spacing="1.7">
+    <text x="142" y="143">PATIENT VOICE</text>
+    <text x="125" y="367">CLINICIANS</text>
+    <text x="250" y="34">RESEARCHERS</text>
+    <text x="568" y="78">GOVERNANCE</text>
+    <text x="578" y="194">RESEARCH FUNDING</text>
+    <text x="570" y="370">DATA RIGHTS</text>
+  </g>
+  <g fill="#84d8ee" opacity=".8" font-size="8" letter-spacing="2">
+    <text x="360" y="412">PATIENTS · RESEARCH · ACCOUNTABILITY</text>
+  </g>
+</g>
+<g fill="none" stroke="#a6a0ef" stroke-opacity=".45">
+  <circle cx="360" cy="220" r="126" stroke-dasharray="2 8"/>
+  <circle cx="360" cy="220" r="151" stroke-dasharray="1 12"/>
+</g>
+</svg>
