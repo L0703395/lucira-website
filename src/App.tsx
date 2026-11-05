@@ -108,6 +108,48 @@ export const engines: { key:EngineKey; title:string; desc:string; cta:string; }[
   { key:'TAXE', title:'TAXE — Tax & Filing', desc:'Geo‑adjusted filings with secure data exchange and receipts.', cta:'Start TAXE' },
 ];
 
+export const projects: {
+  key: 'refract' | 'ms-dao' | 'cellular-precision';
+  title: string;
+  category: string;
+  description: string;
+  image: string;
+  imageAlt: string;
+  href: string;
+  cta: string;
+}[] = [
+  {
+    key: 'refract',
+    title: 'Project Refract',
+    category: 'RECURSIVE EXPLORATION',
+    description: 'An interactive research concept exploring recursive processes, multiple paths, and reviewable steps.',
+    image: '/images/project-refract.svg',
+    imageAlt: 'A luminous prism separating a beam into multiple paths',
+    href: '#/refraction',
+    cta: 'View the demonstration',
+  },
+  {
+    key: 'ms-dao',
+    title: 'MS DAO',
+    category: 'PATIENT-LED RESEARCH',
+    description: 'A proposed decentralized initiative for multiple sclerosis research, centered on patient participation, ethical data sharing, and transparent research funding.',
+    image: '/images/ms-dao.svg',
+    imageAlt: 'A conceptual network connecting patients, clinicians, researchers, and shared governance',
+    href: '#/contact',
+    cta: 'Discuss the initiative',
+  },
+  {
+    key: 'cellular-precision',
+    title: 'Cellular Precision',
+    category: 'PRECISION MEDICINE RESEARCH',
+    description: 'An emerging research initiative exploring cellular profiles and immune signaling to help evaluate targeted therapeutic hypotheses, including questions around xenon.',
+    image: '/images/cellular-precision.svg',
+    imageAlt: 'A conceptual view of a cell, molecular signals, and immune pathway connections',
+    href: '#/contact',
+    cta: 'Discuss the research',
+  },
+];
+
 export const industries: { key:IndustryKey; title:string; items:string[]; }[] = [
   { key:'education', title:'Education', items:['EDEE — adaptive paths','Credential ledger','Workforce bridge'] },
   { key:'finance', title:'Finance', items:['FIE & DAFE rails','Risk & compliance','Public receipts'] },
@@ -422,42 +464,29 @@ function HomeSections({
           <div>
             <p className="ca-eyebrow">SELECTED WORK</p>
             <h2 className="mt-3 text-3xl md:text-4xl font-semibold subhead text-[var(--ink)]">Projects and initiatives</h2>
-            <p className="mt-3 max-w-2xl text-[var(--muted)] subtitle">A closer look at the systems and ideas being explored within Caeliaris.</p>
+            <p className="mt-3 max-w-2xl text-[var(--muted)] subtitle">A closer look at the research and systems being explored within Caeliaris.</p>
           </div>
           <span className="text-xs uppercase tracking-[0.16em] text-[var(--muted)]/65">Research · Architecture · Development</span>
         </div>
         <div className="mt-9 grid gap-5 lg:grid-cols-3">
-          <article className="ca-project-card">
-            <img src="/images/ason-architecture.svg" alt="Illustrative network architecture for ASON" loading="lazy" />
-            <div className="ca-project-content">
-              <p className="ca-project-kicker">MODULAR INTELLIGENCE</p>
-              <h3>ASON</h3>
-              <p>A modular intelligence framework exploring how information, memory, and system components can be organized and coordinated.</p>
-              <a href="https://github.com/L0703395/CAELIARIS-V.0.1" target="_blank" rel="noreferrer" className="ca-project-link">Explore the repository <span aria-hidden="true">↗</span></a>
-            </div>
-          </article>
-          <article className="ca-project-card">
-            <img src="/images/project-refract.svg" alt="Illustrative prism refracting a beam into multiple paths for Project Refract" loading="lazy" />
-            <div className="ca-project-content">
-              <p className="ca-project-kicker">RECURSIVE EXPLORATION</p>
-              <h3>Project Refract</h3>
-              <p>A research concept and interactive demonstration exploring recursive processes, multiple paths, and reviewable steps.</p>
-              <a href="#/refraction" className="ca-project-link">View the demonstration <span aria-hidden="true">→</span></a>
-            </div>
-          </article>
-          <article className="ca-project-card">
-            <img src="/images/jason-transpiler.svg" alt="Illustrative modular processing circuit for Jason Transpiler" loading="lazy" />
-            <div className="ca-project-content">
-              <p className="ca-project-kicker">LANGUAGE & TOOLING</p>
-              <h3>Jason Transpiler</h3>
-              <p>A development initiative exploring structured translation and modular program generation.</p>
-              <a href="#/contact" className="ca-project-link">Ask about this project <span aria-hidden="true">→</span></a>
-            </div>
-          </article>
+          {projects.map((project) => (
+            <article className="ca-project-card" key={project.key}>
+              <img src={project.image} alt={project.imageAlt} loading="lazy" />
+              <div className="ca-project-content">
+                <p className="ca-project-kicker">{project.category}</p>
+                <h3>{project.title}</h3>
+                <p>{project.description}</p>
+                <a href={project.href} className="ca-project-link">
+                  {project.cta} <span aria-hidden="true">{project.key === 'refract' ? '→' : '↗'}</span>
+                </a>
+              </div>
+            </article>
+          ))}
         </div>
-        <p className="mt-5 text-xs leading-relaxed text-[var(--muted)]/65">Project artwork is illustrative. Descriptions summarize project direction and should not be read as claims of validated performance or completed deployment.</p>
+        <p className="mt-5 text-xs leading-relaxed text-[var(--muted)]/65">Project artwork is illustrative. MS DAO and Cellular Precision are presented as research initiatives; descriptions do not imply completed deployment, validated performance, or established medical treatment.</p>
       </section>
 
+      
       {/* ENGINES GRID */}
       <section id="engines" className="relative mx-auto max-w-7xl px-6 py-16 md:py-24">
         <SectionTitle kicker="PLATFORM" title="Explore the technology" subtitle="A set of specialized engines for different types of work. Select an area to see how it is intended to function." />
