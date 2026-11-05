@@ -140,16 +140,16 @@ export default function CaeliarisLanding(): JSX.Element {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;700&display=swap');
         :root{
-          --bg-solid:#0A0D12; /* bottom solid */
-          --bg-via:#0F1420;   /* middle via */
-          --bg-top:#C6DEFF;   /*heavenly blue*/
-          --ink:#E5E7EB;      /* primary text on dark */
-          --muted:#F5F5F5;    /* secondary text */
-          --accent:#63E6FF;   /* cyan accent */
-          --accent-2:#9C7BFF; /* violet accent */
+          --bg-solid:#080d16; /* bottom solid */
+          --bg-via:#101c2c;   /* middle via */
+          --bg-top:#17283b;   /*heavenly blue*/
+          --ink:#f3f7fc;      /* primary text on dark */
+          --muted:#c1ccd9;    /* secondary text */
+          --accent:#79d9ef;   /* cyan accent */
+          --accent-2:#a7a4ee; /* violet accent */
           --glow:#63E6FF33;   /* glow */
-          --card:#111827CC;   /* translucent card */
-          --border:#233044;   /* subtle border */
+          --card:rgba(17, 29, 45, .88);   /* translucent card */
+          --border:rgba(150, 183, 211, .2);   /* subtle border */
         }
         html, body{background: linear-gradient(to top, var(--bg-solid), var(--bg-via) 40%, var(--bg-top));}
         body { font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, 'Apple Color Emoji', 'Segoe UI Emoji'; }
@@ -166,19 +166,20 @@ export default function CaeliarisLanding(): JSX.Element {
       <a className="hover:text-[var(--accent)] transition" href="#/engines">Technology</a>
       <a className="hover:text-[var(--accent)] transition" href="#/sovereignty">Approach</a>
       <a className="hover:text-[var(--accent)] transition" href="#/industries">Applications</a>
-<a
-  className="rounded-full border border-[var(--border)] px-4 py-2 hover:border-[var(--accent)] hover:text-[var(--accent)] transition"
-  href="#/refraction"
->
-  Refraction
-</a>
-      <a
-        className="rounded-full border border-[var(--accent)] bg-[var(--accent)]/10 text-[var(--accent)] px-4 py-2 hover:bg-[var(--accent)]/20 transition"
-        href="#/contact"
-      >
-        Contact
-      </a>
+      <a className="rounded-full border border-[var(--border)] px-4 py-2 hover:border-[var(--accent)] hover:text-[var(--accent)] transition" href="#/refraction">Refraction</a>
+      <a className="rounded-full border border-[var(--accent)] bg-[var(--accent)]/10 text-[var(--accent)] px-4 py-2 hover:bg-[var(--accent)]/20 transition" href="#/contact">Contact</a>
     </div>
+    <details className="ca-mobile-menu relative ml-auto md:hidden">
+      <summary aria-label="Open navigation menu">Menu <span aria-hidden="true">⌄</span></summary>
+      <div className="ca-mobile-menu-panel">
+        <a href="#/">Home</a>
+        <a href="#/engines">Technology</a>
+        <a href="#/sovereignty">Approach</a>
+        <a href="#/industries">Applications</a>
+        <a href="#/refraction">Refraction</a>
+        <a href="#/contact">Contact</a>
+      </div>
+    </details>
   </nav>
 </header>
 
