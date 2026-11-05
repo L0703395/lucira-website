@@ -14,6 +14,10 @@ describe('Caeliaris site navigation', () => {
     expect(resolveRoute('#/uli')).toEqual({ type: 'section', anchor: 'uli' });
   });
 
+  it('resolves the Refraction demonstration page', () => {
+    expect(resolveRoute('#/refraction')).toEqual({ type: 'section', anchor: 'refraction' });
+  });
+
   it('keeps engine routes case-insensitive', () => {
     expect(resolveRoute('#/engines/rie')).toEqual({ type: 'engine', engine: 'RIE' });
   });
