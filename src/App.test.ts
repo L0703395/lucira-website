@@ -46,7 +46,12 @@ describe('Caeliaris platform content', () => {
     expect(projects.map((project) => project.title)).toEqual([
       'Project Refract',
       'MS DAO',
-      'Cellular Precision',
+      'XPM',
+    ]);
+    expect(projects.map((project) => project.key)).toEqual([
+      'refract',
+      'ms-dao',
+      'xpm',
     ]);
     expect(projects.map((project) => project.image)).toEqual([
       '/images/project-refract.svg',
