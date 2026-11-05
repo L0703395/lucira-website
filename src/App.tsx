@@ -333,7 +333,7 @@ export { resolveRoute };
   }
 
   return (
-    <form onSubmit={onSubmit} className="mt-6 grid md:grid-cols-3 gap-3">
+    <form onSubmit={onSubmit} className="ca-contact-form mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
       <input type="text" name="_gotcha" className="hidden" tabIndex={-1} autoComplete="off" />
       <input type="hidden" name="_subject" value="New message from Caeliaris.site" />
       <input type="hidden" name="_template" value="table" />
@@ -341,34 +341,41 @@ export { resolveRoute };
       <input
         name="name"
         placeholder="Your name"
+        aria-label="Your name"
+        autoComplete="name"
         required
-        className="col-span-1 rounded-xl bg-transparent border border-[var(--border)] px-4 py-3 outline-none focus:border-[var(--accent)]"
+        className="min-w-0 w-full rounded-xl bg-transparent border border-[var(--border)] px-4 py-3 text-base outline-none focus:border-[var(--accent)]"
       />
       <input
         type="email"
         name="email"
         placeholder="Email"
+        aria-label="Email"
+        autoComplete="email"
         required
-        className="col-span-1 rounded-xl bg-transparent border border-[var(--border)] px-4 py-3 outline-none focus:border-[var(--accent)]"
+        className="min-w-0 w-full rounded-xl bg-transparent border border-[var(--border)] px-4 py-3 text-base outline-none focus:border-[var(--accent)]"
       />
       <input
         name="organization"
         placeholder="Organization"
-        className="col-span-1 rounded-xl bg-transparent border border-[var(--border)] px-4 py-3 outline-none focus:border-[var(--accent)]"
+        aria-label="Organization"
+        autoComplete="organization"
+        className="min-w-0 w-full rounded-xl bg-transparent border border-[var(--border)] px-4 py-3 text-base outline-none focus:border-[var(--accent)]"
       />
       <textarea
         name="message"
         placeholder="How would you like to collaborate?"
+        aria-label="How would you like to collaborate?"
         required
-        className="col-span-3 h-28 rounded-xl bg-transparent border border-[var(--border)] px-4 py-3 outline-none focus:border-[var(--accent)]"
+        className="col-span-full min-w-0 w-full min-h-32 resize-y rounded-xl bg-transparent border border-[var(--border)] px-4 py-3 text-base outline-none focus:border-[var(--accent)]"
       />
 
-      <div className="col-span-3 flex items-center gap-3">
+      <div className="col-span-full flex flex-col items-start gap-3 sm:flex-row sm:items-center">
         <button
           type="submit"
           disabled={status === 'sending'}
           className={[
-            'inline-flex items-center gap-2 rounded-full border px-5 py-2 text-sm',
+            'inline-flex min-h-11 items-center justify-center gap-2 rounded-full border px-5 py-2 text-base',
             'bg-[var(--accent)]/10 border-[var(--accent)] text-[var(--accent)]',
             status === 'sending' ? 'opacity-60 cursor-not-allowed' : 'hover:bg-[var(--accent)]/20',
           ].join(' ')}
@@ -377,7 +384,7 @@ export { resolveRoute };
         </button>
 
         {status !== 'idle' && (
-          <span className={status === 'success' ? 'text-emerald-400' : 'text-red-400'}>
+          <span aria-live="polite" className={['max-w-full break-words text-sm', status === 'success' ? 'text-emerald-400' : 'text-red-400'].join(' ')}>
             {message}
           </span>
         )}
@@ -1288,20 +1295,20 @@ function ULIPage(): JSX.Element {
 
 function ContactPage(): JSX.Element {
   return (
-    <section className="relative mx-auto max-w-5xl px-6 py-16 md:py-24">
+    <main className="ca-contact-page relative mx-auto w-full max-w-5xl px-4 py-10 sm:px-6 sm:py-14 md:py-24">
       <h1 className="text-3xl md:text-5xl font-semibold subhead text-[var(--ink)]">Contact</h1>
-      <p className="mt-3 text-[var(--muted)] subtitle">
+      <p className="mt-3 max-w-3xl text-[var(--muted)] subtitle">
         Are you a researcher, policymaker, developer, or community leader? Reach out.
         All inquiries are vetted via ULI for ethical compliance.
       </p>
 
-      <div className="mt-8 rounded-3xl border border-[var(--border)] bg-[var(--card)] p-8 md:p-12">
+      <div className="mt-8 w-full min-w-0 overflow-hidden rounded-2xl sm:rounded-3xl border border-[var(--border)] bg-[var(--card)] p-5 sm:p-8 md:p-12">
         <ContactForm />
         <p className="mt-4 text-xs text-[var(--muted)]/80">
           By submitting, you agree to our <a className="underline" href="#/privacy">Privacy Policy</a>.
         </p>
       </div>
-    </section>
+    </main>
   );
 }
 
