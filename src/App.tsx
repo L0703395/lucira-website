@@ -163,6 +163,7 @@ export default function CaeliarisLanding(): JSX.Element {
 <nav className="mx-auto max-w-7xl px-6 py-5 flex items-center gap-6">
     <Logo />
     <div className="ml-auto hidden md:flex items-center gap-6 text-sm">
+      <a className="hover:text-[var(--accent)] transition" href="#/projects">Projects</a>
       <a className="hover:text-[var(--accent)] transition" href="#/engines">Technology</a>
       <a className="hover:text-[var(--accent)] transition" href="#/sovereignty">Approach</a>
       <a className="hover:text-[var(--accent)] transition" href="#/industries">Applications</a>
@@ -173,6 +174,7 @@ export default function CaeliarisLanding(): JSX.Element {
       <summary aria-label="Open navigation menu">Menu <span aria-hidden="true">⌄</span></summary>
       <div className="ca-mobile-menu-panel">
         <a href="#/">Home</a>
+        <a href="#/projects">Projects</a>
         <a href="#/engines">Technology</a>
         <a href="#/sovereignty">Approach</a>
         <a href="#/industries">Applications</a>
@@ -188,6 +190,9 @@ export default function CaeliarisLanding(): JSX.Element {
 
     {page.type === 'home' && <HomeSections />}
 
+{page.type === 'section' && page.anchor === 'projects' && (
+  <HomeSections initialAnchor="projects" />
+)}
 {page.type === 'section' && page.anchor === 'engines' && (
   <HomeSections initialAnchor="engines" />
 )}
@@ -226,7 +231,7 @@ export default function CaeliarisLanding(): JSX.Element {
 /** Router helpers **/
 function resolveRoute(hash: string):
   | { type: 'home' }
-  | { type: 'section'; anchor: 'engines'|'sovereignty'|'industries'|'contact'|'privacy'|'terms'|'refraction' }
+  | { type: 'section'; anchor: 'projects'|'engines'|'sovereignty'|'industries'|'contact'|'privacy'|'terms'|'refraction' }
   | { type: 'engine'; engine: EngineKey }
   | { type: 'industry'; industry: IndustryKey } {
   if (!hash || hash === '#' || hash === '#/') return { type: 'home' };
@@ -234,7 +239,7 @@ function resolveRoute(hash: string):
   const clean = hash.replace(/^#\/?/, '');
 
   // top-level sections
-  if (['engines','sovereignty','industries','contact','privacy','terms','refraction'].includes(clean)) {
+  if (['projects','engines','sovereignty','industries','contact','privacy','terms','refraction'].includes(clean)) {
     return { type: 'section', anchor: clean as any };
   }
 
@@ -339,7 +344,7 @@ export { resolveRoute };
 function HomeSections({
   initialAnchor,
 }: {
-  initialAnchor?: 'engines' | 'sovereignty' | 'industries' | 'contact';
+  initialAnchor?: 'projects' | 'engines' | 'sovereignty' | 'industries' | 'contact';
 }): JSX.Element {
   useEffect(() => {
     if (initialAnchor) {
@@ -406,6 +411,48 @@ function HomeSections({
           <article className="ca-principle-card"><div className="ca-number">02</div><h3>Coordinate</h3><p>Explore how specialized tools can work together without losing their roles.</p></article>
           <article className="ca-principle-card"><div className="ca-number">03</div><h3>Verify</h3><p>Design for traceability so actions and outputs can be reviewed.</p></article>
         </div>
+      </section>
+
+      {/* FEATURED PROJECTS */}
+      <section id="projects" className="relative mx-auto max-w-7xl px-6 py-16 md:py-24">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="ca-eyebrow">SELECTED WORK</p>
+            <h2 className="mt-3 text-3xl md:text-4xl font-semibold subhead text-[var(--ink)]">Projects and initiatives</h2>
+            <p className="mt-3 max-w-2xl text-[var(--muted)] subtitle">A closer look at the systems and ideas being explored within Caeliaris.</p>
+          </div>
+          <span className="text-xs uppercase tracking-[0.16em] text-[var(--muted)]/65">Research · Architecture · Development</span>
+        </div>
+        <div className="mt-9 grid gap-5 lg:grid-cols-3">
+          <article className="ca-project-card">
+            <img src="/images/ason-architecture.svg" alt="Illustrative network architecture for ASON" loading="lazy" />
+            <div className="ca-project-content">
+              <p className="ca-project-kicker">MODULAR INTELLIGENCE</p>
+              <h3>ASON</h3>
+              <p>A modular intelligence framework exploring how information, memory, and system components can be organized and coordinated.</p>
+              <a href="https://github.com/L0703395/CAELIARIS-V.0.1" target="_blank" rel="noreferrer" className="ca-project-link">Explore the repository <span aria-hidden="true">↗</span></a>
+            </div>
+          </article>
+          <article className="ca-project-card">
+            <img src="/images/project-refract.svg" alt="Illustrative prism refracting a beam into multiple paths for Project Refract" loading="lazy" />
+            <div className="ca-project-content">
+              <p className="ca-project-kicker">RECURSIVE EXPLORATION</p>
+              <h3>Project Refract</h3>
+              <p>A research concept and interactive demonstration exploring recursive processes, multiple paths, and reviewable steps.</p>
+              <a href="#/refraction" className="ca-project-link">View the demonstration <span aria-hidden="true">→</span></a>
+            </div>
+          </article>
+          <article className="ca-project-card">
+            <img src="/images/jason-transpiler.svg" alt="Illustrative modular processing circuit for Jason Transpiler" loading="lazy" />
+            <div className="ca-project-content">
+              <p className="ca-project-kicker">LANGUAGE & TOOLING</p>
+              <h3>Jason Transpiler</h3>
+              <p>A development initiative exploring structured translation and modular program generation.</p>
+              <a href="#/contact" className="ca-project-link">Ask about this project <span aria-hidden="true">→</span></a>
+            </div>
+          </article>
+        </div>
+        <p className="mt-5 text-xs leading-relaxed text-[var(--muted)]/65">Project artwork is illustrative. Descriptions summarize project direction and should not be read as claims of validated performance or completed deployment.</p>
       </section>
 
       {/* ENGINES GRID */}
